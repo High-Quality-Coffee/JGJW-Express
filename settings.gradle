@@ -1,2 +1,5 @@
 rootProject.name = 'JGJW-Express'
-include 'common'
+include ':common'
+include ':user'
+include ':discovery'
+include ':gateway'
