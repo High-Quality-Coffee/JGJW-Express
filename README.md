@@ -1,12 +1,12 @@
 # 2. 팀원 소개
 
-<table>
+<table style="margin-left:auto;margin-right:auto;">
   <tr height="160px">
     <th align="center" width="140px">
       <a href="https://github.com/High-Quality-Coffee"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/125748258?v=4"/></a>
     </th>
     <th align="center" width="140px">
-      <a href="https://github.com/Ryujy"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/63836145?v=4"/>
+      <a href="https://github.com/Ryujy"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/63836145?v=4"/></a>
     </th>
     <th align="center" width="140px">
       <a href="https://github.com/sosa7753"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/141195262?v=4"/></a>
@@ -31,27 +31,27 @@
   </tr>
   <tr>
     <td align="center" width="160px">
-      카테고리, 가게 관리
+      회원, 배송담당자, 상품
     </td>
     <td align="center" width="160px">
-      주문, 결제 관리
+      주문, 배송
     </td>
     <td align="center" width="160px">
-      상품 관리, AI 기능
+      슬랙, 업체
     </td>
     <td align="center" width="160px">
-      로그인, 사용자, 리뷰 관리
+      허브
     </td>
   </tr>
   <tr>
     <td align="center" width="160px">
-       BE, Git
+       BE
     </td>
     <td align="center" width="160px">
-       BE 개발
+       BE
     </td>
     <td align="center" width="160px">
-       BE 개발, AI 연동
+       BE
     </td>
     <td align="center" width="160px">
        BE, DB
