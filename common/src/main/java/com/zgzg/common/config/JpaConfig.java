@@ -12,8 +12,4 @@ import jakarta.persistence.EntityManager;
 @EnableJpaAuditing
 public class JpaConfig {
 
-	@Bean
-	JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
-		return new JPAQueryFactory(entityManager);
-	}
 }
