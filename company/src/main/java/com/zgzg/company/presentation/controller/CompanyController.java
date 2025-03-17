@@ -17,7 +17,10 @@ import com.zgzg.common.response.Code;
 import com.zgzg.company.presentation.dto.CreateCompanyRequestDTO;
 import com.zgzg.company.application.service.CompanyService;
 import com.zgzg.company.presentation.dto.CompanyResponseDTO;
+import com.zgzg.company.presentation.dto.PageableRequestDTO;
+import com.zgzg.company.presentation.dto.PageableResponseDTO;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -40,9 +43,9 @@ public class CompanyController {
 	}
 
 	@GetMapping("/")
-	public ResponseEntity<?> getCompanies() {
-		Object result = companyService.getCompanies();
-		return ResponseEntity.ok(new ApiResponseData<>());
+	public ResponseEntity<?> getCompanies(@Valid PageableRequestDTO pageableRequestDTO) {
+		PageableResponseDTO<CompanyResponseDTO> result = companyService.getCompanies(pageableRequestDTO);
+		return ResponseEntity.ok(ApiResponseData.success(result,"업체 전제 조회가 완료되었습니다."));
 	}
 
 	@PutMapping("/adj")
