@@ -4,6 +4,7 @@ import com.zgzg.user.domain.model.RefreshToken;
 import com.zgzg.user.domain.repository.RefreshRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ public class RefreshRepositoryImpl implements RefreshRepository {
     }
 
     @Override
+    @Transactional
     public void deleteByRefresh(String refresh) {
         jpaRefreshRepository.deleteByRefresh(refresh);
     }
