@@ -1,6 +1,7 @@
 package com.zgzg.user.domain.model;
 
 import com.zgzg.common.enums.Role;
+import com.zgzg.common.utils.BaseEntity;
 import com.zgzg.user.presentation.request.JoinRequestDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
@@ -15,7 +16,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name="p_user")
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
