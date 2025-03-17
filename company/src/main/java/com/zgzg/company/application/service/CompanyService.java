@@ -2,6 +2,10 @@ package com.zgzg.company.application.service;
 
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.zgzg.common.exception.BaseException;
@@ -10,6 +14,8 @@ import com.zgzg.company.presentation.dto.CreateCompanyRequestDTO;
 import com.zgzg.company.domain.Company;
 import com.zgzg.company.domain.Persistence.CompanyRepository;
 import com.zgzg.company.presentation.dto.CompanyResponseDTO;
+import com.zgzg.company.presentation.dto.PageableRequestDTO;
+import com.zgzg.company.presentation.dto.PageableResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,8 +35,17 @@ public class CompanyService {
 		return company.toDTO();
 	}
 
-	public Object getCompanies() {
-		return null;
+	public PageableResponseDTO<CompanyResponseDTO> getCompanies(PageableRequestDTO pageableRequestDTO) {
+
+		Sort sort = Sort.unsorted();
+		if (pageableRequestDTO.getSortBy() != null && !pageableRequestDTO.getSortBy().isEmpty()) {
+			sort = Sort.by(pageableRequestDTO.getDirection(), pageableRequestDTO.getSortBy());
+		}
+
+		Pageable pageable = PageRequest.of(pageableRequestDTO.getPage(), pageableRequestDTO.getSize(), sort);
+		Page<Company> companiesPage = companyRepository.findAll(pageable);
+
+		return PageableResponseDTO.from(companiesPage, CompanyResponseDTO::toDto);
 	}
 
 	public Object updateCompany() {
