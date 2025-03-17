@@ -17,6 +17,7 @@ public enum Code {
     COMPANY_FIND(HttpStatus.OK,5002,"업체 검색이 완료되었습니다."),
 
     COMPANY_FIND_ERROR(HttpStatus.BAD_REQUEST, 5101, "아이디와 일치하는 업체가 없습니다."),
+
   /**
    * 성공 0번대
    */
