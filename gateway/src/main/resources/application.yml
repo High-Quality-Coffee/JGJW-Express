@@ -16,6 +16,11 @@ spring:
           uri: lb://user
           predicates:
             - Path=/api/v1/join/**, /api/v1/login
+            - Path=/user/**
+        - id: company
+          uri: lb://company
+          predicates:
+            - Path=/api/v1/companies/**
         - id: order
           uri: lb://order
           predicates:
@@ -34,7 +39,7 @@ spring:
   jwt:
     secret: ${JWT_SECRET_KEY}
   autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration    
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
 
 eureka:
