@@ -60,8 +60,11 @@ public class CompanyService {
 
 	}
 
-	public Object deleteCompany() {
-		return null;
+	public void deleteCompany(UUID id) {
+		Company company = companyRepository.findById(id)
+			.orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
+
+		company.softDelete("temp");
 	}
 
 	public Object searchCompany() {
