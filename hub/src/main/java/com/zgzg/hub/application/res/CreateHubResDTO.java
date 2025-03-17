@@ -35,6 +35,7 @@ public class CreateHubResDTO {
     private String hubLongitude;
     private Long hubAdminId;
     private boolean isMegaHub;
+  }
 
     public static HubDTO from(Hub hub) {
       return HubDTO.builder()
