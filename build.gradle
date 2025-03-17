@@ -44,7 +44,6 @@ subprojects { // 모든 하위 모듈에 이 설정을 적용함
     dependencies {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation("io.github.cdimascio:java-dotenv:5.2.2") // 환경변수 파일 읽기 위한 라이브러리 추가
