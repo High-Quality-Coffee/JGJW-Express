@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.response.Code;
-import com.zgzg.company.presentation.dto.CreateCompanyRequestDTO;
 import com.zgzg.company.application.service.CompanyService;
 import com.zgzg.company.presentation.dto.CompanyResponseDTO;
+import com.zgzg.company.presentation.dto.CreateCompanyRequestDTO;
 import com.zgzg.company.presentation.dto.PageableRequestDTO;
 import com.zgzg.company.presentation.dto.PageableResponseDTO;
+import com.zgzg.company.presentation.dto.UpdateCompanyRequestDTO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,19 +40,19 @@ public class CompanyController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getCompany(@PathVariable UUID id) {
 		CompanyResponseDTO companyResponseDTO = companyService.getCompany(id);
-		return ResponseEntity.ok(ApiResponseData.success(companyResponseDTO, "업체 조회가 완료되었습니다."));
+		return ResponseEntity.ok(ApiResponseData.success(companyResponseDTO, Code.COMPANY_FIND.getMessage()));
 	}
 
 	@GetMapping("/")
 	public ResponseEntity<?> getCompanies(@Valid PageableRequestDTO pageableRequestDTO) {
 		PageableResponseDTO<CompanyResponseDTO> result = companyService.getCompanies(pageableRequestDTO);
-		return ResponseEntity.ok(ApiResponseData.success(result,"업체 전제 조회가 완료되었습니다."));
+		return ResponseEntity.ok(ApiResponseData.success(result, Code.COMPANY_FIND.getMessage()));
 	}
 
 	@PutMapping("/adj")
-	public ResponseEntity<?> updateCompany() {
-		Object result = companyService.updateCompany();
-		return ResponseEntity.ok(new ApiResponseData<>());
+	public ResponseEntity<?> updateCompany(@RequestBody UpdateCompanyRequestDTO updateCompanyRequestDTO) {
+		companyService.updateCompany(updateCompanyRequestDTO);
+		return ResponseEntity.ok(ApiResponseData.success(Code.COMPANY_UPDATE));
 	}
 
 	@PatchMapping("/{id}")

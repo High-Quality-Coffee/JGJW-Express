@@ -27,7 +27,8 @@ public class CompanyResponseDTO {
 		return CompanyResponseDTO.builder()
 			.id(company.getId())
 			.name(company.getName())
-			// 다른 필드들도 필요에 따라 설정
+			.type(company.getType())
+			.address(company.getAddress())
 			.build();
 	}
 }
