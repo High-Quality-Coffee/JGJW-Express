@@ -1,4 +1,4 @@
-package com.zgzg.company.application.dto;
+package com.zgzg.company.presentation.dto;
 
 import com.zgzg.company.domain.Company;
 
@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
-public class CreateCompanyDTO {
+public class CreateCompanyRequestDTO {
 
 	@Schema(description = "업체명", example = "test2025")
 	private String name;

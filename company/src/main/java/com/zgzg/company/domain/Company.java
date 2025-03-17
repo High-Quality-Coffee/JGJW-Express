@@ -3,6 +3,7 @@ package com.zgzg.company.domain;
 import java.util.UUID;
 
 import com.zgzg.common.utils.BaseEntity;
+import com.zgzg.company.presentation.dto.CompanyResponseDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "p_company")
-public class Company {
+public class Company extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -33,4 +34,14 @@ public class Company {
 	private String type;
 
 	private String address;
+
+	public CompanyResponseDTO toDTO(){
+		return CompanyResponseDTO.builder()
+			.id(this.id)
+			.hub_id(this.hub_id)
+			.name(this.name)
+			.type(this.type)
+			.address(this.address)
+			.build();
+	}
 }

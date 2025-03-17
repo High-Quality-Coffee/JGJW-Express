@@ -4,9 +4,12 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.zgzg.company.application.dto.CreateCompanyDTO;
+import com.zgzg.common.exception.BaseException;
+import com.zgzg.common.response.Code;
+import com.zgzg.company.presentation.dto.CreateCompanyRequestDTO;
 import com.zgzg.company.domain.Company;
 import com.zgzg.company.domain.Persistence.CompanyRepository;
+import com.zgzg.company.presentation.dto.CompanyResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,13 +19,14 @@ public class CompanyService {
 
 	private final CompanyRepository companyRepository;
 
-	public Object createCompany(CreateCompanyDTO createCompanyDTO) {
-		Company company = createCompanyDTO.toEntity();
-		return companyRepository.save(company);
+	public void createCompany(CreateCompanyRequestDTO createCompanyRequestDTO) {
+		Company company = createCompanyRequestDTO.toEntity();
+		companyRepository.save(company);
 	}
 
-	public Object getCompany(UUID id) {
-		return null;
+	public CompanyResponseDTO getCompany(UUID id) {
+		Company company = companyRepository.findById(id).orElseThrow(()-> new BaseException(Code.COMPANY_FIND_ERROR));
+		return company.toDTO();
 	}
 
 	public Object getCompanies() {
