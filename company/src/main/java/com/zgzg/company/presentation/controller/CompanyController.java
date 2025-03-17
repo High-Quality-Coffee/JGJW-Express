@@ -56,7 +56,7 @@ public class CompanyController {
 		return ResponseEntity.ok(new ApiResponseData<>());
 	}
 
-	@GetMapping("/")
+	@GetMapping("/search")
 	public ResponseEntity<?> searchCompany() {
 		Object result = companyService.searchCompany();
 		return ResponseEntity.ok(new ApiResponseData<>());
