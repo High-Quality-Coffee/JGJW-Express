@@ -44,4 +44,11 @@ public class Company extends BaseEntity {
 			.address(this.address)
 			.build();
 	}
+
+	public void update(String name, String type, String address){
+		this.name = name;
+		this.type = type;
+		this.address = address;
+
+	}
 }

@@ -10,13 +10,15 @@ import org.springframework.stereotype.Service;
 
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.response.Code;
-import com.zgzg.company.presentation.dto.CreateCompanyRequestDTO;
 import com.zgzg.company.domain.Company;
 import com.zgzg.company.domain.Persistence.CompanyRepository;
 import com.zgzg.company.presentation.dto.CompanyResponseDTO;
+import com.zgzg.company.presentation.dto.CreateCompanyRequestDTO;
 import com.zgzg.company.presentation.dto.PageableRequestDTO;
 import com.zgzg.company.presentation.dto.PageableResponseDTO;
+import com.zgzg.company.presentation.dto.UpdateCompanyRequestDTO;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -31,7 +33,7 @@ public class CompanyService {
 	}
 
 	public CompanyResponseDTO getCompany(UUID id) {
-		Company company = companyRepository.findById(id).orElseThrow(()-> new BaseException(Code.COMPANY_FIND_ERROR));
+		Company company = companyRepository.findById(id).orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
 		return company.toDTO();
 	}
 
@@ -48,8 +50,14 @@ public class CompanyService {
 		return PageableResponseDTO.from(companiesPage, CompanyResponseDTO::toDto);
 	}
 
-	public Object updateCompany() {
-		return null;
+	public void updateCompany(UpdateCompanyRequestDTO updateCompanyRequestDTO) {
+		Company company = companyRepository.findById(updateCompanyRequestDTO.getId())
+			.orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
+
+		company.update(updateCompanyRequestDTO.getName(),
+			updateCompanyRequestDTO.getType(),
+			updateCompanyRequestDTO.getAddress());
+
 	}
 
 	public Object deleteCompany() {
