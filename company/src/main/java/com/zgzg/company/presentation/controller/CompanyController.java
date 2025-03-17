@@ -38,7 +38,7 @@ public class CompanyController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getCompany(@PathVariable UUID id) {
+	public ResponseEntity<?> getCompany(@PathVariable(name = "id") UUID id) {
 		CompanyResponseDTO companyResponseDTO = companyService.getCompany(id);
 		return ResponseEntity.ok(ApiResponseData.success(companyResponseDTO, Code.COMPANY_FIND.getMessage()));
 	}
@@ -56,9 +56,9 @@ public class CompanyController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> deleteCompany() {
-		Object result = companyService.deleteCompany();
-		return ResponseEntity.ok(new ApiResponseData<>());
+	public ResponseEntity<?> deleteCompany(@PathVariable(name = "id") UUID id) {
+		companyService.deleteCompany(id);
+		return ResponseEntity.ok(ApiResponseData.success(Code.COMPANY_DELETE.getMessage()));
 	}
 
 	@GetMapping("/search")
