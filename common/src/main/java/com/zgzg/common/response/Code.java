@@ -27,6 +27,17 @@ public enum Code {
   EXIST_HUB_NAME(HttpStatus.BAD_REQUEST, 4001, "이미 존재하는 허브명 입니다."),
   HUB_NOT_FOUND(HttpStatus.NOT_FOUND, 4002, "허브가 존재하지 않습니다."),
   PARENT_HUB_NOT_FOUND(HttpStatus.BAD_REQUEST, 4003, "중앙 허브가 존재하지 않습니다."),
+	/**
+	 * 주문 2000번대
+	 */
+	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "해당 주문을 찾을 수 없습니다."),
+
+	/**
+	 * 성공 0번대
+	 */
+	SUCCESS(HttpStatus.OK, 200, "성공적으로 처리되었습니다."),
+	CREATED(HttpStatus.CREATED, 201, "성공적으로 생성되었습니다."),
+	ALREADY_EXISTS(HttpStatus.OK, 202, "이미 존재하는 리소스입니다."),
 
   /**
    * VALIDATION 관련 100번대
@@ -51,14 +62,6 @@ public enum Code {
   //유효하지 않은 리소스(40100 ~ 40199번대
   CAN_NOT_FIND_RESOURCE(HttpStatus.BAD_REQUEST, 40100, "해당 리소스를 찾을 수 없습니다."),
   CAN_NOT_FIND_USER(HttpStatus.BAD_REQUEST, 40101, "해당 유저를 찾을 수 없습니다."),
-
-  /**
-   * 성공 0번대
-   */
-  SUCCESS(HttpStatus.OK, 200, "성공적으로 처리되었습니다."),
-  CREATED(HttpStatus.CREATED, 201, "성공적으로 생성되었습니다."),
-  ALREADY_EXISTS(HttpStatus.OK, 202, "이미 존재하는 리소스입니다."),
-
 
   //보안 관련(40200 ~ 40299번대)
   REQUIRED_LOGIN(HttpStatus.UNAUTHORIZED, 40200, "로그인이 필요합니다."),
