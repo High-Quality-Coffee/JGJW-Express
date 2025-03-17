@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: order
+  datasource:
+    url: ${ORDER_POSTGRE_URL}
+    username: ${ORDER_POSTGRE_USERNAME}
+    password: ${ORDER_POSTGRE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  config:
+    import:
+      - classpath:./properties/.env.properties
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: create
+server:
+  port: 8084
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:19090/eureka/
