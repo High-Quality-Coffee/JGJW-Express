@@ -2,13 +2,12 @@ package com.zgzg.company.domain;
 
 import java.util.UUID;
 
-import org.springframework.data.annotation.Id;
-
 import com.zgzg.common.utils.BaseEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +20,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "p_company")
-public class Company extends BaseEntity {
+public class Company {
 
-	@Id @GeneratedValue(strategy = GenerationType.UUID)
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 
 	private UUID hub_id;
