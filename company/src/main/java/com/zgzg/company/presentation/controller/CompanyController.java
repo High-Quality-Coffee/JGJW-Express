@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zgzg.common.response.ApiResponseData;
@@ -58,13 +59,14 @@ public class CompanyController {
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> deleteCompany(@PathVariable(name = "id") UUID id) {
 		companyService.deleteCompany(id);
-		return ResponseEntity.ok(ApiResponseData.success(Code.COMPANY_DELETE.getMessage()));
+		return ResponseEntity.ok(ApiResponseData.success(Code.COMPANY_DELETE));
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<?> searchCompany() {
-		Object result = companyService.searchCompany();
-		return ResponseEntity.ok(new ApiResponseData<>());
+	public ResponseEntity<?> searchCompany(PageableRequestDTO pageableRequestDTO,
+		@RequestParam(name = "keyword", required = false) String keyword) {
+		Object result = companyService.searchCompany(pageableRequestDTO, keyword);
+		return ResponseEntity.ok(ApiResponseData.success(result, Code.COMANY_SEARCH.getMessage()));
 	}
 
 }

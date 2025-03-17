@@ -18,7 +18,6 @@ import com.zgzg.company.presentation.dto.PageableRequestDTO;
 import com.zgzg.company.presentation.dto.PageableResponseDTO;
 import com.zgzg.company.presentation.dto.UpdateCompanyRequestDTO;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -67,7 +66,13 @@ public class CompanyService {
 		company.softDelete("temp");
 	}
 
-	public Object searchCompany() {
-		return null;
+	public Object searchCompany(PageableRequestDTO pageableRequestDTO, String keyword) {
+		Sort sort = Sort.unsorted();
+		if (pageableRequestDTO.getSortBy() != null && !pageableRequestDTO.getSortBy().isEmpty()) {
+			sort = Sort.by(pageableRequestDTO.getDirection(), pageableRequestDTO.getSortBy());
+		}
+		Pageable pageable = PageRequest.of(pageableRequestDTO.getPage(), pageableRequestDTO.getSize(), sort);
+		Page<Company> companiesPage = companyRepository.searchCompanies(keyword, pageable);
+		return PageableResponseDTO.from(companiesPage, CompanyResponseDTO::toDto);
 	}
 }
