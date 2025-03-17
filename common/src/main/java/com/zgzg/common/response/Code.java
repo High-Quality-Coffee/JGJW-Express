@@ -10,6 +10,11 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum Code {
 
+    /**
+     * 업체 5000 번대
+     */
+    COMPANY_CREATE(HttpStatus.OK, 5001, "업체 생성이 완료되었습니다."),
+
   /**
    * 허브 4000번 대
    */

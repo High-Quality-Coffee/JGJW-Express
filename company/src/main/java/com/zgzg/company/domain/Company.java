@@ -1,0 +1,36 @@
+package com.zgzg.company.domain;
+
+import java.util.UUID;
+
+import org.springframework.data.annotation.Id;
+
+import com.zgzg.common.utils.BaseEntity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "p_company")
+public class Company extends BaseEntity {
+
+	@Id @GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
+
+	private UUID hub_id;
+
+	private String name;
+
+	private String type;
+
+	private String address;
+}
