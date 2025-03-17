@@ -10,9 +10,14 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum Code {
 
-  /**
-   * 허브 4000번 대
-   */
+    /**
+     * 업체 5000 번대
+     */
+    COMPANY_CREATE(HttpStatus.OK, 5001, "업체 생성이 완료되었습니다."),
+    COMPANY_FIND(HttpStatus.OK,5002,"업체 검색이 완료되었습니다."),
+
+    COMPANY_FIND_ERROR(HttpStatus.BAD_REQUEST, 5101, "아이디와 일치하는 업체가 없습니다."),
+
 
   GET_HUBS_SUCCESS(HttpStatus.OK, 4105, "허브 목록 조회가 처리되었습니다"),
   GET_HUB_SUCCESS(HttpStatus.OK, 4104, "허브 조회가 처리되었습니다."),
