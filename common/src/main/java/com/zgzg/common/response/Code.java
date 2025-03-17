@@ -14,6 +14,9 @@ public enum Code {
      * 업체 5000 번대
      */
     COMPANY_CREATE(HttpStatus.OK, 5001, "업체 생성이 완료되었습니다."),
+    COMPANY_FIND(HttpStatus.OK,5002,"업체 검색이 완료되었습니다."),
+
+    COMPANY_FIND_ERROR(HttpStatus.BAD_REQUEST, 5101, "아이디와 일치하는 업체가 없습니다."),
 
 
     /**

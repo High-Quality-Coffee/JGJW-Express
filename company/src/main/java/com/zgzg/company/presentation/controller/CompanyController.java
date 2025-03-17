@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.response.Code;
-import com.zgzg.company.application.dto.CreateCompanyDTO;
+import com.zgzg.company.presentation.dto.CreateCompanyRequestDTO;
 import com.zgzg.company.application.service.CompanyService;
+import com.zgzg.company.presentation.dto.CompanyResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,15 +28,15 @@ public class CompanyController {
 	private final CompanyService companyService;
 
 	@PostMapping("/")
-	public ResponseEntity<?> createCompany(@RequestBody CreateCompanyDTO createCompanyDTO) {
-		companyService.createCompany(createCompanyDTO);
+	public ResponseEntity<?> createCompany(@RequestBody CreateCompanyRequestDTO createCompanyRequestDTO) {
+		companyService.createCompany(createCompanyRequestDTO);
 		return ResponseEntity.ok().body(ApiResponseData.success(Code.COMPANY_CREATE));
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getCompany(@PathVariable UUID id) {
-		Object result = companyService.getCompany(id);
-		return ResponseEntity.ok(new ApiResponseData<>());
+		CompanyResponseDTO companyResponseDTO = companyService.getCompany(id);
+		return ResponseEntity.ok(ApiResponseData.success(companyResponseDTO, "업체 조회가 완료되었습니다."));
 	}
 
 	@GetMapping("/")
