@@ -39,6 +39,9 @@ out/
 /JGJW-Express/build/
 /JGJW-Express/**/build/
 /JGJW-Express/**/src/main/resources/properties/.env.properties
+/JGJW-Express/**/src/main/resources/properties/env.properties
+
+
 /JGJW-Express/docker-compose.yml
 docker-compose.yml
 /gradle/wrapper/gradle-wrapper.jar
@@ -46,3 +49,4 @@ docker-compose.yml
 
 **/gradle/wrapper/gradle-wrapper.jar
 **/gradle/wrapper/gradle-wrapper.properties
+**/src/main/resources/properties/env.properties

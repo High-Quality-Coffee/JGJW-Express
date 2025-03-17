@@ -28,8 +28,10 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation project(':common')
+    runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 
 dependencyManagement {
