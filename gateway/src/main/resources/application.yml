@@ -16,6 +16,7 @@ spring:
           uri: lb://user
           predicates:
             - Path=/user/**
+            - Path=/api/v1/join/**, /api/v1/login
         - id: company
           uri: lb://company
           predicates:
@@ -24,14 +25,26 @@ spring:
           uri: lb://order
           predicates:
             - Path=/api/v1/orders/**
+        #로그인 필요한 요청(토큰 검증 필터 o)
+        - id: user
+          uri: lb://user
+          predicates:
+            - Path=/api/v1/logout
+          filters:
+            - name: AuthPermissionFilter
         - id: hub
           uri: lb://hub
           predicates:
             - Path=/api/v1/hubs/**
+  jwt:
+    secret: ${JWT_SECRET_KEY}
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration    
+
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: ${EUREKA_DISCOVERY_URL}
     register-with-eureka: true
     fetch-registry: true

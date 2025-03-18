@@ -47,4 +47,4 @@ docker-compose.yml
 
 **/gradle/wrapper/gradle-wrapper.jar
 **/gradle/wrapper/gradle-wrapper.properties
-company/src/main/resources/env.properties
+**/src/main/resources/properties/env.properties
