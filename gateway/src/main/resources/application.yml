@@ -27,10 +27,15 @@ spring:
             - Path=/api/v1/logout
           filters:
             - name: AuthPermissionFilter
+        - id: hub
+          uri: lb://hub
+          predicates:
+            - Path=/api/v1/hubs/**
   jwt:
     secret: ${JWT_SECRET_KEY}
   autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration    
+
 
 eureka:
   client:
