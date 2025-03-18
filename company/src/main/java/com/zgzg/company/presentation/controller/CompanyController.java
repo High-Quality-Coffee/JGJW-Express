@@ -56,7 +56,7 @@ public class CompanyController {
 		return ResponseEntity.ok(ApiResponseData.success(Code.COMPANY_UPDATE));
 	}
 
-	@PatchMapping("/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> deleteCompany(@PathVariable(name = "id") UUID id) {
 		companyService.deleteCompany(id);
 		return ResponseEntity.ok(ApiResponseData.success(Code.COMPANY_DELETE));

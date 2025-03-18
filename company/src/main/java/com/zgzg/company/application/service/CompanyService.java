@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.response.Code;
@@ -32,7 +33,7 @@ public class CompanyService {
 	}
 
 	public CompanyResponseDTO getCompany(UUID id) {
-		Company company = companyRepository.findById(id).orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
+		Company company = companyRepository.findByIdAndDeletedAtIsNull(id).orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
 		return company.toDTO();
 	}
 
@@ -44,13 +45,13 @@ public class CompanyService {
 		}
 
 		Pageable pageable = PageRequest.of(pageableRequestDTO.getPage(), pageableRequestDTO.getSize(), sort);
-		Page<Company> companiesPage = companyRepository.findAll(pageable);
+		Page<Company> companiesPage = (Page<Company>)companyRepository.findAllByDeletedAtIsNull(pageable);
 
 		return PageableResponseDTO.from(companiesPage, CompanyResponseDTO::toDto);
 	}
 
 	public void updateCompany(UpdateCompanyRequestDTO updateCompanyRequestDTO) {
-		Company company = companyRepository.findById(updateCompanyRequestDTO.getId())
+		Company company = companyRepository.findByIdAndDeletedAtIsNull(updateCompanyRequestDTO.getId())
 			.orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
 
 		company.update(updateCompanyRequestDTO.getName(),
@@ -59,11 +60,13 @@ public class CompanyService {
 
 	}
 
+	@Transactional(readOnly = false)
 	public void deleteCompany(UUID id) {
-		Company company = companyRepository.findById(id)
+		Company company = companyRepository.findByIdAndDeletedAtIsNull(id)
 			.orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
 
 		company.softDelete("temp");
+		companyRepository.save(company);
 	}
 
 	public Object searchCompany(PageableRequestDTO pageableRequestDTO, String keyword) {
