@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.zgzg.order.domain.entity.Order;
 
 public interface OrderJpaRepository extends JpaRepository<Order, UUID> {
-	Order findByOrderIdAndDeletedAtIsNull(UUID orderId);
+
 }
