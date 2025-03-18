@@ -1,11 +1,14 @@
 package com.zgzg.user.presentation.controller;
 
 import com.zgzg.common.response.ApiResponseData;
+import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.user.application.service.JoinService;
 import com.zgzg.user.presentation.request.JoinRequestDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static com.zgzg.common.response.Code.MEMBER_SAVE;
@@ -18,9 +21,11 @@ public class JoinController {
     private final JoinService joinService;
 
     @GetMapping("/test")
-    public String test(){
+    public String test(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+
         return "hello world";
     }
+
 
 
     @PostMapping("/hub")
