@@ -4,8 +4,6 @@ server:
 spring:
   application:
     name: ai
-  config:
-    import: "classpath:env.properties"
 
   datasource:
     url: ${SPRING_DATASOURCE_URL}
