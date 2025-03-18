@@ -50,4 +50,7 @@ public class Hub extends BaseEntity {
 
   @Setter
   private Long hubAdminId;
+
+  @Setter
+  private UUID parentHubId;
 }

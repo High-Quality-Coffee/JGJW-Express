@@ -3,6 +3,7 @@ package com.zgzg.hub.presentation.req;
 import com.zgzg.hub.util.annotation.NullAndNotEmpty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,5 +40,7 @@ public class UpdateHubReqDTO {
     private Long hubAdminId;
 
     private Boolean isMegaHub;
+
+    private UUID parentHubId;
   }
 }
