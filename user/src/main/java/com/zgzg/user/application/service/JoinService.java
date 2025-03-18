@@ -20,31 +20,35 @@ public class JoinService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public void hub_join(JoinRequestDTO joinRequestDTO){
-        joinRequestDTO.setPassword(bCryptPasswordEncoder.encode(joinRequestDTO.getPassword()));
-        User user = new User(joinRequestDTO);
+        User user = toUser(joinRequestDTO);
         user.setRole(Role.ROLE_HUB);
         userRepository.save(user).orElseThrow(() -> new BaseException(Code.MEMBER_NOT_SAVE));
     }
 
     public void delivery_join(JoinRequestDTO joinRequestDTO){
-        joinRequestDTO.setPassword(bCryptPasswordEncoder.encode(joinRequestDTO.getPassword()));
-        User user = new User(joinRequestDTO);
+        User user = toUser(joinRequestDTO);
         user.setRole(Role.ROLE_DELIVERY);
         userRepository.save(user).orElseThrow(()->new BaseException(Code.MEMBER_NOT_SAVE));
     }
 
     public void store_join(JoinRequestDTO joinRequestDTO){
-        joinRequestDTO.setPassword(bCryptPasswordEncoder.encode(joinRequestDTO.getPassword()));
-        User user = new User(joinRequestDTO);
+        User user = toUser(joinRequestDTO);
         user.setRole(Role.ROLE_STORE);
         userRepository.save(user).orElseThrow(()->new BaseException(Code.MEMBER_NOT_SAVE));
     }
 
     public void master_join(JoinRequestDTO joinRequestDTO){
-        joinRequestDTO.setPassword(bCryptPasswordEncoder.encode(joinRequestDTO.getPassword()));
-        User user = new User(joinRequestDTO);
+        User user = toUser(joinRequestDTO);
         user.setRole(Role.ROLE_MASTER);
         userRepository.save(user).orElseThrow(()->new BaseException(Code.MEMBER_NOT_SAVE));
+    }
+
+    public User toUser(JoinRequestDTO joinRequestDTO){
+        return User.builder()
+                .username(joinRequestDTO.getUsername())
+                .password(bCryptPasswordEncoder.encode(joinRequestDTO.getPassword()))
+                .nickname(joinRequestDTO.getNickname())
+                .build();
     }
 
 }

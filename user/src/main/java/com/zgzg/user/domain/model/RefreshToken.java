@@ -7,14 +7,18 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "p_refresh")
 public class RefreshToken extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     private String username;
+
+    @Setter
     private String refresh;
+
+    @Setter
     private String expiration;
 }
