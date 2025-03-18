@@ -2,6 +2,7 @@ package com.zgzg.hub.presentation.req;
 
 import com.zgzg.hub.domain.entity.Hub;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class CreateHubReqDTO {
     private String hubLongitude;
 
     @NotNull(message = "허브 관리자는 필수로 입력해야 합니다.")
+    @Min(value = 1, message = "허브 관리자는 1이상의 값을 입력해야 합니다.")
     private Long hubAdminId;
 
     private Boolean isMegaHub;

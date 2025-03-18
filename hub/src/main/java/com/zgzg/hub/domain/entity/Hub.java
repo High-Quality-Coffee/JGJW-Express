@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -27,21 +28,26 @@ public class Hub extends BaseEntity {
   @Column(columnDefinition = "uuid", nullable = false, updatable = false)
   private UUID hubId;
 
-  @Column(nullable = false)
+  @Setter
+  @Column(nullable = false, unique = true)
   private String hubName;
 
+  @Setter
   @Column(nullable = false)
   private String hubAddress;
 
+  @Setter
   @Column(nullable = false)
   private String hubLatitude; // 위도
 
+  @Setter
   @Column(nullable = false)
   private String hubLongitude; // 경도
 
+  @Setter
   @Builder.Default
   private boolean isMegaHub = false;
 
+  @Setter
   private Long hubAdminId;
-
 }
