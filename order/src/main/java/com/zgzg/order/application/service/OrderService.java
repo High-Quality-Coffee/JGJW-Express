@@ -3,18 +3,23 @@ package com.zgzg.order.application.service;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.response.Code;
+import com.zgzg.order.application.dto.global.PageableResponse;
 import com.zgzg.order.application.dto.res.OrderDetaiListDTO;
 import com.zgzg.order.application.dto.res.OrderDetailDTO;
-import com.zgzg.order.application.dto.res.OrderResponseDto;
+import com.zgzg.order.application.dto.res.OrderDetailResponseDTO;
+import com.zgzg.order.application.dto.res.OrderResponseDTO;
 import com.zgzg.order.domain.entity.Order;
 import com.zgzg.order.domain.entity.OrderDetail;
 import com.zgzg.order.domain.repo.OrderRepository;
 import com.zgzg.order.presentation.dto.req.CreateOrderRequestDto;
+import com.zgzg.order.presentation.dto.req.SearchCriteria;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,10 +56,17 @@ public class OrderService {
 	public OrderDetaiListDTO getOrder(UUID orderId) {
 		// todo. 권한 확인 - MASTER, HUB(담당 허브만), DELIVERY(본인 주문만), STORE(본인 주문만)
 		List<OrderDetail> orderDetails = orderRepository.findByOrderIdAndNotDeleted(orderId);
-		List<OrderResponseDto> detailList = orderDetails.stream()
-			.map(detail -> OrderResponseDto.from(detail))
+		List<OrderDetailResponseDTO> detailList = orderDetails.stream()
+			.map(detail -> OrderDetailResponseDTO.from(detail))
 			.toList();
-
+		// todo. 응답 객체 필드에 baseEntity 필드도 추가
 		return new OrderDetaiListDTO(orderId, detailList);
+	}
+
+	// todo. 권한 확인 - MASTER, HUB(담당 허브만), DELIVERY(본인 주문만), STORE(본인 주문만)
+	public PageableResponse<OrderResponseDTO> searchOrder(SearchCriteria criteria, Pageable pageable) {
+		Page<OrderResponseDTO> orderDTOPage = orderRepository.searchOrderByCriteria(criteria, pageable);
+		// todo. 응답 객체 필드에 baseEntity 필드도 추가
+		return new PageableResponse<>(orderDTOPage);
 	}
 }
