@@ -47,10 +47,15 @@ spring:
             - Path=/api/v1/products/**
           filters:
             - name: AuthPermissionFilter
+        - id: ai
+          uri: lb://ai
+          predicates:
+            - Path=/api/v1/ai/**
+
   jwt:
     secret: ${JWT_SECRET_KEY}
   autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration    
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
 
 eureka:
