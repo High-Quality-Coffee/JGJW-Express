@@ -70,10 +70,11 @@ public class OrderService {
 		return new PageableResponse<>(orderDTOPage);
 	}
 
-	// todo. 권한 확인 - MASTER, HUB(담당 허브만), STORE(본인 주문만, 배송 시작 전까지만)
 	@Transactional
 	public OrderResponseDTO cancelOrder(UUID orderId) {
+		// todo. 권한 확인 - MASTER, HUB(담당 허브만), STORE(본인 주문만)
 		Order order = orderRepository.findByIdAndNotDeleted(orderId);
+		// todo. STORE 의 경우, 배송 상태가 배송 시작 전일 때만 취소 가능
 		order.cancelOrder();
 		return OrderResponseDTO.from(order);
 	}
