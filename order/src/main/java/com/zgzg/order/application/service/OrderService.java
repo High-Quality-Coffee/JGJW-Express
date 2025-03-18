@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.response.Code;
+import com.zgzg.order.application.dto.res.OrderResponseDto;
 import com.zgzg.order.domain.entity.Order;
 import com.zgzg.order.domain.repo.OrderRepository;
 import com.zgzg.order.presentation.dto.req.CreateOrderRequestDto;
@@ -25,7 +26,6 @@ public class OrderService {
 	@Transactional
 	public UUID createOrder(CreateOrderRequestDto requestDto) {
 		Order order = requestDto.toEntity(requestDto);
-		log.info("Order creat request: " + order.getReceiverCompanyId());
 		Order savedOrder = orderRepository.save(order);
 		return savedOrder.getOrderId();
 	}
@@ -37,5 +37,18 @@ public class OrderService {
 		// todo. 권한 유효성 검사
 		// todo. 사용자 정보 대입, 임시 데이터 제거
 		order.softDelete("temp1");
+		// todo. 주문이 삭제될 때 연관된 데이터도 함께 관리
+	}
+
+	public OrderResponseDto getOrder(UUID orderId) {
+		// 단건 조회
+		// 삭제 여부 확인
+		// todo. 권한 확인 - MASTER, HUB(담당 허브만), DELIVERY(본인 주문만), STORE(본인 주문만)
+		Order order = orderRepository.findByOrderIdAndNotDeleted(orderId);
+		// todo. deliverId 조회 어떻게 해야할까?
+		// todo. receiverCompanyName 조회 어떻게 해야할까?
+		// todo. productName 조회.. 하
+		// todo. response 값으로 변환
+		return null;
 	}
 }
