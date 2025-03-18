@@ -10,6 +10,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OrderDetaiListDTO {
 	private UUID orderId;
-	private List<OrderResponseDto> orderDetails;
+	private List<OrderDetailResponseDTO> orderDetails;
 
 }

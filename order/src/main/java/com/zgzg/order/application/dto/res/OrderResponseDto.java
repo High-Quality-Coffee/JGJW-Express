@@ -3,31 +3,36 @@ package com.zgzg.order.application.dto.res;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import com.zgzg.order.domain.entity.OrderDetail;
+import com.zgzg.order.domain.entity.Order;
+import com.zgzg.order.domain.entity.OrderStatus;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 @Builder
-public class OrderResponseDto { // 단건 상세 조회
+@Getter
+@AllArgsConstructor
+public class OrderResponseDTO {
 
-	private UUID odId;
-	private UUID productId;
-	private String productName;
-	private BigDecimal productPrice;
-	private Integer productQuantity;
-	private UUID deliveryId;
-	// todo. deliveryId 여기에서 가지고 있어야할까?
+	private UUID orderId;
+	private UUID receiverCompanyId;
+	private UUID supplierCompanyId;
+	private String supplierCompanyName;
+	private BigDecimal orderTotalPrice;
+	private OrderStatus orderStatus;
+	private String orderRequest;
 
-	public static OrderResponseDto from(OrderDetail orderDetail) {
-		return OrderResponseDto.builder()
-			.odId(orderDetail.getOdId())
-			.productId(orderDetail.getProductId())
-			.productName(orderDetail.getProductName())
-			.productPrice(orderDetail.getProductPrice())
-			.productQuantity(orderDetail.getQuantity())
+	public static OrderResponseDTO from(Order order) {
+
+		return OrderResponseDTO.builder()
+			.orderId(order.getOrderId())
+			.receiverCompanyId(order.getReceiverCompanyId())
+			.supplierCompanyId(order.getSupplierCompanyId())
+			.supplierCompanyName(order.getSupplierCompanyName())
+			.orderTotalPrice(order.getOrderTotalPrice())
+			.orderStatus(order.getOrderStatus())
+			.orderRequest(order.getOrderRequest())
 			.build();
 	}
-
 }
