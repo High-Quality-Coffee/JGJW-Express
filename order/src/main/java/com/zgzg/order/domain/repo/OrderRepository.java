@@ -19,7 +19,9 @@ public interface OrderRepository {
 
 	OrderDetail saveDetail(OrderDetail orderDetail);
 
-	List<OrderDetail> findByOrderIdAndNotDeleted(UUID orderId);
+	List<OrderDetail> findAllByOrderIdAndNotDeleted(UUID orderId);
 
 	Page<OrderResponseDTO> searchOrderByCriteria(SearchCriteria criteria, Pageable pageable);
+
+	Order findByIdAndNotDeleted(UUID orderId);
 }

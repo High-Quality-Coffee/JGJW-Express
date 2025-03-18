@@ -90,4 +90,12 @@ public class OrderController {
 			.body(ApiResponseData.of(ORDER_GET_SUCCESS.getCode(), ORDER_GET_SUCCESS.getMessage(), orderList));
 	}
 
+	@PatchMapping("/{orderId}/cancel")
+	public ResponseEntity<ApiResponseData<OrderResponseDTO>> cancelOrder(@PathVariable UUID orderId) {
+		OrderResponseDTO responseDTO = orderService.cancelOrder(orderId);
+
+		return ResponseEntity.ok().body(ApiResponseData.of(ORDER_CANCEL_SUCCESS.getCode(),
+			ORDER_CANCEL_SUCCESS.getMessage(), responseDTO));
+	}
+
 }

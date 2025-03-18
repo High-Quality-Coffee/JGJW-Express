@@ -55,7 +55,7 @@ public class OrderService {
 
 	public OrderDetaiListDTO getOrder(UUID orderId) {
 		// todo. 권한 확인 - MASTER, HUB(담당 허브만), DELIVERY(본인 주문만), STORE(본인 주문만)
-		List<OrderDetail> orderDetails = orderRepository.findByOrderIdAndNotDeleted(orderId);
+		List<OrderDetail> orderDetails = orderRepository.findAllByOrderIdAndNotDeleted(orderId);
 		List<OrderDetailResponseDTO> detailList = orderDetails.stream()
 			.map(detail -> OrderDetailResponseDTO.from(detail))
 			.toList();
@@ -68,5 +68,13 @@ public class OrderService {
 		Page<OrderResponseDTO> orderDTOPage = orderRepository.searchOrderByCriteria(criteria, pageable);
 		// todo. 응답 객체 필드에 baseEntity 필드도 추가
 		return new PageableResponse<>(orderDTOPage);
+	}
+
+	// todo. 권한 확인 - MASTER, HUB(담당 허브만), STORE(본인 주문만, 배송 시작 전까지만)
+	@Transactional
+	public OrderResponseDTO cancelOrder(UUID orderId) {
+		Order order = orderRepository.findByIdAndNotDeleted(orderId);
+		order.cancelOrder();
+		return OrderResponseDTO.from(order);
 	}
 }

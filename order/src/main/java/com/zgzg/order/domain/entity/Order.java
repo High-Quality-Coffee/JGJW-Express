@@ -57,4 +57,8 @@ public class Order extends BaseEntity {
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	@Builder.Default
 	private List<OrderDetail> orderDetails = new ArrayList<>();
+
+	public void cancelOrder() {
+		this.orderStatus = OrderStatus.CANCELED;
+	}
 }

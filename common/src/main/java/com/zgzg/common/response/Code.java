@@ -15,9 +15,10 @@ public enum Code {
 	/**
 	 * 주문 2000번대
 	 */
-	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "해당 주문을 찾을 수 없습니다."),
+	ORDER_GET_SUCCESS(HttpStatus.OK, 2000, "주문이 성공적으로 조회되었습니다."),
+	ORDER_CANCEL_SUCCESS(HttpStatus.OK, 2001, "주문이 성공적으로 취소되었습니다."),
 
-	ORDER_GET_SUCCESS(HttpStatus.OK, 200, "주문이 성공적으로 조회되었습니다."),
+	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, 2400, "해당 주문을 찾을 수 없습니다."),
 
 	/**
 	 * 성공 0번대
