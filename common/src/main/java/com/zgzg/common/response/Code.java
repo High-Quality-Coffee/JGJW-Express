@@ -17,6 +17,8 @@ public enum Code {
 	 */
 	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "해당 주문을 찾을 수 없습니다."),
 
+	ORDER_GET_SUCCESS(HttpStatus.OK, 200, "주문이 성공적으로 조회되었습니다."),
+
 	/**
 	 * 성공 0번대
 	 */
