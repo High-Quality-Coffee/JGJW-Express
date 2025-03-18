@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateHubResDTO {
+public class HubResDTO {
 
   private HubDTO hubDTO;
 
-  public static CreateHubResDTO from(Hub hub) {
-    return CreateHubResDTO.builder()
+  public static HubResDTO from(Hub hub) {
+    return HubResDTO.builder()
         .hubDTO(HubDTO.from(hub))
         .build();
   }
@@ -28,7 +28,7 @@ public class CreateHubResDTO {
   public static class HubDTO {
 
     private UUID hubId;
-    private String hubName; // Consider using camelCase for consistency
+    private String HubName;
     private String hubAddress;
     private String hubLatitude;
     private String hubLongitude;
@@ -38,7 +38,7 @@ public class CreateHubResDTO {
     public static HubDTO from(Hub hub) {
       return HubDTO.builder()
           .hubId(hub.getHubId())
-          .hubName(hub.getHubName())
+          .HubName(hub.getHubName())
           .hubAddress(hub.getHubAddress())
           .hubLatitude(hub.getHubLatitude())
           .hubLongitude(hub.getHubLongitude())

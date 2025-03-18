@@ -1,23 +1,25 @@
 package com.zgzg.hub.application.res;
 
+
 import com.zgzg.hub.domain.entity.Hub;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateHubResDTO {
+public class PageHubsResDTO {
 
-  private HubDTO hubDTO;
+  private Page<HubDTO> hubs;
 
-  public static CreateHubResDTO from(Hub hub) {
-    return CreateHubResDTO.builder()
-        .hubDTO(HubDTO.from(hub))
+  public static PageHubsResDTO from(Page<Hub> hubs) {
+    return PageHubsResDTO.builder()
+        .hubs(hubs.map(HubDTO::from))
         .build();
   }
 
@@ -28,7 +30,7 @@ public class CreateHubResDTO {
   public static class HubDTO {
 
     private UUID hubId;
-    private String hubName; // Consider using camelCase for consistency
+    private String HubName;
     private String hubAddress;
     private String hubLatitude;
     private String hubLongitude;
@@ -38,7 +40,7 @@ public class CreateHubResDTO {
     public static HubDTO from(Hub hub) {
       return HubDTO.builder()
           .hubId(hub.getHubId())
-          .hubName(hub.getHubName())
+          .HubName(hub.getHubName())
           .hubAddress(hub.getHubAddress())
           .hubLatitude(hub.getHubLatitude())
           .hubLongitude(hub.getHubLongitude())
