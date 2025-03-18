@@ -15,7 +15,6 @@ spring:
         - id: user
           uri: lb://user
           predicates:
-            - Path=/api/v1/join/**, /api/v1/login
             - Path=/user/**
         - id: company
           uri: lb://company
@@ -36,6 +35,11 @@ spring:
           uri: lb://hub
           predicates:
             - Path=/api/v1/hubs/**
+        - id: ai
+          uri: lb://ai
+          predicates:
+            - Path=/api/v1/ai/**
+
   jwt:
     secret: ${JWT_SECRET_KEY}
   autoconfigure:
@@ -45,6 +49,6 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_DISCOVERY_URL}
+      defaultZone: http://localhost:19090/eureka/
     register-with-eureka: true
     fetch-registry: true
