@@ -15,8 +15,10 @@ import com.zgzg.company.domain.Company;
 public interface CompanyRepository extends JpaRepository<Company, UUID> {
 
 	Optional<Company> findById(UUID id);
+	Optional<Company> findByIdAndDeletedAtIsNull(UUID id);
 
 	List<Company> findAll();
+	Page<Company> findAllByDeletedAtIsNull(Pageable pageable);
 
 	@Query("SELECT c FROM Company c " +
 		"WHERE (:keyword IS NULL OR :keyword = '' OR " +
