@@ -29,18 +29,17 @@ public class CreateHubResDTO {
   public static class HubDTO {
 
     private UUID hubId;
-    private String HubName;
+    private String hubName; // Consider using camelCase for consistency
     private String hubAddress;
     private String hubLatitude;
     private String hubLongitude;
     private Long hubAdminId;
     private boolean isMegaHub;
-  }
 
     public static HubDTO from(Hub hub) {
       return HubDTO.builder()
           .hubId(hub.getHubId())
-          .HubName(hub.getHubName())
+          .hubName(hub.getHubName())
           .hubAddress(hub.getHubAddress())
           .hubLatitude(hub.getHubLatitude())
           .hubLongitude(hub.getHubLongitude())
