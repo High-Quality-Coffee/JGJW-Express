@@ -38,7 +38,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 	}
 
 	@Override
-	public List<OrderDetail> findByOrderIdAndNotDeleted(UUID orderId) {
+	public List<OrderDetail> findAllByOrderIdAndNotDeleted(UUID orderId) {
 		return detailJpaRepository.findByOrder_OrderIdAndDeletedAtIsNull(orderId);
 	}
 
@@ -46,5 +46,10 @@ public class OrderRepositoryImpl implements OrderRepository {
 	public Page<OrderResponseDTO> searchOrderByCriteria(SearchCriteria criteria, Pageable pageable) {
 		return jpaRepository.searchOrderByCriteria(criteria, pageable);
 	}
-	
+
+	@Override
+	public Order findByIdAndNotDeleted(UUID orderId) {
+		return jpaRepository.findByOrderIdAndDeletedAtIsNull(orderId);
+	}
+
 }

@@ -8,4 +8,5 @@ import com.zgzg.order.domain.entity.Order;
 
 public interface OrderJpaRepository extends JpaRepository<Order, UUID>, OrderJpaRepositoryCustom {
 
+	Order findByOrderIdAndDeletedAtIsNull(UUID orderId);
 }
