@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,6 +43,8 @@ public class CreateHubReqDTO {
     private Long hubAdminId;
 
     private Boolean isMegaHub;
+
+    private UUID parentHubId;
   }
 
   public static Hub toEntity(CreateHubReqDTO createHubReqDTO) {
@@ -52,6 +55,7 @@ public class CreateHubReqDTO {
         .hubLongitude(createHubReqDTO.getHubDTO().getHubLongitude())
         .hubAdminId(createHubReqDTO.getHubDTO().getHubAdminId())
         .isMegaHub(createHubReqDTO.getHubDTO().getIsMegaHub())
+        .parentHubId(createHubReqDTO.getHubDTO().getParentHubId())
         .build();
   }
 }

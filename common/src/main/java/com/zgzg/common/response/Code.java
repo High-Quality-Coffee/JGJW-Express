@@ -21,6 +21,7 @@ public enum Code {
   CREATED_HUB_SUCCESS(HttpStatus.CREATED, 4101, "허브가 생성되었습니다."),
   EXIST_HUB_NAME(HttpStatus.BAD_REQUEST, 4001, "이미 존재하는 허브명 입니다."),
   HUB_NOT_FOUND(HttpStatus.NOT_FOUND, 4002, "허브가 존재하지 않습니다."),
+  PARENT_HUB_NOT_FOUND(HttpStatus.BAD_REQUEST, 4003, "중앙 허브가 존재하지 않습니다."),
 
   /**
    * VALIDATION 관련 100번대

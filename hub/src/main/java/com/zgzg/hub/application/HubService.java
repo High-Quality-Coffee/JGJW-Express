@@ -2,6 +2,7 @@ package com.zgzg.hub.application;
 
 import static com.zgzg.common.response.Code.EXIST_HUB_NAME;
 import static com.zgzg.common.response.Code.HUB_NOT_FOUND;
+import static com.zgzg.common.response.Code.PARENT_HUB_NOT_FOUND;
 
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.hub.application.res.CreateHubResDTO;
@@ -28,10 +29,18 @@ public class HubService {
 
   @Transactional
   public CreateHubResDTO createHub(CreateHubReqDTO createHubReqDTO) {
-    boolean exist = hubRepository.existsByHubName(createHubReqDTO.getHubDTO().getHubName());
+    boolean existsByHubName = hubRepository.existsByHubName(
+        createHubReqDTO.getHubDTO().getHubName());
 
-    if (exist) {
+    if (existsByHubName) {
       throw new BaseException(EXIST_HUB_NAME);
+    }
+
+    if (createHubReqDTO.getHubDTO().getParentHubId() != null) {
+      boolean existHub = hubRepository.existsByHubId(createHubReqDTO.getHubDTO().getParentHubId());
+      if (!existHub) {
+        throw new BaseException(PARENT_HUB_NOT_FOUND);
+      }
     }
 
     // TODO : 허브 관리자 검증
@@ -44,6 +53,13 @@ public class HubService {
   public UpdateHubResDTO updateHub(UUID hubId, UpdateHubReqDTO updateHubReqDTO) {
     Hub hub = hubRepository.findByHubId(hubId)
         .orElseThrow(() -> new BaseException(HUB_NOT_FOUND));
+
+    if (updateHubReqDTO.getHubDTO().getParentHubId() != null) {
+      boolean existHub = hubRepository.existsByHubId(updateHubReqDTO.getHubDTO().getParentHubId());
+      if (!existHub) {
+        throw new BaseException(PARENT_HUB_NOT_FOUND);
+      }
+    }
 
     // TODO : 허브 관리자 검증
 
@@ -97,5 +113,7 @@ public class HubService {
     if (updateHubReqDTO.getHubDTO().getIsMegaHub() != null) {
       hub.setMegaHub(updateHubReqDTO.getHubDTO().getIsMegaHub());
     }
+
+    hub.setParentHubId(updateHubReqDTO.getHubDTO().getParentHubId());
   }
 }
