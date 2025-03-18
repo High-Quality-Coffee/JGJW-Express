@@ -32,22 +32,19 @@ dependencies {
     implementation project(':common')
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
-    implementation 'org.glassfish.jersey.core:jersey-client:3.1.5'
-    implementation 'org.glassfish.jersey.inject:jersey-hk2:3.1.5'
-    implementation 'org.glassfish.jersey.media:jersey-media-jaxb:3.1.5'
-    implementation 'com.sun.jersey:jersey-client:1.19.4'
-    implementation 'com.sun.jersey:jersey-core:1.19.4'
-    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client') {
+        exclude group: 'com.sun.jersey'
+        exclude group: 'org.glassfish.jersey.core'
+    }
 
-    compileOnly 'org.projectlombok:lombok'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+    implementation "com.squareup.okhttp3:okhttp:4.11.0"
+
     runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 dependencyManagement {
