@@ -16,7 +16,7 @@ public enum Code {
   EXIST_HUB_NAME(HttpStatus.BAD_REQUEST, 4001, "이미 존재하는 허브명 입니다."),
 
     /**
-     * VALIDATION 관련 100번대
+     * 회원 관련 1000번대
      */
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, 100, "잘못된 입력값이 존재합니다."),
     MEMBER_NOT_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, 1001, "회원가입이 정상적으로 처리되지 않았습니다."),
@@ -44,19 +44,28 @@ public enum Code {
 
 
     ACCESS_DENIED(HttpStatus.FORBIDDEN, 40204, "접근 권한이 없습니다."),
+
+  /**
+   * 상품 관련 6000번대
+   */
+  PRODUCT_CREATE(HttpStatus.OK,6000,"상품 등록을 성공하였습니다."),
+  PRODUCT_NOT_CREATE(HttpStatus.BAD_REQUEST,6001,"상품 등록을 실패하였습니다."),
+  PRODUCT_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,6002, "동일한 상품이 이미 존재합니다. 동일한 상품이라면, 재고를 추가해주세요"),
+  PRODUCT_EXISTS(HttpStatus.OK,6010,"상품 조회가 완료되었습니다."),
+  PRODUCT_NOT_EXISTS(HttpStatus.BAD_REQUEST,6011,"상품 조회를 실패하였습니다."),
+  PRODUCT_UPDATE(HttpStatus.OK,6020,"상품 수정이 완료되었습니다."),
+  PRODUCT_NOT_UPDATE(HttpStatus.BAD_REQUEST,6021,"상품 수정을 실패했습니다."),
+  PRODUCT_DELETE(HttpStatus.OK,6030, "상품 삭제가 완료되었습니다."),
+  PRODUCT_NOT_DELETE(HttpStatus.BAD_REQUEST,6031, "상품 삭제를 실패했습니다."),
+  PRODUCT_NO_STOCK(HttpStatus.BAD_REQUEST,6040, "상품 재고가 부족합니다."),
+  PRODUCT_STOCK_NOT_ADD(HttpStatus.BAD_REQUEST,6041, "추가할 재고는 1개 이상 이어야 합니다."),
+  PRODUCT_STOCK_NOT_REDUCE(HttpStatus.BAD_REQUEST, 6042, "삭제할 재고는 1개 이상이어야 합니다."),
   /**
    * 성공 0번대
    */
   SUCCESS(HttpStatus.OK, 200, "성공적으로 처리되었습니다."),
   CREATED(HttpStatus.CREATED, 201, "성공적으로 생성되었습니다."),
   ALREADY_EXISTS(HttpStatus.OK, 202, "이미 존재하는 리소스입니다."),
-
-
-  //보안 관련(40200 ~ 40299번대)
-  REQUIRED_LOGIN(HttpStatus.UNAUTHORIZED, 40200, "로그인이 필요합니다."),
-  INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 40201, "유효하지 않은 토큰입니다."),
-  EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 40202, "토큰이 만료되었습니다."),
-  ACCESS_DENIED(HttpStatus.FORBIDDEN, 40204, "접근 권한이 없습니다."),
 
   /**
    * 500번대
