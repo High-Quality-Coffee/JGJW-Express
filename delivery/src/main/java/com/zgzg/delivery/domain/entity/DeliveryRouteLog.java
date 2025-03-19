@@ -13,34 +13,38 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "p_delivery_route_log")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class DeliveryRouteLog extends BaseEntity { //배송 경로 기록
 
 	@Id
-	private UUID deliveryRouteLogId;
-
+	private UUID drlId;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Delivery delivery;
-
 	@Column(nullable = false)
 	private Integer sequence;
 	@Column(nullable = false)
 	private UUID startHubId;
 	@Column(nullable = false)
+	private String startHubName;
+	@Column(nullable = false)
 	private UUID endHubId;
+	@Column(nullable = false)
+	private String endHubName;
 	@Column(nullable = false)
 	private BigDecimal estimatedDistance;
 	@Column(nullable = false)
 	private BigDecimal estimatedTime;
-
 	private BigDecimal actualDistance;
 	private BigDecimal actualTimeSpent;
 	@Column(nullable = false)
 	private DeliveryStatus deliveryStatus;
 	private UUID deliveryPersonId;
+	private String deliveryPersonName;
 }

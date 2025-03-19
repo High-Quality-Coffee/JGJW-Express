@@ -25,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.response.Code;
 import com.zgzg.delivery.application.dto.res.DeliveryResponseDTO;
+import com.zgzg.delivery.application.dto.res.DeliveryRouteLogsResponseDTO;
 import com.zgzg.delivery.application.dto.res.PageableResponse;
 import com.zgzg.delivery.application.service.DeliveryService;
 import com.zgzg.delivery.presentation.dto.global.SearchCriteria;
@@ -92,5 +93,13 @@ public class DeliveryController {
 		return ResponseEntity.ok()
 			.body(
 				ApiResponseData.of(DELIVERY_READ_SUCCESS.getCode(), DELIVERY_READ_SUCCESS.getMessage(), deliveryList));
+	}
+
+	@GetMapping("/{deliveryId}/routes")
+	public ResponseEntity<ApiResponseData<DeliveryRouteLogsResponseDTO>> getDeliveryRoutes(
+		@RequestParam UUID deliveryId) {
+		DeliveryRouteLogsResponseDTO responseDTO = deliveryService.getDeliveryRoutes(deliveryId);
+		return ResponseEntity.ok()
+			.body(ApiResponseData.of(DELIVERY_READ_SUCCESS.getCode(), DELIVERY_READ_SUCCESS.getMessage(), responseDTO));
 	}
 }
