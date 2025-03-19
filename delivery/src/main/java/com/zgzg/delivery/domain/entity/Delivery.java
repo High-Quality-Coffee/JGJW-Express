@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -22,13 +23,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Delivery {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID deliveryId;
 	@Column(nullable = false)
-	private DeliveryStatus orderStatus;
+	private DeliveryStatus deliveryStatus;
 	@Column(nullable = false)
 	private UUID originHubId; // 출발 허브
 	@Column(nullable = false)

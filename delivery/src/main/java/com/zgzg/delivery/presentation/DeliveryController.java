@@ -1,5 +1,10 @@
 package com.zgzg.delivery.presentation;
 
+import static com.zgzg.common.response.Code.*;
+
+import java.net.URI;
+import java.util.UUID;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.zgzg.common.response.ApiResponseData;
+import com.zgzg.common.response.Code;
 import com.zgzg.delivery.application.service.DeliveryService;
 import com.zgzg.delivery.presentation.dto.req.CreateDeliveryRequestDTO;
 
@@ -23,10 +30,15 @@ public class DeliveryController {
 	private final DeliveryService deliveryService;
 
 	@PostMapping()
-	public ResponseEntity<ApiResponseData<String>> createDelivery(
+	public ResponseEntity<ApiResponseData<Code>> createDelivery(
 		@RequestBody @Validated CreateDeliveryRequestDTO requestDTO) {
-		// deliveryService.createDelivery(requestDTO);
-		return null;
+		UUID deliveryID = deliveryService.createDelivery(requestDTO);
+
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+			.path("/{deliveryId}")
+			.buildAndExpand(deliveryID)
+			.toUri();
+		return ResponseEntity.created(uri).body(ApiResponseData.success(DELIVERY_CREATE_SUCCESS));
 	}
 
 	@GetMapping("/{deliveryId}")
