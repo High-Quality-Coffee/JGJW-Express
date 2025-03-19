@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.zgzg.common.utils.BaseEntity;
 
 import jakarta.persistence.CascadeType;
@@ -34,9 +36,10 @@ public class Delivery extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID deliveryId;
 
+	@ColumnDefault("'PREPARING'")
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private DeliveryStatus deliveryStatus;
+	@Builder.Default
+	private DeliveryStatus deliveryStatus = DeliveryStatus.PREPARING;
 
 	@Column(nullable = false)
 	private UUID originHubId; // 출발 허브
@@ -60,7 +63,7 @@ public class Delivery extends BaseEntity {
 	private UUID deliveryPersonId;
 
 	private String deliveryPersonName;
-	
+
 	@Column(nullable = false)
 	private UUID orderId;
 

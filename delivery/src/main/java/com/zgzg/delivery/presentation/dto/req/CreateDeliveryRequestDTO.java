@@ -3,7 +3,6 @@ package com.zgzg.delivery.presentation.dto.req;
 import java.util.UUID;
 
 import com.zgzg.delivery.domain.entity.Delivery;
-import com.zgzg.delivery.domain.entity.DeliveryStatus;
 
 import lombok.Getter;
 
@@ -11,7 +10,6 @@ import lombok.Getter;
 public class CreateDeliveryRequestDTO {
 
 	private UUID orderId;
-	private DeliveryStatus deliveryStatus;
 	private UUID originHubId; // 출발 허브
 	private UUID destinationHubId; // 목적지 허브
 	private String receiverAddress;
@@ -22,7 +20,6 @@ public class CreateDeliveryRequestDTO {
 	public Delivery toEntity() {
 		return Delivery.builder()
 			.orderId(orderId)
-			.deliveryStatus(deliveryStatus)
 			.originHubId(originHubId)
 			.destinationHubId(destinationHubId)
 			.receiverAddress(receiverAddress)
