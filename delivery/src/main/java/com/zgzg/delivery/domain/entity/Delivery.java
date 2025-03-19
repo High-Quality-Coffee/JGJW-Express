@@ -9,6 +9,8 @@ import com.zgzg.common.utils.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,26 +33,42 @@ public class Delivery extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID deliveryId;
+
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private DeliveryStatus deliveryStatus;
+
 	@Column(nullable = false)
 	private UUID originHubId; // 출발 허브
+
 	private String originHubName; // 출발 허브
+
 	@Column(nullable = false)
 	private UUID destinationHubId; // 목적지 허브
+
 	private String destinationHubName; // 목적지 허브
+
 	@Column(nullable = false)
 	private String receiverAddress;
+
 	@Column(nullable = false)
 	private String receiverName;
+
 	@Column(nullable = false)
 	private String receiverSlackId;
+
 	private UUID deliveryPersonId;
+
 	private String deliveryPersonName;
+	
 	@Column(nullable = false)
 	private UUID orderId;
+
 	@OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
 	@Builder.Default
 	private List<DeliveryRouteLog> deliveryRouteLogs = new ArrayList<>();
 
+	public void cancelDelivery() {
+		this.deliveryStatus = DeliveryStatus.CANCELED;
+	}
 }

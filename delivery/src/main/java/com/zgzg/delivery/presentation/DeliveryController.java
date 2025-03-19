@@ -46,18 +46,23 @@ public class DeliveryController {
 	@GetMapping("/{deliveryId}")
 	public ResponseEntity<ApiResponseData<DeliveryResponseDTO>> getDelivery(@PathVariable UUID deliveryId) {
 		DeliveryResponseDTO responseDTO = deliveryService.getDelivery(deliveryId);
-		return null;
+		return ResponseEntity.ok()
+			.body(ApiResponseData.of(DELIVERY_READ_SUCCESS.getCode(), DELIVERY_READ_SUCCESS.getMessage(), responseDTO));
 	}
 
 	@PatchMapping("/{deliveryId}/cancel")
-	public ResponseEntity<ApiResponseData<String>> cancelDelivery(
-		@RequestBody @Validated CreateDeliveryRequestDTO requestDTO) {
-		return null;
+	public ResponseEntity<ApiResponseData<DeliveryResponseDTO>> cancelDelivery(
+		@PathVariable UUID deliveryId) {
+		DeliveryResponseDTO responseDTO = deliveryService.cancelDelivery(deliveryId);
+		return ResponseEntity.ok()
+			.body(ApiResponseData.of(DELIVERY_CANCEL_SUCCESS.getCode(), DELIVERY_CANCEL_SUCCESS.getMessage(),
+				responseDTO));
 	}
 
 	@PatchMapping("/{deliveryId}/delete")
-	public ResponseEntity<ApiResponseData<String>> deleteDelivery() {
-		return null;
+	public ResponseEntity<ApiResponseData<String>> deleteDelivery(@PathVariable UUID deliveryId) {
+		deliveryService.deleteDelivery(deliveryId);
+		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping()

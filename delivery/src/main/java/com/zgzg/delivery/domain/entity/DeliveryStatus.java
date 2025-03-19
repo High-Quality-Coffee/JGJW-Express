@@ -7,5 +7,6 @@ public enum DeliveryStatus {
 	HUB_IN_TRANSIT,     // 허브 이동 중  (허브 간 이동)
 	HUB_ARRIVED,        // 목적지 허브 도착  (마지막 허브 도착)
 	IN_DELIVERY,        // 배송 중  (업체 배송중)
-	DELIVERED           // 배송 완료
+	DELIVERED,           // 배송 완료
+	CANCELED            // 배송 취소
 }

@@ -21,6 +21,6 @@ public class DeliveryRepositoryImpl implements DeliveryRepository {
 
 	@Override
 	public Delivery findByIdAndNotDeleted(UUID deliveryId) {
-		return jpaRepository.findByIdAndDeletedAtIsNull(deliveryId);
+		return jpaRepository.findByDeliveryIdAndDeletedAtIsNull(deliveryId);
 	}
 }
