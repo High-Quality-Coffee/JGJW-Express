@@ -2,11 +2,9 @@ package com.zgzg.common.response;
 
 import java.util.Optional;
 import java.util.function.Predicate;
-
-import org.springframework.http.HttpStatus;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
@@ -91,7 +89,7 @@ public enum Code {
 			.orElse(this.getMessage());
 	}
 
-	public String getDetailMessage(String message) {
-		return this.getMessage() + " : " + message;
-	}
+  public String getDetailMessage(String message) {
+    return this.getMessage() + " : " + message;
+  }
 }

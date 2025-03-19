@@ -1,4 +1,4 @@
-package com.zgzg.user.Infrastructure.configuration;
+package com.zgzg.product.infrastructure.configuration;
 
 import com.zgzg.common.config.JpaConfig;
 import com.zgzg.common.config.PropertyConfig;
@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Import;
 @Import({
         JpaConfig.class,
         PropertyConfig.class,
+        GlobalSecurityConfig.class,
         GlobalSecurityContextFilter.class
 })
 public class GlobalConfig {
 }
+
 
