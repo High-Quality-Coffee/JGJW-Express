@@ -2,9 +2,11 @@ package com.zgzg.common.response;
 
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import org.springframework.http.HttpStatus;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
@@ -14,6 +16,14 @@ public enum Code {
    * 허브 4000번 대
    */
   EXIST_HUB_NAME(HttpStatus.BAD_REQUEST, 4001, "이미 존재하는 허브명 입니다."),
+  
+  	/**
+	 * 주문 2000번대
+	 */
+	ORDER_GET_SUCCESS(HttpStatus.OK, 2000, "주문이 성공적으로 조회되었습니다."),
+	ORDER_CANCEL_SUCCESS(HttpStatus.OK, 2001, "주문이 성공적으로 취소되었습니다."),
+
+	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, 2400, "해당 주문을 찾을 수 없습니다."),
 
     /**
      * VALIDATION 관련 100번대
