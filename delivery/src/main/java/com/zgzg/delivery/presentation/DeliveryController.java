@@ -3,8 +3,13 @@ package com.zgzg.delivery.presentation;
 import static com.zgzg.common.response.Code.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,13 +18,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.response.Code;
 import com.zgzg.delivery.application.dto.res.DeliveryResponseDTO;
+import com.zgzg.delivery.application.dto.res.PageableResponse;
 import com.zgzg.delivery.application.service.DeliveryService;
+import com.zgzg.delivery.presentation.dto.global.SearchCriteria;
 import com.zgzg.delivery.presentation.dto.req.CreateDeliveryRequestDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -66,7 +74,23 @@ public class DeliveryController {
 	}
 
 	@GetMapping()
-	public ResponseEntity<ApiResponseData<String>> searchDelivery() {
-		return null;
+	public ResponseEntity<ApiResponseData<PageableResponse<DeliveryResponseDTO>>> searchDelivery(
+		@RequestParam(required = false) LocalDateTime startDate,
+		@RequestParam(required = false) LocalDateTime endDate,
+		@PageableDefault
+		@SortDefault.SortDefaults({
+			@SortDefault(sort = "createdDateTime", direction = Sort.Direction.DESC),
+			@SortDefault(sort = "modifiedDateTime", direction = Sort.Direction.DESC)
+		}) Pageable pageable) {
+
+		// todo. 검색 조건 기간 외에 뭐가 있을까..
+		SearchCriteria criteria = SearchCriteria.builder()
+			.startDate(startDate)
+			.endDate(endDate)
+			.build();
+		PageableResponse<DeliveryResponseDTO> deliveryList = deliveryService.searchOrder(criteria, pageable);
+		return ResponseEntity.ok()
+			.body(
+				ApiResponseData.of(DELIVERY_READ_SUCCESS.getCode(), DELIVERY_READ_SUCCESS.getMessage(), deliveryList));
 	}
 }

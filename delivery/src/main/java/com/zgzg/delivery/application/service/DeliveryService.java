@@ -4,14 +4,18 @@ import static com.zgzg.common.response.Code.*;
 
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.delivery.application.dto.res.DeliveryResponseDTO;
+import com.zgzg.delivery.application.dto.res.PageableResponse;
 import com.zgzg.delivery.domain.entity.Delivery;
 import com.zgzg.delivery.domain.entity.DeliveryStatus;
 import com.zgzg.delivery.domain.repo.DeliveryRepository;
+import com.zgzg.delivery.presentation.dto.global.SearchCriteria;
 import com.zgzg.delivery.presentation.dto.req.CreateDeliveryRequestDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -53,5 +57,10 @@ public class DeliveryService {
 		}
 		delivery.cancelDelivery();
 		return DeliveryResponseDTO.from(delivery);
+	}
+
+	public PageableResponse<DeliveryResponseDTO> searchOrder(SearchCriteria criteria, Pageable pageable) {
+		Page<DeliveryResponseDTO> deliveryDTOPage = deliveryRepository.searchDeliveryByCriteria(criteria, pageable);
+		return new PageableResponse<>(deliveryDTOPage);
 	}
 }

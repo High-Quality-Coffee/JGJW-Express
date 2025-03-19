@@ -5,11 +5,13 @@ import java.util.UUID;
 import com.zgzg.delivery.domain.entity.Delivery;
 import com.zgzg.delivery.domain.entity.DeliveryStatus;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class DeliveryResponseDTO {
 
 	private UUID deliveryId;
