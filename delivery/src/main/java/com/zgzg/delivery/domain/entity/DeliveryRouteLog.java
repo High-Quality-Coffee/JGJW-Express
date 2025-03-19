@@ -3,6 +3,8 @@ package com.zgzg.delivery.domain.entity;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import com.zgzg.common.utils.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "p_delivery_route_log")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class DeliveryRouteLog { //배송 경로 기록
+public class DeliveryRouteLog extends BaseEntity { //배송 경로 기록
 
 	@Id
 	private UUID deliveryRouteLogId;

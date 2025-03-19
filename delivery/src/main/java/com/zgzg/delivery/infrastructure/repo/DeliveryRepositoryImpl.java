@@ -1,5 +1,7 @@
 package com.zgzg.delivery.infrastructure.repo;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Repository;
 
 import com.zgzg.delivery.domain.entity.Delivery;
@@ -15,5 +17,10 @@ public class DeliveryRepositoryImpl implements DeliveryRepository {
 	@Override
 	public Delivery save(Delivery delivery) {
 		return jpaRepository.save(delivery);
+	}
+
+	@Override
+	public Delivery findByIdAndNotDeleted(UUID deliveryId) {
+		return jpaRepository.findByIdAndDeletedAtIsNull(deliveryId);
 	}
 }

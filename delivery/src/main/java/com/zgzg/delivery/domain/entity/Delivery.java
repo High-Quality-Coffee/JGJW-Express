@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.zgzg.common.utils.BaseEntity;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Delivery {
+public class Delivery extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -33,8 +35,10 @@ public class Delivery {
 	private DeliveryStatus deliveryStatus;
 	@Column(nullable = false)
 	private UUID originHubId; // 출발 허브
+	private String originHubName; // 출발 허브
 	@Column(nullable = false)
 	private UUID destinationHubId; // 목적지 허브
+	private String destinationHubName; // 목적지 허브
 	@Column(nullable = false)
 	private String receiverAddress;
 	@Column(nullable = false)
@@ -42,6 +46,7 @@ public class Delivery {
 	@Column(nullable = false)
 	private String receiverSlackId;
 	private UUID deliveryPersonId;
+	private String deliveryPersonName;
 	@Column(nullable = false)
 	private UUID orderId;
 	@OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
