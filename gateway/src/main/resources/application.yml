@@ -29,6 +29,8 @@ spring:
           uri: lb://delivery
           predicates:
             - Path=/api/v1/deliveries/**
+          filters:
+            - name: AuthPermissionFilter
         #로그인 필요한 요청(토큰 검증 필터 o)
         - id: user
           uri: lb://user

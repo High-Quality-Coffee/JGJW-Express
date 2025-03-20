@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zgzg.common.exception.BaseException;
+import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.delivery.application.dto.res.DeliveryResponseDTO;
 import com.zgzg.delivery.application.dto.res.DeliveryRouteLogsResponseDTO;
 import com.zgzg.delivery.application.dto.res.DeliveryRouteResponseDTO;
@@ -34,7 +35,7 @@ public class DeliveryService {
 	private final DeliveryRouteLogRepository deliveryRouteLogRepository;
 
 	@Transactional
-	public UUID createDelivery(CreateDeliveryRequestDTO requestDTO) {
+	public UUID createDelivery(CreateDeliveryRequestDTO requestDTO, CustomUserDetails userDetails) {
 		Delivery delivery = requestDTO.toEntity();
 		Delivery savedDelivery = deliveryRepository.save(delivery);
 		// todo. 배송 경로 생성 로직 추가 (허브 경로)

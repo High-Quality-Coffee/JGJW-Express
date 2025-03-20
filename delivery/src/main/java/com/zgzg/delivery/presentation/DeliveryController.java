@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,6 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.response.Code;
+import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.delivery.application.dto.res.DeliveryResponseDTO;
 import com.zgzg.delivery.application.dto.res.DeliveryRouteLogsResponseDTO;
 import com.zgzg.delivery.application.dto.res.PageableResponse;
@@ -32,18 +35,25 @@ import com.zgzg.delivery.presentation.dto.global.SearchCriteria;
 import com.zgzg.delivery.presentation.dto.req.CreateDeliveryRequestDTO;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/deliveries")
+@Slf4j
 public class DeliveryController {
 
 	private final DeliveryService deliveryService;
 
 	@PostMapping()
+	@Secured("ROLE_MASTER")
 	public ResponseEntity<ApiResponseData<Code>> createDelivery(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@RequestBody @Validated CreateDeliveryRequestDTO requestDTO) {
-		UUID deliveryID = deliveryService.createDelivery(requestDTO);
+
+		log.info("userDetails: {}", userDetails.getUsername());
+		log.info("userDetails: {}", userDetails.getRole());
+		UUID deliveryID = deliveryService.createDelivery(requestDTO, userDetails);
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 			.path("/{deliveryId}")
