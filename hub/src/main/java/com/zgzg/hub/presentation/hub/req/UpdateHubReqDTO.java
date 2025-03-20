@@ -1,4 +1,4 @@
-package com.zgzg.hub.presentation.req;
+package com.zgzg.hub.presentation.hub.req;
 
 import com.zgzg.hub.util.annotation.NullAndNotEmpty;
 import jakarta.validation.Valid;

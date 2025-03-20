@@ -1,4 +1,4 @@
-package com.zgzg.hub.presentation;
+package com.zgzg.hub.presentation.hub;
 
 import static com.zgzg.common.response.Code.CREATED_HUB_SUCCESS;
 import static com.zgzg.common.response.Code.GET_HUBS_SUCCESS;
@@ -6,13 +6,13 @@ import static com.zgzg.common.response.Code.GET_HUB_SUCCESS;
 import static com.zgzg.common.response.Code.UPDATE_HUB_SUCCESS;
 
 import com.zgzg.common.response.ApiResponseData;
-import com.zgzg.hub.application.HubService;
-import com.zgzg.hub.application.res.CreateHubResDTO;
-import com.zgzg.hub.application.res.HubResDTO;
-import com.zgzg.hub.application.res.PageHubsResDTO;
-import com.zgzg.hub.application.res.UpdateHubResDTO;
-import com.zgzg.hub.presentation.req.CreateHubReqDTO;
-import com.zgzg.hub.presentation.req.UpdateHubReqDTO;
+import com.zgzg.hub.application.hub.HubService;
+import com.zgzg.hub.application.hub.res.CreateHubResDTO;
+import com.zgzg.hub.application.hub.res.HubResDTO;
+import com.zgzg.hub.application.hub.res.PageHubsResDTO;
+import com.zgzg.hub.application.hub.res.UpdateHubResDTO;
+import com.zgzg.hub.presentation.hub.req.CreateHubReqDTO;
+import com.zgzg.hub.presentation.hub.req.UpdateHubReqDTO;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.UUID;

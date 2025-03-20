@@ -1,4 +1,4 @@
-package com.zgzg.hub.application.res;
+package com.zgzg.hub.application.hub.res;
 
 import com.zgzg.hub.domain.entity.Hub;
 import java.util.UUID;
@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateHubResDTO {
+public class HubResDTO {
 
   private HubDTO hubDTO;
 
-  public static UpdateHubResDTO from(Hub hub) {
-    return UpdateHubResDTO.builder()
+  public static HubResDTO from(Hub hub) {
+    return HubResDTO.builder()
         .hubDTO(HubDTO.from(hub))
         .build();
   }

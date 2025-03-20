@@ -46,6 +46,10 @@ public enum Code {
   /**
    * Hub 4000번
    */
+
+  GET_HUB_ROUTES_SUCCESS(HttpStatus.OK, 4150, "경로 조회에 성공했습니다."),
+  HUB_ROUTE_NOT_FOUND(HttpStatus.NOT_FOUND, 4050, "경로가 존재하지 않습니다"),
+
   GET_HUBS_SUCCESS(HttpStatus.OK, 4105, "허브 목록 조회가 처리되었습니다"),
   GET_HUB_SUCCESS(HttpStatus.OK, 4104, "허브 조회가 처리되었습니다."),
   DELETE_HUB_SUCCESS(HttpStatus.OK, 4103, "허브 삭제가 처리되었습니다."),
