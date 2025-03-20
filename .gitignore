@@ -52,3 +52,4 @@ docker-compose.yml
 **/gradle/wrapper/gradle-wrapper.properties
 **/src/main/resources/properties/env.properties
 ai/src/main/resources/env.properties
+gateway/src/main/resources/env.properties
