@@ -4,12 +4,17 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
-bootJar.enabled = false // 루트 프로젝트의 bootJar 비활성화
+bootJar.enabled = false // 루트 프로젝트에서는 bootJar 비활성화
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
+}
+
+ext {
+    springCloudVersion = "2024.0.0"
+    springDocVersion = "2.4.0"  // 모든 하위 모듈에 통일된 springdoc 버전 적용
 }
 
 allprojects {
@@ -22,22 +27,24 @@ allprojects {
 }
 
 dependencies {
+    // 루트 프로젝트에서는 필요한 경우 최소한의 의존성만 포함
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-subprojects { // 모든 하위 모듈에 이 설정을 적용함
+subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
+    // 하위 모듈은 실행 가능한 아티팩트를 생성하도록 설정
     bootJar.enabled = true
     jar.enabled = false
 
     dependencyManagement {
         imports {
-            mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.0"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
         }
     }
 
@@ -46,15 +53,13 @@ subprojects { // 모든 하위 모듈에 이 설정을 적용함
         annotationProcessor 'org.projectlombok:lombok'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation("io.github.cdimascio:java-dotenv:5.2.2") // 환경변수 파일 읽기 위한 라이브러리 추가
-
+        implementation("io.github.cdimascio:java-dotenv:5.2.2")
         implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testAnnotationProcessor 'org.projectlombok:lombok'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
-
 
     tasks.withType(Jar).configureEach {
         enabled = false
