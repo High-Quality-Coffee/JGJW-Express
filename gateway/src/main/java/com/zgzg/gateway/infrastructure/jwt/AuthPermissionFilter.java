@@ -63,6 +63,8 @@ public class AuthPermissionFilter extends AbstractGatewayFilterFactory<Config> {
                     .header("X-USER-ROLE", role)
                     .build();
 
+            log.info("username : "+username);
+            log.info("role: "+role);
             return chain.filter(exchange.mutate().request(authRequest).build());
         };
     }

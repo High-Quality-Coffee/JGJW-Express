@@ -1,5 +1,6 @@
 package com.zgzg.user.Infrastructure.configuration;
 
+import com.zgzg.common.security.GlobalSecurityContextFilter;
 import com.zgzg.user.Infrastructure.jwt.CustomLogoutFilter;
 import com.zgzg.user.Infrastructure.jwt.JWTFilter;
 import com.zgzg.user.Infrastructure.jwt.JWTUtil;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -35,6 +37,8 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+    private final GlobalSecurityContextFilter globalSecurityContextFilter;
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -71,27 +75,19 @@ public class SecurityConfig {
                         }));
 
         http
+                .securityMatcher("/**")
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/join/**", "/api/v1/login").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화 (POST 요청 허용)
-//                .authorizeHttpRequests(auth -> auth
-//                        .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요
-//                )
                 .formLogin(login -> login.disable())  // 기본 로그인 폼 비활성화
-                .httpBasic(basic -> basic.disable()); // HTTP Basic 인증 비활성화
-
-        http
-                .logout((auth) -> auth.disable()); // 기본 로그아웃 필터 비활성화
-
-        http
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-
-        http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
-
-        http
-                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
-
-        //세션 설정
-        http
+                .httpBasic(basic -> basic.disable()) // HTTP Basic 인증 비활성화
+                .logout((auth) -> auth.disable()) // 기본 로그아웃 필터 비활성화
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(globalSecurityContextFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class)
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

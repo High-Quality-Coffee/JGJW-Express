@@ -15,6 +15,7 @@ public class RefreshRepositoryImpl implements RefreshRepository {
     private final JpaRefreshRepository jpaRefreshRepository;
 
     @Override
+    @Transactional
     public Optional<RefreshToken> save(RefreshToken refreshToken) {
         return Optional.of(jpaRefreshRepository.save(refreshToken));
     }
