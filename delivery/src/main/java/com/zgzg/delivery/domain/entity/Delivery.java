@@ -78,4 +78,8 @@ public class Delivery extends BaseEntity {
 	public void startDelivery() {
 		this.deliveryStatus = DeliveryStatus.IN_DELIVERY;
 	}
+
+	public void completeDelivery() {
+		this.deliveryStatus = DeliveryStatus.DELIVERED;
+	}
 }

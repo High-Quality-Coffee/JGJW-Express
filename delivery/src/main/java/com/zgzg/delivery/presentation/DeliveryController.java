@@ -113,11 +113,31 @@ public class DeliveryController {
 			.body(ApiResponseData.of(DELIVERY_READ_SUCCESS.getCode(), DELIVERY_READ_SUCCESS.getMessage(), responseDTO));
 	}
 
-	@PatchMapping("/{deliveryId}/{sequence}/status")
+	@PatchMapping("/{deliveryId}/{sequence}/start")
 	public ResponseEntity<ApiResponseData<DeliveryRouteLogsResponseDTO>> startDelivery(
 		@PathVariable UUID deliveryId, @PathVariable int sequence) {
 
 		deliveryService.startDelivery(deliveryId, sequence);
+
+		return ResponseEntity.ok()
+			.body(null);
+	}
+
+	@PatchMapping("/{deliveryId}/{sequence}/hub-arrival")
+	public ResponseEntity<ApiResponseData<DeliveryRouteLogsResponseDTO>> arriveDelivery(
+		@PathVariable UUID deliveryId, @PathVariable int sequence) {
+
+		deliveryService.arriveDelivery(deliveryId, sequence);
+
+		return ResponseEntity.ok()
+			.body(null);
+	}
+
+	@PatchMapping("/{deliveryId}/{sequence}/complete")
+	public ResponseEntity<ApiResponseData<DeliveryRouteLogsResponseDTO>> completeDelivery(
+		@PathVariable UUID deliveryId, @PathVariable int sequence) {
+		// 업체 배송 완료
+		deliveryService.completeDelivery(deliveryId, sequence);
 
 		return ResponseEntity.ok()
 			.body(null);
