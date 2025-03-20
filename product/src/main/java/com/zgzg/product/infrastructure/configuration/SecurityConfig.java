@@ -26,10 +26,10 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화 (POST 요청 허용)
-                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/v1/products/**").hasRole("HUB")
-                        .anyRequest().permitAll() // 그 외 모든 요청은 인증 필요
-                )
+//                .authorizeHttpRequests(auth -> auth
+////                        .requestMatchers("/api/v1/products/**").hasRole("HUB")
+//                        .anyRequest().permitAll() // 그 외 모든 요청은 인증 필요
+//                )
                 .formLogin(login -> login.disable())  // 기본 로그인 폼 비활성화
                 .httpBasic(basic -> basic.disable()); // HTTP Basic 인증 비활성화
 

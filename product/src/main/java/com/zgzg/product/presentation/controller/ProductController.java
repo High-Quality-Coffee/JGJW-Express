@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class ProductController {
     private final ProductService productService;
 
     //상품 신규 등록 (같은 업체, 같은 허브, 같은 상품 이름일 경우, 신규 등록은 불가 -> 재고 추가를 해야함)
+    @Secured("ROLE_HUB")
     @PostMapping("")
     public ResponseEntity<ApiResponseData<String>> create(@RequestBody @Valid ProductRequestDTO productRequestDTO){
 
