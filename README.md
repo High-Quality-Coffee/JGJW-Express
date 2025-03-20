@@ -20,7 +20,7 @@
       <a href="https://github.com/High-Quality-Coffee"><strong>박규원</strong></a>
     </td>
     <td align="center" width="160px">
-      <a href="https://github.com/Ryujy"><strong>류지은</strong></a>
+      <a href="https://github.com/Ryujy"><strong>류지윤</strong></a>
     </td>
     <td align="center" width="160px">
       <a href="https://github.com/sosa7753"><strong>박상욱</strong></a>
@@ -37,10 +37,10 @@
       주문, 배송
     </td>
     <td align="center" width="160px">
-      슬랙, 업체
+      허브
     </td>
     <td align="center" width="160px">
-      허브
+      슬랙, 업체
     </td>
   </tr>
   <tr>
