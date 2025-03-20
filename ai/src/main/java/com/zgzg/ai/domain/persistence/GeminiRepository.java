@@ -11,6 +11,9 @@ import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class GeminiRepository {
 
@@ -19,7 +22,7 @@ public class GeminiRepository {
 
 	@Value("${GEMINI_URL}")
 	private String GEMINI_URL;
-	@Value("${GEMINI_API_KEY")
+	@Value("${GEMINI_API_KEY}")
 	private String GEMINI_API_KEY;
 
 	/**
@@ -40,6 +43,7 @@ public class GeminiRepository {
 
 		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
+		log.info("gemini response : "+String.valueOf(response.body()));
 		return response.body();
 	}
 
@@ -73,7 +77,7 @@ public class GeminiRepository {
 			JsonNode firstTurn = contentsNode.get(0);
 			JsonNode partsNode = firstTurn.path("parts");
 			if (partsNode.isArray() && partsNode.size() > 0) {
-				return partsNode.get(0).asText();
+				return partsNode.get(0).path("text").asText();
 			}
 		}
 		return "";

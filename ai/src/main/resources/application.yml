@@ -32,3 +32,5 @@ logging:
     org.springframework.cloud.netflix.eureka: DEBUG
     com.netflix.discovery: DEBUG
     com.netflix.eureka: DEBUG
+    com.springframework: DEBUG
+    root: DEBUG

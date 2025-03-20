@@ -1,6 +1,5 @@
 package com.zgzg.common.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,10 +11,6 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 
 @Configuration
-@ConditionalOnClass(name = {
-	"io.swagger.v3.oas.models.OpenAPI",
-	"org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer"
-})
 public class SwaggerConfig {
 	private static final String SECURITY_SCHEME_NAME = "JWT";
 
