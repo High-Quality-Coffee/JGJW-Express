@@ -2,8 +2,10 @@ package com.zgzg.hub.presentation.req;
 
 import com.zgzg.hub.domain.entity.Hub;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,9 +39,12 @@ public class CreateHubReqDTO {
     private String hubLongitude;
 
     @NotNull(message = "허브 관리자는 필수로 입력해야 합니다.")
+    @Min(value = 1, message = "허브 관리자는 1이상의 값을 입력해야 합니다.")
     private Long hubAdminId;
 
     private Boolean isMegaHub;
+
+    private UUID parentHubId;
   }
 
   public static Hub toEntity(CreateHubReqDTO createHubReqDTO) {
@@ -50,6 +55,7 @@ public class CreateHubReqDTO {
         .hubLongitude(createHubReqDTO.getHubDTO().getHubLongitude())
         .hubAdminId(createHubReqDTO.getHubDTO().getHubAdminId())
         .isMegaHub(createHubReqDTO.getHubDTO().getIsMegaHub())
+        .parentHubId(createHubReqDTO.getHubDTO().getParentHubId())
         .build();
   }
 }

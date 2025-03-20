@@ -2,7 +2,6 @@ package com.zgzg.hub.application.res;
 
 import com.zgzg.hub.domain.entity.Hub;
 import java.util.UUID;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +9,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateHubResDTO {
 
   private HubDTO hubDTO;
@@ -24,8 +23,8 @@ public class CreateHubResDTO {
 
   @Getter
   @Builder
-  @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  @AllArgsConstructor(access = AccessLevel.PRIVATE)
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class HubDTO {
 
     private UUID hubId;
@@ -35,6 +34,7 @@ public class CreateHubResDTO {
     private String hubLongitude;
     private Long hubAdminId;
     private boolean isMegaHub;
+    private UUID parentHubId;
 
     public static HubDTO from(Hub hub) {
       return HubDTO.builder()
@@ -45,6 +45,7 @@ public class CreateHubResDTO {
           .hubLongitude(hub.getHubLongitude())
           .hubAdminId(hub.getHubAdminId())
           .isMegaHub(hub.isMegaHub())
+          .parentHubId(hub.getParentHubId())
           .build();
     }
   }

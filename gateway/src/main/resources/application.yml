@@ -15,7 +15,12 @@ spring:
         - id: user
           uri: lb://user
           predicates:
+            - Path=/user/**
             - Path=/api/v1/join/**, /api/v1/login
+        - id: company
+          uri: lb://company
+          predicates:
+            - Path=/api/v1/companies/**
         - id: order
           uri: lb://order
           predicates:
