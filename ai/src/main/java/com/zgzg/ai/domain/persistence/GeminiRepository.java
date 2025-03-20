@@ -72,15 +72,19 @@ public class GeminiRepository {
 	public String parseGeneratedMessage(String response) throws Exception {
 		JsonNode root = objectMapper.readTree(response);
 
-		JsonNode contentsNode = root.path("contents");
-		if(contentsNode.isArray() && contentsNode.size() > 0) {
-			JsonNode firstTurn = contentsNode.get(0);
-			JsonNode partsNode = firstTurn.path("parts");
+		JsonNode candidatesNode = root.path("candidates");
+		if (candidatesNode.isArray() && candidatesNode.size() > 0) {
+			JsonNode firstCandidate = candidatesNode.get(0);
+
+			// "content" → "parts" 배열에서 첫 번째 요소
+			JsonNode contentNode = firstCandidate.path("content");
+			JsonNode partsNode = contentNode.path("parts");
 			if (partsNode.isArray() && partsNode.size() > 0) {
+				// 실제 텍스트는 parts[0].text
 				return partsNode.get(0).path("text").asText();
 			}
 		}
-		return "";
+		return " ";
 	}
 
 	public String parseVerificationMessage(String response) throws Exception {
@@ -93,7 +97,7 @@ public class GeminiRepository {
 			if(!contentNode.isMissingNode()){
 				JsonNode partsNode = contentNode.path("parts");
 				if(partsNode.isArray() && partsNode.size() > 0) {
-					return partsNode.get(0).asText();
+					return partsNode.get(0).path("text").asText();
 				}
 			}
 		}
