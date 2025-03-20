@@ -14,7 +14,7 @@ java {
 
 ext {
     springCloudVersion = "2024.0.0"
-    springDocVersion = "2.4.0"  // 모든 하위 모듈에 통일된 springdoc 버전 적용
+    springDocVersion = "2.2.0"  // 모든 하위 모듈에 통일된 springdoc 버전 적용
 }
 
 allprojects {
