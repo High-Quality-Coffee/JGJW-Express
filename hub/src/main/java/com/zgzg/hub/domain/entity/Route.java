@@ -17,40 +17,30 @@ import lombok.Setter;
 
 @Getter
 @Entity
-@Table(name = "p_hub")
+@Table(name = "p_route")
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Hub extends BaseEntity {
+public class Route extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(columnDefinition = "uuid", nullable = false, updatable = false)
-  private UUID hubId;
+  private UUID routeId;
 
-  @Setter
-  @Column(nullable = false, unique = true)
-  private String hubName;
-
-  @Setter
   @Column(nullable = false)
-  private String hubAddress;
+  private UUID startHubId;
 
-  @Setter
   @Column(nullable = false)
-  private String hubLatitude; // 위도
+  private UUID endHubId;
 
   @Setter
-  @Column(nullable = false)
-  private String hubLongitude; // 경도
+  private Integer interTime;
 
   @Setter
-  @Builder.Default
-  private boolean isMegaHub = false;
+  private Integer interDistance;
 
-  @Setter
-  private Long hubAdminId;
+  private int sequence;
 
-  @Setter
-  private UUID parentHubId;
+  private UUID parentId;
 }

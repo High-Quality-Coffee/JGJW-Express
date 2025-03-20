@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateHubResDTO {
+public class UpdateHubResDTO {
 
   private HubDTO hubDTO;
 
-  public static CreateHubResDTO from(Hub hub) {
-    return CreateHubResDTO.builder()
+  public static UpdateHubResDTO from(Hub hub) {
+    return UpdateHubResDTO.builder()
         .hubDTO(HubDTO.from(hub))
         .build();
   }
