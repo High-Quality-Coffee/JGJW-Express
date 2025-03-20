@@ -54,14 +54,15 @@ public enum Code {
   HUB_NOT_FOUND(HttpStatus.NOT_FOUND, 4002, "허브가 존재하지 않습니다."),
   PARENT_HUB_NOT_FOUND(HttpStatus.BAD_REQUEST, 4003, "중앙 허브가 존재하지 않습니다."),
 
-    ACCESS_DENIED(HttpStatus.FORBIDDEN, 40204, "접근 권한이 없습니다."),
   /**
    * 업체 5000 번대
    */
+  COMPANY_CREATE(HttpStatus.OK, 5001, "업체 생성이 완료되었습니다."),
+  COMPANY_FIND(HttpStatus.OK, 5002, "업체 조회가 완료되었습니다."),
   COMPANY_UPDATE(HttpStatus.OK, 5003, "업체 수정이 완료되었습니다."),
   COMPANY_DELETE(HttpStatus.OK, 5004, "업체 삭제가 완료되었습니다."),
   COMANY_SEARCH(HttpStatus.OK, 5005, "업체 검색이 완료되었습니다."),
-
+  COMPANY_FIND_ERROR(HttpStatus.BAD_REQUEST, 5101, "아이디와 일치하는 업체가 없습니다."),
   /**
    * 상품 관련 6000번대
    */
@@ -85,6 +86,7 @@ public enum Code {
   GEMINI_VERIFY_SUCCESS(HttpStatus.OK, 7002, "Slack 메세지 검증 성공입니다."),
   SLACK_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, 7101, "Slack 메세지 전송 실패입니다."),
   ;
+  
 
   private final HttpStatus status;
   private final Integer code;

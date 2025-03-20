@@ -52,7 +52,6 @@ public class GlobalExceptionHandler {
       sb.deleteCharAt(sb.length() - 1);  // 마지막 문자가 개행 문자라면 삭제
     }
 
-
     String errorMessages = sb.toString();
     return ResponseEntity.status(BAD_REQUEST).body(ApiResponseData.failure(0, errorMessages));
   }

@@ -21,7 +21,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "p_company")
-public class Company {
+
+public class Company extends BaseEntity {
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
