@@ -75,7 +75,15 @@ public enum Code {
   PRODUCT_NOT_DELETE(HttpStatus.BAD_REQUEST, 6031, "상품 삭제를 실패했습니다."),
   PRODUCT_NO_STOCK(HttpStatus.BAD_REQUEST, 6040, "상품 재고가 부족합니다."),
   PRODUCT_STOCK_NOT_ADD(HttpStatus.BAD_REQUEST, 6041, "추가할 재고는 1개 이상 이어야 합니다."),
-  PRODUCT_STOCK_NOT_REDUCE(HttpStatus.BAD_REQUEST, 6042, "삭제할 재고는 1개 이상이어야 합니다.");
+  PRODUCT_STOCK_NOT_REDUCE(HttpStatus.BAD_REQUEST, 6042, "삭제할 재고는 1개 이상이어야 합니다."),
+
+  /**
+   * AI/SLACK #7000
+   */
+  SLACK_SUCCESS(HttpStatus.OK, 7001, "Slack 메세지 전송 성공입니다."),
+  GEMINI_VERIFY_SUCCESS(HttpStatus.OK, 7002, "Slack 메세지 검증 성공입니다."),
+  SLACK_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, 7101, "Slack 메세지 전송 실패입니다."),
+  ;
 
   private final HttpStatus status;
   private final Integer code;
