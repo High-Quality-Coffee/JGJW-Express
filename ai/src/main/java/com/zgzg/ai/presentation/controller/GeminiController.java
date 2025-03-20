@@ -29,8 +29,8 @@ public class GeminiController {
 
 	@PostMapping("/")
 	public ResponseEntity<?> createMessage(@RequestBody GenerateMessageRequest requestDto) {
-		geminiService.createMessage(requestDto);
-		return ResponseEntity.ok().body(ApiResponseData.success(Code.SLACK_SUCCESS));
+		String generatedMessage = geminiService.createMessage(requestDto);
+		return ResponseEntity.ok().body(ApiResponseData.success(Code.SLACK_SUCCESS,generatedMessage));
 	}
 
 	@PostMapping("/verify")
