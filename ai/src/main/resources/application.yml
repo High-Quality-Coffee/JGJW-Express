@@ -22,8 +22,6 @@ spring:
 
 eureka:
   client:
-    transport:
-      type: okhttp
     service-url:
       defaultZone: http://localhost:19090/eureka/
     register-with-eureka: true  # Eureka에 서비스 등록
