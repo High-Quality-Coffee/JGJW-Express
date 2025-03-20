@@ -1,8 +1,10 @@
 package com.zgzg.ai.presentation.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zgzg.ai.application.dto.SendDirectMessageRequest;
@@ -18,7 +20,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 
 import lombok.RequiredArgsConstructor;
 
-@RestController("/api/v1/gemini")
+@RestController
+@RequestMapping("/api/v1/gemini")
 @RequiredArgsConstructor
 public class GeminiController {
 
@@ -39,6 +42,11 @@ public class GeminiController {
 	@PostMapping("/send")
 	public ResponseEntity<?> sendDirectMessage(@RequestBody SendDirectMessageRequest requestDto) {
 		geminiService.sendDirectMessage(requestDto);
+		return ResponseEntity.ok().body(ApiResponseData.success(Code.SLACK_SUCCESS));
+	}
+
+	@GetMapping("/test")
+	public ResponseEntity<?> testEndpoint() {
 		return ResponseEntity.ok().body(ApiResponseData.success(Code.SLACK_SUCCESS));
 	}
 
