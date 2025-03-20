@@ -152,12 +152,4 @@ public class GeminiService {
 		} else return new VerificationResult(!verifiedMsg.isEmpty(), errorMessage ,verifiedMsg);
 	}
 
-
-	public void sendDirectMessage(SendDirectMessageRequest requestDto){
-		try {
-			slackRepository.sendDirectMessage(requestDto.getUserId(), requestDto.getText());
-		} catch (Exception e) {
-			new BaseException(Code.SLACK_SEND_FAIL);
-		}
-	}
 }

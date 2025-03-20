@@ -13,7 +13,7 @@ public class GenerateMessageRequest {
 	private String originHub;
 	@Schema(example = "부산 센터")
 	private String destinationHub;
-	@Schema(example = "{대전 센터}")
+	@Schema(example = "[\"대전 센터\"]")
 	private List<String> intermediateHubs;
 	@Schema(example = "09:00-18:00")
 	private String workHours;
