@@ -74,4 +74,8 @@ public class Delivery extends BaseEntity {
 	public void cancelDelivery() {
 		this.deliveryStatus = DeliveryStatus.CANCELED;
 	}
+
+	public void startDelivery() {
+		this.deliveryStatus = DeliveryStatus.IN_DELIVERY;
+	}
 }

@@ -47,4 +47,8 @@ public class DeliveryRouteLog extends BaseEntity { //배송 경로 기록
 	private DeliveryStatus deliveryStatus;
 	private UUID deliveryPersonId;
 	private String deliveryPersonName;
+
+	public void startDelivery() {
+		this.deliveryStatus = DeliveryStatus.HUB_IN_TRANSIT;
+	}
 }

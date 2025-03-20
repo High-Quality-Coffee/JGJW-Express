@@ -107,9 +107,19 @@ public class DeliveryController {
 
 	@GetMapping("/{deliveryId}/routes")
 	public ResponseEntity<ApiResponseData<DeliveryRouteLogsResponseDTO>> getDeliveryRoutes(
-		@RequestParam UUID deliveryId) {
+		@PathVariable UUID deliveryId) {
 		DeliveryRouteLogsResponseDTO responseDTO = deliveryService.getDeliveryRoutes(deliveryId);
 		return ResponseEntity.ok()
 			.body(ApiResponseData.of(DELIVERY_READ_SUCCESS.getCode(), DELIVERY_READ_SUCCESS.getMessage(), responseDTO));
+	}
+
+	@PatchMapping("/{deliveryId}/{sequence}/status")
+	public ResponseEntity<ApiResponseData<DeliveryRouteLogsResponseDTO>> startDelivery(
+		@PathVariable UUID deliveryId, @PathVariable int sequence) {
+
+		deliveryService.startDelivery(deliveryId, sequence);
+
+		return ResponseEntity.ok()
+			.body(null);
 	}
 }

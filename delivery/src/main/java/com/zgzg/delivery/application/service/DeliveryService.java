@@ -80,4 +80,14 @@ public class DeliveryService {
 
 		return new DeliveryRouteLogsResponseDTO(deliveryId, routeList);
 	}
+
+	@Transactional
+	public void startDelivery(UUID deliveryId, int sequence) {
+		if (sequence == 1) {
+			Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
+			delivery.startDelivery(); // 배송 상태 변경
+		}
+		DeliveryRouteLog route = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, sequence);
+		route.startDelivery(); // 각 시퀀스 배송 상태 변경
+	}
 }

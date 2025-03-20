@@ -20,4 +20,9 @@ public class DeliveryRouteLogRepositoryImpl implements DeliveryRouteLogRepositor
 	public List<DeliveryRouteLog> findByIdAndNotDeleted(UUID deliveryId) {
 		return deliveryRouteLogJpaRepository.findByDrlIdAndDeletedAtIsNull(deliveryId);
 	}
+
+	@Override
+	public DeliveryRouteLog findByIdAndSequence(UUID deliveryId, Integer sequence) {
+		return deliveryRouteLogJpaRepository.findByDelivery_IdAndSequenceAndDeletedAtIsNull(deliveryId, sequence);
+	}
 }
