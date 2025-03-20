@@ -2,9 +2,11 @@ package com.zgzg.common.response;
 
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import org.springframework.http.HttpStatus;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
@@ -25,6 +27,15 @@ public enum Code {
    COMANY_SEARCH(HttpStatus.OK,5005,"업체 검색이 완료되었습니다."),
 
    COMPANY_FIND_ERROR(HttpStatus.BAD_REQUEST, 5101, "아이디와 일치하는 업체가 없습니다."),
+
+  	/**
+	 * 주문 2000번대
+	 */
+	ORDER_GET_SUCCESS(HttpStatus.OK, 2000, "주문이 성공적으로 조회되었습니다."),
+	ORDER_CANCEL_SUCCESS(HttpStatus.OK, 2001, "주문이 성공적으로 취소되었습니다."),
+
+	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, 2400, "해당 주문을 찾을 수 없습니다."),
+
 
     /**
      * VALIDATION 관련 100번대
