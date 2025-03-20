@@ -46,7 +46,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
         //refresh 토큰을 가져오기
         String refresh = null;
         Cookie[] cookies = request.getCookies();
-        System.out.println(cookies);
+
         if(cookies != null){
             for(Cookie cookie : cookies) {
                 if(cookie.getName().equals("refresh")){

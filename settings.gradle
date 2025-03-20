@@ -6,3 +6,5 @@ include ':gateway'
 include ':company'
 include ':order'
 include ':hub'
+include ':product'
+

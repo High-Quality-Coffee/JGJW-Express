@@ -16,7 +16,7 @@ public class CustomUserDetails implements UserDetails {
 
     public CustomUserDetails(String username, String role) {
         this.username = username;
-        this.role = "ROLE_"+role;
+        this.role = role;
         this.enabled = true;
     }
 

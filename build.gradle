@@ -53,7 +53,6 @@ subprojects { // 모든 하위 모듈에 이 설정을 적용함
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testAnnotationProcessor 'org.projectlombok:lombok'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
     }
 
 
