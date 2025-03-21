@@ -5,6 +5,7 @@ import static com.zgzg.common.response.Code.PRODUCT_NOT_EXISTS;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.zgzg.common.response.ApiResponseData;
+import com.zgzg.common.response.Code;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,8 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(BaseException.class)
   public ResponseEntity<ApiResponseData<String>> handleException(BaseException e) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseData.failure(
-        PRODUCT_NOT_EXISTS.getCode(),
-        PRODUCT_NOT_EXISTS.getMessage()));
+            Code.INTERNAL_SERVER_ERROR.getCode(),
+        e.getMessage()));
   }
 
 

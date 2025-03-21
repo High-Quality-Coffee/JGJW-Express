@@ -19,12 +19,17 @@ public class GlobalSecurityContextFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String username = request.getHeader("X-USER-NAME");
         String role = request.getHeader("X-USER-ROLE");
+        String userId = request.getHeader("X-USER-ID");
 
-        if(username!=null && role != null) {
-            // SecurityContext에 사용자 정보 저장
-            CustomUserDetails customUserDetails = new CustomUserDetails(username, role);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if(username != null && role != null && userId != null) {
+            try {
+                Long id = Long.parseLong(userId);
+                CustomUserDetails customUserDetails = new CustomUserDetails(username, role, id);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (NumberFormatException e) {
+                // 로그만 남기고 계속 진행
+            }
         }
         filterChain.doFilter(request, response);
     }

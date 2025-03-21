@@ -1,4 +1,4 @@
-package com.zgzg.product.application.service.dto;
+package com.zgzg.product.application.dto;
 
 import lombok.Builder;
 import lombok.Getter;

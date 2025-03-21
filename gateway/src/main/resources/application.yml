@@ -28,7 +28,7 @@ spring:
         - id: user
           uri: lb://user
           predicates:
-            - Path=/api/v1/logout
+            - Path=/api/v1/logout, /api/v1/deliveries/users/**, /test
           filters:
             - name: AuthPermissionFilter
         - id: hub

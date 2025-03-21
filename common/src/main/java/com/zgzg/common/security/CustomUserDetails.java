@@ -12,11 +12,13 @@ import java.util.Collections;
 public class CustomUserDetails implements UserDetails {
     private final String username;
     private final String role;
+    private final Long id;
     private final boolean enabled;
 
-    public CustomUserDetails(String username,  String role) {
+    public CustomUserDetails(String username,  String role, Long id) {
         this.username = username;
         this.role = role;
+        this.id=id;
         this.enabled = true;
     }
 

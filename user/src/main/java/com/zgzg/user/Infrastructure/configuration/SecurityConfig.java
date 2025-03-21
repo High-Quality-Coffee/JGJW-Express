@@ -6,6 +6,7 @@ import com.zgzg.user.Infrastructure.jwt.JWTFilter;
 import com.zgzg.user.Infrastructure.jwt.JWTUtil;
 import com.zgzg.user.Infrastructure.jwt.LoginFilter;
 import com.zgzg.user.domain.repository.RefreshRepository;
+import com.zgzg.user.domain.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -38,6 +39,7 @@ public class SecurityConfig {
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
     private final GlobalSecurityContextFilter globalSecurityContextFilter;
+    private final UserRepository userRepository;
 
 
     @Bean
@@ -53,7 +55,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         // Custom LoginFilter 등록
-        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository);
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, userRepository);
         loginFilter.setFilterProcessesUrl("/api/v1/login"); // 엔드포인트를 /api/login으로 변경
 
         http
@@ -85,8 +87,8 @@ public class SecurityConfig {
                 .httpBasic(basic -> basic.disable()) // HTTP Basic 인증 비활성화
                 .logout((auth) -> auth.disable()) // 기본 로그아웃 필터 비활성화
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(globalSecurityContextFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository,userRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(globalSecurityContextFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class)
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
