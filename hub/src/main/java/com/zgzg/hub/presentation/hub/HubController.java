@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class HubController {
 
   private final HubService hubService;
 
+  @Secured("ROLE_MASTER")
   @PostMapping
   public ResponseEntity<ApiResponseData<CreateHubResDTO>> createHub(
       @Valid @RequestBody CreateHubReqDTO createHubReqDTO) {
@@ -51,6 +53,7 @@ public class HubController {
         responseDto));
   }
 
+  @Secured("ROLE_MASTER")
   @PutMapping("/{hubId}")
   public ResponseEntity<ApiResponseData<UpdateHubResDTO>> updateHub(
       @PathVariable("hubId") UUID hubId,
@@ -62,6 +65,7 @@ public class HubController {
         hubService.updateHub(hubId, updateHubReqDTO)));
   }
 
+  @Secured("ROLE_MASTER")
   @PatchMapping("/{hubId}")
   public ResponseEntity<Void> deleteHub(
       @PathVariable("hubId") UUID hubId) {
