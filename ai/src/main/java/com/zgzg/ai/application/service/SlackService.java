@@ -18,6 +18,8 @@ import com.zgzg.ai.application.dto.SendDirectMessageRequest;
 import com.zgzg.ai.domain.Message;
 import com.zgzg.ai.domain.persistence.MessageReposiroty;
 import com.zgzg.ai.domain.persistence.SlackRepository;
+import com.zgzg.ai.presentation.DTO.MessageResponseDTO;
+import com.zgzg.ai.presentation.DTO.MessageUpdateDTO;
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.response.Code;
 
@@ -39,11 +41,16 @@ public class SlackService {
 		}
 	}
 
-	public String getMessage(String id) {
-		return null;
+	public MessageResponseDTO getMessage(String id) {
+		Optional<Message> message = messageReposiroty.findById(UUID.fromString(id));
+		MessageResponseDTO responseDTO = message.get().toDto();
+		return responseDTO;
 	}
 
-	public void updateMessage(SendDirectMessageRequest requestDto) {
+	@Transactional
+	public void updateMessage(String id, MessageUpdateDTO requestDto) {
+		Optional<Message> message = messageReposiroty.findById(UUID.fromString(id));
+		message.get().update(requestDto);
 	}
 
 	public Message saveParsedMessage(String generatedMessage) {
@@ -58,7 +65,7 @@ public class SlackService {
 		Message savingMessage = new Message(generatedMessage, parsedMessage.getMessageTitle(),
 			parsedMessage.getOrderNumber(), parsedMessage.getOriginHub(),
 			parsedMessage.getCurrentLocation(), parsedMessage.getFinalDestination(),
-			parsedMessage.getEstimatedDeliveryTime(), parsedMessage.getFinalDeliveryStratTime(), reviverSlackId,
+			parsedMessage.getEstimatedDeliveryTime(), parsedMessage.getFinalDeliveryStartTime(), reviverSlackId,
 			"slackBot", LocalDateTime.now());
 
 		Message savedMessage = messageReposiroty.save(savingMessage);
@@ -71,7 +78,6 @@ public class SlackService {
 			String messageTitle = node.path("messageTitle").asText();
 			String orderNumber = node.path("orderNumber").asText();
 			String originHub = node.path("originHub").asText();
-
 
 			// 경유지가 복수일 경우 분리
 			JsonNode intermediateHubsNode = node.path("intermediateHubs");
@@ -122,4 +128,5 @@ public class SlackService {
 		Optional<Message> message = messageReposiroty.findById(UUID.fromString(id));
 		message.get().softDelete("Temp");
 	}
+
 }

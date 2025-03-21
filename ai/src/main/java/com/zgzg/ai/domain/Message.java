@@ -3,6 +3,8 @@ package com.zgzg.ai.domain;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.zgzg.ai.presentation.DTO.MessageResponseDTO;
+import com.zgzg.ai.presentation.DTO.MessageUpdateDTO;
 import com.zgzg.common.utils.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -59,7 +61,7 @@ public class Message extends BaseEntity {
 	private LocalDateTime sentAt;
 
 	@Column(name = "final_delivery_strat_time", length = 100)
-	private String finalDeliveryStratTime;
+	private String finalDeliveryStartTime;
 
 	@Column(name = "is_delay")
 	private boolean isDelay;
@@ -77,7 +79,7 @@ public class Message extends BaseEntity {
 		this.currentLocation = currentLocation;
 		this.finalDestination = finalDestination;
 		this.estimatedDeliveryTime = estimatedDeliveryTime;
-		this.finalDeliveryStratTime = finalDeliveryStartTime;
+		this.finalDeliveryStartTime = finalDeliveryStartTime;
 	}
 
 	public Message(String messageContent, String messageTitle, String orderNumber, String originHub,
@@ -90,11 +92,40 @@ public class Message extends BaseEntity {
 		this.currentLocation = currentLocation;
 		this.finalDestination = finalDestination;
 		this.estimatedDeliveryTime = estimatedDeliveryTime;
-		this.finalDeliveryStratTime = finalDeliveryStartTime;
+		this.finalDeliveryStartTime = finalDeliveryStartTime;
 		this.receiverId = receiverId;
 		this.senderId = senderId;
 		this.sentAt = sentAt;
+	}
 
+	public MessageResponseDTO toDto(){
+		return MessageResponseDTO.builder()
+			.messageContent(this.messageContent)
+			.messageTitle(this.messageTitle)
+			.orderNumber(this.orderNumber)
+			.originHub(this.originHub)
+			.currentLocation(this.currentLocation)
+			.finalDestination(this.finalDestination)
+			.estimatedDeliveryTime(this.estimatedDeliveryTime)
+			.sentAt(this.sentAt)
+			.finalDeliveryStartTime(this.finalDeliveryStartTime)
+			.isDelay(this.isDelay)
+			.delayReason(this.delayReason)
+			.id(this.id)
+			.receiverId(this.receiverId)
+			.build();
+	}
+
+	public void update(MessageUpdateDTO messageUpdateDTO){
+		this.messageTitle = messageUpdateDTO.getMessageTitle();
+		this.originHub = messageUpdateDTO.getOriginHub();
+		this.currentLocation = messageUpdateDTO.getCurrentLocation();
+		this.finalDestination = messageUpdateDTO.getFinalDestination();
+		this.estimatedDeliveryTime = messageUpdateDTO.getEstimatedDeliveryTime();
+		this.messageContent = messageUpdateDTO.getMessageContent();
+		this.finalDeliveryStartTime = messageUpdateDTO.getFinalDeliveryStartTime();
+		this.isDelay = messageUpdateDTO.isDelay();
+		this.delayReason = messageUpdateDTO.getDelayReason();
 
 	}
 
