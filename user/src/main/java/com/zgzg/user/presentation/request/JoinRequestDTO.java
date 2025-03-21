@@ -26,4 +26,6 @@ public class JoinRequestDTO {
     @Pattern(regexp = "^[a-z0-9]+$", message = "닉네임은 알파벳 소문자(a-z)와 숫자(0-9)만 포함해야 합니다.")
     private String nickname;
 
+    private String slackUsername;
+
 }

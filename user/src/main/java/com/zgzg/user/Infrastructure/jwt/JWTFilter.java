@@ -2,6 +2,7 @@ package com.zgzg.user.Infrastructure.jwt;
 
 
 import com.zgzg.common.enums.Role;
+import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.user.domain.model.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -70,7 +71,7 @@ public class JWTFilter extends OncePerRequestFilter {
         user.setUsername(username);
         user.setRole(Role.valueOf(role));
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(user);
+        CustomUserDetails customUserDetails = new CustomUserDetails(username,role);
 
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);

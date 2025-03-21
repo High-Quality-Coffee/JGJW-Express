@@ -15,7 +15,6 @@ spring:
         - id: user
           uri: lb://user
           predicates:
-            - Path=/user/**
             - Path=/api/v1/join/**, /api/v1/login
         - id: company
           uri: lb://company
@@ -25,6 +24,12 @@ spring:
           uri: lb://order
           predicates:
             - Path=/api/v1/orders/**
+        - id: delivery
+          uri: lb://delivery
+          predicates:
+            - Path=/api/v1/deliveries/**
+          filters:
+            - name: AuthPermissionFilter
         #로그인 필요한 요청(토큰 검증 필터 o)
         - id: user
           uri: lb://user
@@ -45,7 +50,7 @@ spring:
   jwt:
     secret: ${JWT_SECRET_KEY}
   autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration    
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
 
 eureka:

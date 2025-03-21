@@ -3,6 +3,7 @@ package com.zgzg.user.presentation.controller;
 import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.user.application.service.JoinService;
+import com.zgzg.user.presentation.request.JoinDeliveryUserRequestDTO;
 import com.zgzg.user.presentation.request.JoinRequestDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,6 @@ public class JoinController {
         return "hello world";
     }
 
-
-
     @PostMapping("/hub")
     public ResponseEntity<ApiResponseData<String>> hub_join(@RequestBody @Valid JoinRequestDTO joinRequestDTO){
         joinService.hub_join(joinRequestDTO);
@@ -35,8 +34,8 @@ public class JoinController {
     }
 
     @PostMapping("/delivery")
-    public ResponseEntity<ApiResponseData<String>> delivery_join(@RequestBody @Valid JoinRequestDTO joinRequestDTO){
-        joinService.delivery_join(joinRequestDTO);
+    public ResponseEntity<ApiResponseData<String>> delivery_join(@RequestBody @Valid JoinDeliveryUserRequestDTO joinDeliveryUserRequestDTO){
+        joinService.delivery_join(joinDeliveryUserRequestDTO);
         return ResponseEntity.ok().body(ApiResponseData.of(MEMBER_SAVE.getCode(),"회원가입이 처리되었습니다.",null));
     }
 

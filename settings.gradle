@@ -7,4 +7,4 @@ include ':company'
 include ':order'
 include ':hub'
 include ':product'
-
+include ':delivery'

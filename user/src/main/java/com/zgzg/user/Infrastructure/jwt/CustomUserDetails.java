@@ -1,44 +1,47 @@
 package com.zgzg.user.Infrastructure.jwt;
 
 import com.zgzg.user.domain.model.User;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
+@Getter
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
-
     private final User user;
 
-    public CustomUserDetails(User user){
-        this.user = user;
+    //user를 반환합니다.
+    public User getUser() {
+        return user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collection = new ArrayList<>();
-
-        collection.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return user.getRole().toString();
-            }
-        });
-
-        return collection;
+        return Collections.singleton(() -> user.getRole().name());
     }
 
+    // password를 반환합니다.
     @Override
     public String getPassword() {
         return user.getPassword();
     }
 
+    // username을 반환합니다.
     @Override
     public String getUsername() {
         return user.getUsername();
     }
 
+    //id를 반환합니다.
+    public Long getId() {
+        return user.getId();
+    }
+
+    //UserDetails 인터페이스의 메소드들
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -58,4 +61,5 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

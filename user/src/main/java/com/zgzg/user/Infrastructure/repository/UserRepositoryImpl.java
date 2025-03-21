@@ -6,6 +6,7 @@ import com.zgzg.user.domain.model.User;
 import com.zgzg.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final JpaUserRepository jpaUserRepository;
 
+    @Transactional
     public Optional<User> save(User user) {
         return Optional.of(jpaUserRepository.save(user));
     }
