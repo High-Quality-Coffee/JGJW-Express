@@ -96,12 +96,17 @@ public class GeminiRepository {
 		if (candidatesNode.isArray() && candidatesNode.size() > 0) {
 			JsonNode firstCandidate = candidatesNode.get(0);
 
-			// "content" → "parts" 배열에서 첫 번째 요소
 			JsonNode contentNode = firstCandidate.path("content");
 			JsonNode partsNode = contentNode.path("parts");
 			if (partsNode.isArray() && partsNode.size() > 0) {
-				// 실제 텍스트는 parts[0].text
-				return partsNode.get(0).path("text").asText();
+				StringBuilder sb = new StringBuilder();
+				for (JsonNode part : partsNode) {
+					JsonNode textNode = part.get("text");
+					if (textNode != null && !textNode.isNull()) {
+						sb.append(textNode.asText());
+					}
+				}
+				return sb.toString().trim();
 			}
 		}
 		return " ";

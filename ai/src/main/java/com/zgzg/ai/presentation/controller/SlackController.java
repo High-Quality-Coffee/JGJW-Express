@@ -2,6 +2,7 @@ package com.zgzg.ai.presentation.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,7 @@ public class SlackController {
 	@PostMapping("/messages")
 	public ResponseEntity<?> createMessage(@RequestBody GenerateMessageRequest requestDto) {
 		String generatedMessage = geminiService.createMessage(requestDto);
-		slackService.saveParsedMessage(generatedMessage, requestDto);
+		slackService.saveParsedMessage(generatedMessage);
 		return ResponseEntity.ok().body(ApiResponseData.success(Code.SLACK_SUCCESS,generatedMessage));
 	}
 
@@ -77,6 +78,13 @@ public class SlackController {
 	public ResponseEntity<?> updateMessage(@RequestBody SendDirectMessageRequest requestDto) {
 		slackService.updateMessage(requestDto);
 		return ResponseEntity.ok().body(ApiResponseData.success(Code.SLACK_SUCCESS));
+	}
+
+
+	@PatchMapping("message/{id}")
+	public ResponseEntity<?> deleteMessate(@RequestParam("id") String id){
+		slackService.deleteMessage(id);
+		return ResponseEntity.ok().body(ApiResponseData.success(Code.SLACK_MASSAGE_DELETE_SUCCESS));
 	}
 
 }

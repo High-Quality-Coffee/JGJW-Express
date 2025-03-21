@@ -1,16 +1,23 @@
 package com.zgzg.ai.application.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zgzg.ai.application.dto.SendDirectMessageRequest;
 import com.zgzg.ai.domain.Message;
 import com.zgzg.ai.domain.persistence.MessageReposiroty;
 import com.zgzg.ai.domain.persistence.SlackRepository;
-import com.zgzg.ai.presentation.DTO.GenerateMessageRequest;
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.response.Code;
 
@@ -22,6 +29,7 @@ public class SlackService {
 
 	private final SlackRepository slackRepository;
 	private final MessageReposiroty messageReposiroty;
+	private final ObjectMapper objectMapper;
 
 	public void sendDirectMessage(SendDirectMessageRequest requestDto) {
 		try {
@@ -38,7 +46,7 @@ public class SlackService {
 	public void updateMessage(SendDirectMessageRequest requestDto) {
 	}
 
-	public Message saveParsedMessage(String generatedMessage, GenerateMessageRequest requestDto) {
+	public Message saveParsedMessage(String generatedMessage) {
 
 		Message parsedMessage = parseMessage(generatedMessage);
 
@@ -47,8 +55,10 @@ public class SlackService {
 		 */
 		String reviverSlackId = "U087R317SMN";
 
-		Message savingMessage = new Message(parsedMessage.getMessageContent(), parsedMessage.getMessageTitle(), parsedMessage.getOrderNumber(), parsedMessage.getOriginHub(),
-			parsedMessage.getCurrentLocation(), parsedMessage.getFinalDestination(), parsedMessage.getEstimatedDeliveryTime(), reviverSlackId,
+		Message savingMessage = new Message(generatedMessage, parsedMessage.getMessageTitle(),
+			parsedMessage.getOrderNumber(), parsedMessage.getOriginHub(),
+			parsedMessage.getCurrentLocation(), parsedMessage.getFinalDestination(),
+			parsedMessage.getEstimatedDeliveryTime(), parsedMessage.getFinalDeliveryStratTime(), reviverSlackId,
 			"slackBot", LocalDateTime.now());
 
 		Message savedMessage = messageReposiroty.save(savingMessage);
@@ -56,16 +66,43 @@ public class SlackService {
 	}
 
 	private Message parseMessage(String generatedMessage) {
+		try {
+			JsonNode node = objectMapper.readTree(generatedMessage);
+			String messageTitle = node.path("messageTitle").asText();
+			String orderNumber = node.path("orderNumber").asText();
+			String originHub = node.path("originHub").asText();
 
-		String title = matchByRegex(generatedMessage, "제목:\\s*(.*)");
-		String orderNum = matchByRegex(generatedMessage, "주문번호:\\s*(\\S+)");
-		String origin = matchByRegex(generatedMessage, "출발:\\s*(.*)");
-		String currentLoc = matchByRegex(generatedMessage, "현재 위치:\\s*(.*)");
-		String finalDest = matchByRegex(generatedMessage, "최종 도착:\\s*(.*)");
-		String estimatedTime = matchByRegex(generatedMessage, "예상(\\s*)배송(\\s*)시간:\\s*(.*)");
 
-		Message message = new Message(generatedMessage, title, orderNum, origin, currentLoc, finalDest, estimatedTime);
-		return message;
+			// 경유지가 복수일 경우 분리
+			JsonNode intermediateHubsNode = node.path("intermediateHubs");
+			String currentLocation = "";
+			if (intermediateHubsNode.isArray()) {
+				List<String> hubs = new ArrayList<>();
+				for (JsonNode hubNode : intermediateHubsNode) {
+					hubs.add(hubNode.asText());
+				}
+				currentLocation = String.join(", ", hubs);
+			}
+
+			String destinationHub = node.path("destinationHub").asText();
+			String workHours = node.path("workHours").asText();
+			String estimatedDeliveryTime = node.path("estimatedDeliveryTime").asText();
+			String finalDeliveryStratTime = node.path("finalDeliveryStartTime").asText();
+
+			Message message = new Message(
+				generatedMessage,
+				messageTitle,
+				orderNumber,
+				originHub,
+				currentLocation,
+				destinationHub,
+				estimatedDeliveryTime,
+				finalDeliveryStratTime
+			);
+			return message;
+		} catch (JsonProcessingException e) {
+			throw new BaseException(e);
+		}
 	}
 
 	/**
@@ -78,5 +115,11 @@ public class SlackService {
 			return matcher.group(1).trim();
 		}
 		return null;
+	}
+
+	@Transactional
+	public void deleteMessage(String id) {
+		Optional<Message> message = messageReposiroty.findById(UUID.fromString(id));
+		message.get().softDelete("Temp");
 	}
 }

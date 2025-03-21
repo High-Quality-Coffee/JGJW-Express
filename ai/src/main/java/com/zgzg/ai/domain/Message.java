@@ -3,6 +3,8 @@ package com.zgzg.ai.domain;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.zgzg.common.utils.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Message {
+public class Message extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -56,8 +58,18 @@ public class Message {
 	@Column(name = "sent_at", nullable = false)
 	private LocalDateTime sentAt;
 
+	@Column(name = "final_delivery_strat_time", length = 100)
+	private String finalDeliveryStratTime;
+
+	@Column(name = "is_delay")
+	private boolean isDelay;
+
+	@Column(name = "delay_reason")
+	private String delayReason;
+
+
 	public Message(String messageContent, String messageTitle, String orderNumber, String originHub,
-		String currentLocation, String finalDestination, String estimatedDeliveryTime) {
+		String currentLocation, String finalDestination,String estimatedDeliveryTime, String finalDeliveryStartTime) {
 		this.messageContent = messageContent;
 		this.messageTitle = messageTitle;
 		this.orderNumber = orderNumber;
@@ -65,10 +77,11 @@ public class Message {
 		this.currentLocation = currentLocation;
 		this.finalDestination = finalDestination;
 		this.estimatedDeliveryTime = estimatedDeliveryTime;
+		this.finalDeliveryStratTime = finalDeliveryStartTime;
 	}
 
 	public Message(String messageContent, String messageTitle, String orderNumber, String originHub,
-		String currentLocation, String finalDestination, String estimatedDeliveryTime, String receiverId,
+		String currentLocation, String finalDestination, String estimatedDeliveryTime,String finalDeliveryStartTime, String receiverId,
 		String senderId, LocalDateTime sentAt) {
 		this.messageContent = messageContent;
 		this.messageTitle = messageTitle;
@@ -77,9 +90,12 @@ public class Message {
 		this.currentLocation = currentLocation;
 		this.finalDestination = finalDestination;
 		this.estimatedDeliveryTime = estimatedDeliveryTime;
+		this.finalDeliveryStratTime = finalDeliveryStartTime;
 		this.receiverId = receiverId;
 		this.senderId = senderId;
 		this.sentAt = sentAt;
+
+
 	}
 
 }
