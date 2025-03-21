@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class SendDirectMessageRequest {
-	@Schema(example = "U087R317SMN")
+	@Schema(example = "U08K1D9AGHF")
 	private String userId;
 	private String text;
 }
