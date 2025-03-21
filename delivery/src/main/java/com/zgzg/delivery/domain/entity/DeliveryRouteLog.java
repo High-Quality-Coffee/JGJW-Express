@@ -53,4 +53,8 @@ public class DeliveryRouteLog extends BaseEntity { //배송 경로 기록
 	public void startDelivery() {
 		this.deliveryStatus = DeliveryStatus.HUB_IN_TRANSIT;
 	}
+
+	public void completeDelivery() {
+		this.deliveryStatus = DeliveryStatus.DELIVERED;
+	}
 }

@@ -83,11 +83,37 @@ public class DeliveryService {
 
 	@Transactional
 	public void startDelivery(UUID deliveryId, int sequence) {
+		// 배송 시작 (허브 간 이동)
 		if (sequence == 1) {
 			Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
 			delivery.startDelivery(); // 배송 상태 변경
 		}
 		DeliveryRouteLog route = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, sequence);
 		route.startDelivery(); // 각 시퀀스 배송 상태 변경
+	}
+
+	@Transactional
+	public void arriveDelivery(UUID deliveryId, int sequence) {
+		// 허브 도착(담당자 할당, 실제 거리, 실제 소요 시간
+		// 실제 소요 시간 계산
+		// todo. 실제 거리 계산은 근데 어떻게 하지..? 배송담당자가 운전한 거리 추적을 어케하란말임
+
+		//분기) 마지막 허브인 경우
+		// 업체 배송 담당자 할당(이전 hubId, 현재 hubId, 배송타입) + "IN_DELIVERY" + sequence += 1
+		//분기) 아닌 경우
+		// 허브 배송 담당자 할당(이전 hubId, 현재 hubId, 배송타입) + "HUB_ARRIVED"
+
+	}
+
+	@Transactional
+	public void completeDelivery(UUID deliveryId, int sequence) {
+		// 배송 완료 (요청 업체 수령 완료)
+		Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
+		delivery.completeDelivery();
+
+		// 경로 기록
+		DeliveryRouteLog route = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, sequence);
+		route.completeDelivery();
+		// 실제 거리, 실제 소요 시간
 	}
 }
