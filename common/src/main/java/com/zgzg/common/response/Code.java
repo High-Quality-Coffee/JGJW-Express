@@ -46,8 +46,22 @@ public enum Code {
   ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, 2400, "해당 주문을 찾을 수 없습니다."),
 
   /**
+   * 주문 3000번대
+   */
+  DELIVERY_CREATE_SUCCESS(HttpStatus.CREATED, 3000, "배송이 성공적으로 생성되었습니다."),
+  DELIVERY_READ_SUCCESS(HttpStatus.OK, 3001, "배송이 성공적으로 조회되었습니다."),
+  DELIVERY_CANCEL_SUCCESS(HttpStatus.OK, 3002, "배송이 성공적으로 취소되었습니다."),
+
+  DELIVERY_CANCEL_FAIL(HttpStatus.BAD_REQUEST, 3003, "배송이 시작되어 취소가 불가합니다."),
+
+  /**
    * Hub 4000번
    */
+
+  GET_HUB_ROUTES_SUCCESS(HttpStatus.OK, 4150, "경로 조회에 성공했습니다."),
+  HUB_ROUTE_NOT_FOUND(HttpStatus.NOT_FOUND, 4050, "경로가 존재하지 않습니다"),
+  DELETE_HUB_ROUTES_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, 4051, "데이터베이스 경로 실패"),
+
   GET_HUBS_SUCCESS(HttpStatus.OK, 4105, "허브 목록 조회가 처리되었습니다"),
   GET_HUB_SUCCESS(HttpStatus.OK, 4104, "허브 조회가 처리되었습니다."),
   DELETE_HUB_SUCCESS(HttpStatus.OK, 4103, "허브 삭제가 처리되었습니다."),
@@ -68,6 +82,8 @@ public enum Code {
 
   COMPANY_FIND_ERROR(HttpStatus.BAD_REQUEST, 5101, "아이디와 일치하는 업체가 없습니다."),
 
+  ACCESS_DENIED(HttpStatus.FORBIDDEN, 40204, "접근 권한이 없습니다."),
+
   /**
    * 상품 관련 6000번대
    */
@@ -82,7 +98,15 @@ public enum Code {
   PRODUCT_NOT_DELETE(HttpStatus.BAD_REQUEST, 6031, "상품 삭제를 실패했습니다."),
   PRODUCT_NO_STOCK(HttpStatus.BAD_REQUEST, 6040, "상품 재고가 부족합니다."),
   PRODUCT_STOCK_NOT_ADD(HttpStatus.BAD_REQUEST, 6041, "추가할 재고는 1개 이상 이어야 합니다."),
-  PRODUCT_STOCK_NOT_REDUCE(HttpStatus.BAD_REQUEST, 6042, "삭제할 재고는 1개 이상이어야 합니다.");
+  PRODUCT_STOCK_NOT_REDUCE(HttpStatus.BAD_REQUEST, 6042, "삭제할 재고는 1개 이상이어야 합니다."),
+
+  /**
+   * AI/SLACK #7000
+   */
+  SLACK_SUCCESS(HttpStatus.OK, 7001, "Slack 메세지 전송 성공입니다."),
+  GEMINI_VERIFY_SUCCESS(HttpStatus.OK, 7002, "Slack 메세지 검증 성공입니다."),
+  SLACK_MASSAGE_DELETE_SUCCESS(HttpStatus.OK, 7003, "Slack 메세지 삭제 성공입니다."),
+  SLACK_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, 7101, "Slack 메세지 전송 실패입니다.");
 
   private final HttpStatus status;
   private final Integer code;

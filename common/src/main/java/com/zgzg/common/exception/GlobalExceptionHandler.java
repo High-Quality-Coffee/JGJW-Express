@@ -1,7 +1,5 @@
 package com.zgzg.common.exception;
 
-
-import static com.zgzg.common.response.Code.PRODUCT_NOT_EXISTS;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.zgzg.common.response.ApiResponseData;
@@ -32,14 +30,12 @@ public class GlobalExceptionHandler {
 
   // 커스텀 에러처리 가능 (아래 예외 핸들러 추가 하면 됨)
 
-
   @ExceptionHandler(BaseException.class)
   public ResponseEntity<ApiResponseData<String>> handleException(BaseException e) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseData.failure(
-            Code.INTERNAL_SERVER_ERROR.getCode(),
-        e.getMessage()));
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(
+            ApiResponseData.failure(e.getErrorCode().getCode(), e.getErrorCode().getMessage()));
   }
-
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ApiResponseData<Object>> handleMethodArgumentNotValidException(
