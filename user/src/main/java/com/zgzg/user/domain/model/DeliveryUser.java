@@ -2,10 +2,7 @@ package com.zgzg.user.domain.model;
 
 import com.zgzg.common.utils.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -28,12 +25,15 @@ public class DeliveryUser extends BaseEntity {
     private String deliverySlackUsername;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private DeliveryType deliveryType;
 
     @Column(nullable = false)
     private Long deliveryOrder;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Setter
     private DeliveryStatus deliveryStatus;
 
 }

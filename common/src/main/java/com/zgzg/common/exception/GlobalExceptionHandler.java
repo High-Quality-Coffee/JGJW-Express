@@ -3,6 +3,7 @@ package com.zgzg.common.exception;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.zgzg.common.response.ApiResponseData;
+import com.zgzg.common.response.Code;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

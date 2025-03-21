@@ -4,7 +4,7 @@ import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.response.Code;
 import com.zgzg.common.security.CustomUserDetails;
-import com.zgzg.product.application.service.dto.ProductResponseDTO;
+import com.zgzg.product.application.dto.ProductResponseDTO;
 import com.zgzg.product.domain.model.Product;
 import com.zgzg.product.domain.repository.ProductRepository;
 import com.zgzg.product.presentation.request.ProductRequestDTO;

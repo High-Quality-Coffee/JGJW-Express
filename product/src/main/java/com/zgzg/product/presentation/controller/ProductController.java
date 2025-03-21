@@ -4,7 +4,7 @@ import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.response.Code;
 import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.product.application.service.ProductService;
-import com.zgzg.product.application.service.dto.ProductResponseDTO;
+import com.zgzg.product.application.dto.ProductResponseDTO;
 import com.zgzg.product.presentation.request.ProductRequestDTO;
 import com.zgzg.product.presentation.request.ProductStockRequestDTO;
 import com.zgzg.product.presentation.request.ProductUpdateRequestDTO;
