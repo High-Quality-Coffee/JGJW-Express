@@ -23,7 +23,7 @@ public class SlackService {
 	private final SlackRepository slackRepository;
 	private final MessageReposiroty messageReposiroty;
 
-	public void sendDirectMessage(SendDirectMessageRequest requestDto){
+	public void sendDirectMessage(SendDirectMessageRequest requestDto) {
 		try {
 			slackRepository.sendDirectMessage(requestDto.getUserId(), requestDto.getText());
 		} catch (Exception e) {
@@ -42,14 +42,16 @@ public class SlackService {
 
 		Message parsedMessage = parseMessage(generatedMessage);
 
-		// 2) 추가적으로 GenerateMessageRequest의 정보를 활용해 엔티티 값 보강
-		//    (예: receiverId, senderId, 등 필요한 필드를 설정)
-		//parsedMessage.setReceiverId("슬랙_채널_ID_또는_사용자_ID");
-		//parsedMessage.setSenderId("SYSTEM"); // 혹은 requestDto에 따라 동적으로
-		//parsedMessage.setSentAt(LocalDateTime.now());
+		/**
+		 * TODO : 수신자 조회하는 메서드로 변경
+		 */
+		String reviverSlackId = "U087R317SMN";
 
-		// 3) 저장
-		Message savedMessage = messageReposiroty.save(parsedMessage);
+		Message savingMessage = new Message(parsedMessage.getMessageContent(), parsedMessage.getMessageTitle(), parsedMessage.getOrderNumber(), parsedMessage.getOriginHub(),
+			parsedMessage.getCurrentLocation(), parsedMessage.getFinalDestination(), parsedMessage.getEstimatedDeliveryTime(), reviverSlackId,
+			"slackBot", LocalDateTime.now());
+
+		Message savedMessage = messageReposiroty.save(savingMessage);
 		return savedMessage;
 	}
 
@@ -62,7 +64,7 @@ public class SlackService {
 		String finalDest = matchByRegex(generatedMessage, "최종 도착:\\s*(.*)");
 		String estimatedTime = matchByRegex(generatedMessage, "예상(\\s*)배송(\\s*)시간:\\s*(.*)");
 
-		Message message = new Message(generatedMessage,title,orderNum,origin,currentLoc,finalDest,estimatedTime);
+		Message message = new Message(generatedMessage, title, orderNum, origin, currentLoc, finalDest, estimatedTime);
 		return message;
 	}
 

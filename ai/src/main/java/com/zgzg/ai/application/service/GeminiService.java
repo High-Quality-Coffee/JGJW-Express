@@ -65,35 +65,18 @@ public class GeminiService {
 		}
 
 		// Call Gemini API
-		String response = null;
-		try {
-			response = geminiRepository.callGeminiApi(payload);
-		} catch (Exception e) {
-			throw new BaseException(e);
-		}
+		String response = geminiRepository.callGeminiApi(payload);
 
 		// error check
-		String errorMessage = null;
-		try {
-			errorMessage = geminiRepository.parseError(response);
-		} catch (Exception e) {
-			throw new BaseException(e);
-		}
-		if (errorMessage != null) {
-			return "Gemini API 오류: " + errorMessage;
-		}
+		String errorMessage = geminiRepository.parseError(response);
+		if (errorMessage != null) return "Gemini API 오류: " + errorMessage;
 
-		String generatedMessage = null;
-		try {
-			generatedMessage = geminiRepository.parseGeneratedMessage(response);
-		} catch (Exception e) {
-			throw new BaseException(e);
-		}
+		String generatedMessage = geminiRepository.parseGeneratedMessage(response);
+
 		return generatedMessage;
 	}
 
 	public VerificationResult verifyMessage(VerifyMessageRequest requestDto) {
-
 
 		// 1) 검증 요청용 프롬프트
 		String prompt = "다음 Slack 메시지를 검증해줘: " + requestDto.getHistoricalDelaysJson() +

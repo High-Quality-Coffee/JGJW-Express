@@ -30,6 +30,7 @@ public class SlackController {
 	@PostMapping("/messages")
 	public ResponseEntity<?> createMessage(@RequestBody GenerateMessageRequest requestDto) {
 		String generatedMessage = geminiService.createMessage(requestDto);
+		slackService.saveParsedMessage(generatedMessage, requestDto);
 		return ResponseEntity.ok().body(ApiResponseData.success(Code.SLACK_SUCCESS,generatedMessage));
 	}
 

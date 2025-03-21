@@ -1,5 +1,6 @@
 package com.zgzg.ai.domain.persistence;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -8,8 +9,10 @@ import java.net.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zgzg.common.exception.BaseException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +34,7 @@ public class GeminiRepository {
 	 * @return
 	 * @throws Exception
 	 */
-	public String callGeminiApi(String payload) throws Exception {
+	public String callGeminiApi(String payload) {
 
 		String url = GEMINI_URL + GEMINI_API_KEY;
 
@@ -41,7 +44,14 @@ public class GeminiRepository {
 			.POST(HttpRequest.BodyPublishers.ofString(payload))
 			.build();
 
-		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+		HttpResponse<String> response = null;
+		try {
+			response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+		} catch (IOException e) {
+			throw new BaseException(e);
+		} catch (InterruptedException e) {
+			throw new BaseException(e);
+		}
 
 		log.info("gemini response : "+String.valueOf(response.body()));
 		return response.body();
@@ -53,8 +63,13 @@ public class GeminiRepository {
 	 * @return
 	 * @throws Exception
 	 */
-	public String parseError(String response) throws Exception {
-		JsonNode root = objectMapper.readTree(response);
+	public String parseError(String response) {
+		JsonNode root = null;
+		try {
+			root = objectMapper.readTree(response);
+		} catch (JsonProcessingException e) {
+			throw new BaseException(e);
+		}
 
 		if(root.has("error")) {
 			return root.get("error").path("message").asText();
@@ -69,8 +84,13 @@ public class GeminiRepository {
 	 * @return
 	 * @throws Exception
 	 */
-	public String parseGeneratedMessage(String response) throws Exception {
-		JsonNode root = objectMapper.readTree(response);
+	public String parseGeneratedMessage(String response){
+		JsonNode root = null;
+		try {
+			root = objectMapper.readTree(response);
+		} catch (JsonProcessingException e) {
+			throw new BaseException(e);
+		}
 
 		JsonNode candidatesNode = root.path("candidates");
 		if (candidatesNode.isArray() && candidatesNode.size() > 0) {

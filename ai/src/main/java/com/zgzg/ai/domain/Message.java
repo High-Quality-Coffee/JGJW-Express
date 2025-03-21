@@ -65,7 +65,21 @@ public class Message {
 		this.currentLocation = currentLocation;
 		this.finalDestination = finalDestination;
 		this.estimatedDeliveryTime = estimatedDeliveryTime;
+	}
 
+	public Message(String messageContent, String messageTitle, String orderNumber, String originHub,
+		String currentLocation, String finalDestination, String estimatedDeliveryTime, String receiverId,
+		String senderId, LocalDateTime sentAt) {
+		this.messageContent = messageContent;
+		this.messageTitle = messageTitle;
+		this.orderNumber = orderNumber;
+		this.originHub = originHub;
+		this.currentLocation = currentLocation;
+		this.finalDestination = finalDestination;
+		this.estimatedDeliveryTime = estimatedDeliveryTime;
+		this.receiverId = receiverId;
+		this.senderId = senderId;
+		this.sentAt = sentAt;
 	}
 
 }
