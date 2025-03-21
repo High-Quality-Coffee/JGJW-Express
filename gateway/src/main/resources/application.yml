@@ -41,10 +41,8 @@ spring:
           uri: lb://hub
           predicates:
             - Path=/api/v1/hubs/**
-        - id: ai
-          uri: lb://ai
-          predicates:
-            - Path=/api/v1/ai/**
+          filters:
+            - name: AuthPermissionFilter
         - id: product
           uri: lb://product
           predicates:
