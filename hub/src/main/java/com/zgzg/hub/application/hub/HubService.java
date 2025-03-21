@@ -1,18 +1,18 @@
-package com.zgzg.hub.application;
+package com.zgzg.hub.application.hub;
 
 import static com.zgzg.common.response.Code.EXIST_HUB_NAME;
 import static com.zgzg.common.response.Code.HUB_NOT_FOUND;
 import static com.zgzg.common.response.Code.PARENT_HUB_NOT_FOUND;
 
 import com.zgzg.common.exception.BaseException;
-import com.zgzg.hub.application.res.CreateHubResDTO;
-import com.zgzg.hub.application.res.HubResDTO;
-import com.zgzg.hub.application.res.PageHubsResDTO;
-import com.zgzg.hub.application.res.UpdateHubResDTO;
+import com.zgzg.hub.application.hub.res.CreateHubResDTO;
+import com.zgzg.hub.application.hub.res.HubResDTO;
+import com.zgzg.hub.application.hub.res.PageHubsResDTO;
+import com.zgzg.hub.application.hub.res.UpdateHubResDTO;
 import com.zgzg.hub.domain.entity.Hub;
 import com.zgzg.hub.domain.repository.HubRepository;
-import com.zgzg.hub.presentation.req.CreateHubReqDTO;
-import com.zgzg.hub.presentation.req.UpdateHubReqDTO;
+import com.zgzg.hub.presentation.hub.req.CreateHubReqDTO;
+import com.zgzg.hub.presentation.hub.req.UpdateHubReqDTO;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

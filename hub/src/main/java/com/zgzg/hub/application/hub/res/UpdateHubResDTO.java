@@ -1,5 +1,4 @@
-package com.zgzg.hub.application.res;
-
+package com.zgzg.hub.application.hub.res;
 
 import com.zgzg.hub.domain.entity.Hub;
 import java.util.UUID;
@@ -7,19 +6,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageHubsResDTO {
+public class UpdateHubResDTO {
 
-  private Page<HubDTO> hubs;
+  private HubDTO hubDTO;
 
-  public static PageHubsResDTO from(Page<Hub> hubs) {
-    return PageHubsResDTO.builder()
-        .hubs(hubs.map(HubDTO::from))
+  public static UpdateHubResDTO from(Hub hub) {
+    return UpdateHubResDTO.builder()
+        .hubDTO(HubDTO.from(hub))
         .build();
   }
 

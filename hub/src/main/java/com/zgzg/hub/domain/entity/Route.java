@@ -42,5 +42,6 @@ public class Route extends BaseEntity {
 
   private int sequence;
 
+  @Setter
   private UUID parentId;
 }
