@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.response.Code;
+import com.zgzg.order.application.client.DeliveryClient;
 import com.zgzg.order.application.dto.global.PageableResponse;
+import com.zgzg.order.application.dto.req.CreateDeliveryRequestDTO;
 import com.zgzg.order.application.dto.res.OrderDetaiListDTO;
 import com.zgzg.order.application.dto.res.OrderDetailDTO;
 import com.zgzg.order.application.dto.res.OrderDetailResponseDTO;
@@ -31,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderService {
 
 	private final OrderRepository orderRepository;
+	private final DeliveryClient deliveryClient;
 
 	@Transactional
 	public UUID createOrder(CreateOrderRequestDto requestDto) {
@@ -40,6 +43,14 @@ public class OrderService {
 			OrderDetail orderDetail = orderDetailDTO.toEntity(order);
 			orderRepository.saveDetail(orderDetail);
 		}
+
+		// todo. feign
+		// todo. CreateDeliveryRequestDTO 생성
+		// todo. company feign -> 공급 업체 id => originHubId,
+		// todo. company feign -> 요청 업체 id => destinationHubId, receiverName, receiverAddress, receiverSlackId
+		CreateDeliveryRequestDTO requestDTO = new CreateDeliveryRequestDTO(savedOrder.getOrderId());
+		deliveryClient.createDelivery(requestDTO);
+
 		return savedOrder.getOrderId();
 	}
 
