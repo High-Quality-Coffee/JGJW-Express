@@ -65,6 +65,7 @@ public enum Code {
   EXIST_HUB_NAME(HttpStatus.BAD_REQUEST, 4001, "이미 존재하는 허브명 입니다."),
   HUB_NOT_FOUND(HttpStatus.NOT_FOUND, 4002, "허브가 존재하지 않습니다."),
   PARENT_HUB_NOT_FOUND(HttpStatus.BAD_REQUEST, 4003, "중앙 허브가 존재하지 않습니다."),
+  HUB_ROUTE_NOT_FOUND(HttpStatus.BAD_REQUEST, 4999, "temp"),
 
   /**
    * 업체 5000 번대
