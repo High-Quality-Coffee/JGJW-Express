@@ -14,7 +14,7 @@ public class CustomUserDetails implements UserDetails {
     private final String role;
     private final boolean enabled;
 
-    public CustomUserDetails(String username, String role) {
+    public CustomUserDetails(String username,  String role) {
         this.username = username;
         this.role = role;
         this.enabled = true;
