@@ -10,5 +10,4 @@ public interface OrderJpaRepository extends JpaRepository<Order, UUID>, OrderJpa
 
 	Order findByOrderIdAndDeletedAtIsNull(UUID orderId);
 
-	Order findByIdAndDeletedAtIsNullAndSupplierHubId(UUID orderId);
 }

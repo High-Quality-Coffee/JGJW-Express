@@ -57,12 +57,5 @@ public class OrderRepositoryImpl implements OrderRepository {
 	public void softDeleteDetails(UUID orderId) {
 		detailJpaRepository.softDeleteDetails(orderId);
 	}
-
-	@Override
-	public Order findByIdAndDeletedAtIsNullAndSupplierHubId(UUID orderId) {
-		// todo. ??
-		// return jpaRepository.findByIdAndDeletedAtIsNullAndSupplierHubId(orderId);
-		return null;
-	}
-
+	
 }

@@ -27,5 +27,4 @@ public interface OrderRepository {
 
 	void softDeleteDetails(UUID orderId);
 
-	Order findByIdAndDeletedAtIsNullAndSupplierHubId(UUID orderId);
 }
