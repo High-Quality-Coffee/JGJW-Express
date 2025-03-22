@@ -44,7 +44,9 @@ spring:
         - id: ai
           uri: lb://ai
           predicates:
-            - Path=/api/v1/ai/**
+            - Path=/api/v1/slack/**
+          filters:
+            - name: AuthPermissionFilter
         - id: product
           uri: lb://product
           predicates:

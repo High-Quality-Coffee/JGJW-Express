@@ -1,6 +1,7 @@
 package com.zgzg.ai.presentation.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class SlackController {
 	}
 
 	@GetMapping("/messages/{id}")
+	@Secured("ROLE_MASTER")
 	public ResponseEntity<?> getMessage(@RequestParam(name = "id") String id) {
 		MessageResponseDTO message = slackService.getMessage(id);
 		return ResponseEntity.ok().body(ApiResponseData.success(message));
