@@ -29,7 +29,7 @@ public class DeliveryRouteLogRepositoryImpl implements DeliveryRouteLogRepositor
 
 	@Override
 	public void save(DeliveryRouteLog entity) {
-
+		deliveryRouteLogJpaRepository.save(entity);
 	}
 
 	@Override

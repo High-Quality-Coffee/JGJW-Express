@@ -49,7 +49,8 @@ public class DeliveryService {
 			delivery.getDestinationHubId());
 		// todo. hubName 추가 요청 -> 상욱님
 		for (RouteDTO hubRoute : hubRoutes) {
-			deliveryRouteLogRepository.save(hubRoute.toEntity());
+			log.info("Hub route: {}", hubRoute.getDistance());
+			deliveryRouteLogRepository.save(hubRoute.toEntity(savedDelivery));
 		}
 
 		return savedDelivery.getDeliveryId();

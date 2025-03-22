@@ -1,6 +1,5 @@
 package com.zgzg.delivery.application.dto.res;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -20,10 +19,10 @@ public class DeliveryRouteResponseDTO {
 	private String startHubName;
 	private UUID endHubId;
 	private String endHubName;
-	private BigDecimal estimatedDistance;
-	private BigDecimal estimatedTime;
-	private BigDecimal actualDistance;
-	private BigDecimal actualTimeSpent;
+	private Integer estimatedDistance;
+	private Integer estimatedTime;
+	private Integer actualDistance;
+	private Integer actualTimeSpent;
 	private DeliveryStatus deliveryStatus;
 	private UUID deliveryPersonId;
 	private String deliveryPersonName;

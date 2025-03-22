@@ -24,6 +24,7 @@ public class HubClientImpl implements HubClient {
 	@Override
 	public List<RouteDTO> getHubRoutes(UUID startHubId, UUID endHubId) {
 		ApiResponseData<RoutesDTO> response = feignHubClient.getHubRoutes(startHubId, endHubId);
+		log.info("message : {} , data : {}", response.getMessage(), response.getData().getRoutes().get(0));
 		return response.getData().getRoutes();
 	}
 
