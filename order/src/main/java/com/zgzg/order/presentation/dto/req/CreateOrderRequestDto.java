@@ -16,19 +16,25 @@ public class CreateOrderRequestDto {
 	private UUID supplierCompanyId;
 	private UUID receiverCompanyId;
 	private String supplierCompanyName;
+	private String receiverCompanyName;
+	private UUID supplierHubId;
 	private BigDecimal orderTotalPrice;
 	private OrderStatus orderStatus;
 	private String orderRequest;
+	private String slackId;
 	private List<OrderDetailDTO> productList;
 
-	public Order toEntity(CreateOrderRequestDto requestDto) {
+	public Order toEntity(CreateOrderRequestDto requestDto, UUID receiverHubId) {
 		return Order.builder()
 			.supplierCompanyId(requestDto.getSupplierCompanyId())
 			.receiverCompanyId(requestDto.getReceiverCompanyId())
 			.supplierCompanyName(requestDto.getSupplierCompanyName())
+			.receiverCompanyName(requestDto.getReceiverCompanyName())
+			.supplierHubId(receiverHubId)
 			.orderTotalPrice(requestDto.getOrderTotalPrice())
 			.orderStatus(requestDto.getOrderStatus())
 			.orderRequest(requestDto.getOrderRequest())
+			.slackId(requestDto.getSlackId())
 			.build();
 	}
 }

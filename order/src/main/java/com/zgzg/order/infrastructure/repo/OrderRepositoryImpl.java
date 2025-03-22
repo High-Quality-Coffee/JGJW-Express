@@ -39,17 +39,29 @@ public class OrderRepositoryImpl implements OrderRepository {
 
 	@Override
 	public List<OrderDetail> findAllByOrderIdAndNotDeleted(UUID orderId) {
-		return detailJpaRepository.findByOrder_OrderIdAndDeletedAtIsNull(orderId);
+		return detailJpaRepository.findByOrderDetails(orderId);
 	}
 
 	@Override
-	public Page<OrderResponseDTO> searchOrderByCriteria(SearchCriteria criteria, Pageable pageable) {
-		return jpaRepository.searchOrderByCriteria(criteria, pageable);
+	public Page<OrderResponseDTO> searchOrderByCriteria(SearchCriteria criteria, Pageable pageable, String role,
+		UUID id) {
+		return jpaRepository.searchOrderByCriteria(criteria, pageable, role, id);
 	}
 
 	@Override
 	public Order findByIdAndNotDeleted(UUID orderId) {
 		return jpaRepository.findByOrderIdAndDeletedAtIsNull(orderId);
+	}
+
+	@Override
+	public void softDeleteDetails(UUID orderId) {
+		detailJpaRepository.softDeleteDetails(orderId);
+	}
+
+	@Override
+	public Order findByIdAndDeletedAtIsNullAndSupplierHubId(UUID orderId) {
+		// todo. ??
+		return jpaRepository.findByIdAndDeletedAtIsNullAndSupplierHubId(orderId);
 	}
 
 }

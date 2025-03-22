@@ -6,15 +6,14 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.zgzg.common.response.ApiResponseData;
+import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.order.application.dto.global.PageableResponse;
 import com.zgzg.order.application.dto.res.OrderDetaiListDTO;
 import com.zgzg.order.application.dto.res.OrderDetailResponseDTO;
@@ -59,17 +56,19 @@ public class OrderController {
 		return ResponseEntity.created(uri).build();
 	}
 
-	// todo. 권한 확인 - MASTER, HUB, STORE
 	@PatchMapping("/{orderId}")
-	public ResponseEntity<ApiResponseData<OrderDetailResponseDTO>> deleteOrder(@PathVariable UUID orderId) {
-		orderService.deleteOrder(orderId);
+	@Secured({"ROLE_MASTER", "ROLE_HUB"})
+	public ResponseEntity<ApiResponseData<OrderDetailResponseDTO>> deleteOrder(@PathVariable UUID orderId,
+		@AuthenticationPrincipal CustomUserDetails userDetails) {
+		orderService.deleteOrder(orderId, userDetails);
 		return ResponseEntity.noContent().build();
 	}
 
-	// todo. 권한 확인 - MASTER, HUB, DELIVERY, STORE
 	@GetMapping("/{orderId}")
-	public ResponseEntity<ApiResponseData<OrderDetaiListDTO>> getOrder(@PathVariable UUID orderId) {
-		OrderDetaiListDTO orderDetails = orderService.getOrder(orderId);
+	@Secured({"ROLE_MASTER", "ROLE_HUB", "ROLE_DILIVERY", "ROLE_STORE"})
+	public ResponseEntity<ApiResponseData<OrderDetaiListDTO>> getOrder(@PathVariable UUID orderId,
+		@AuthenticationPrincipal CustomUserDetails userDetails) {
+		OrderDetaiListDTO orderDetails = orderService.getOrder(orderId, userDetails);
 		return ResponseEntity.ok()
 			.body(
 				ApiResponseData.of(ORDER_GET_SUCCESS.getCode(), ORDER_GET_SUCCESS.getMessage(), orderDetails));
@@ -77,7 +76,9 @@ public class OrderController {
 
 	// 주문 검색
 	@GetMapping()
+	@Secured({"ROLE_MASTER", "ROLE_HUB", "ROLE_STORE"})
 	public ResponseEntity<ApiResponseData<PageableResponse<OrderResponseDTO>>> searchOrder(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@RequestParam(required = false) LocalDateTime startDate,
 		@RequestParam(required = false) LocalDateTime endDate,
 		@PageableDefault
@@ -91,14 +92,16 @@ public class OrderController {
 			.endDate(endDate)
 			.build();
 
-		PageableResponse<OrderResponseDTO> orderList = orderService.searchOrder(criteria, pageable);
+		PageableResponse<OrderResponseDTO> orderList = orderService.searchOrder(criteria, pageable, userDetails);
 		return ResponseEntity.ok()
 			.body(ApiResponseData.of(ORDER_GET_SUCCESS.getCode(), ORDER_GET_SUCCESS.getMessage(), orderList));
 	}
 
 	@PatchMapping("/{orderId}/cancel")
-	public ResponseEntity<ApiResponseData<OrderResponseDTO>> cancelOrder(@PathVariable UUID orderId) {
-		OrderResponseDTO responseDTO = orderService.cancelOrder(orderId);
+	@Secured({"ROLE_MASTER", "ROLE_HUB", "ROLE_STORE"})
+	public ResponseEntity<ApiResponseData<OrderResponseDTO>> cancelOrder(@PathVariable UUID orderId,
+		@AuthenticationPrincipal CustomUserDetails userDetails) {
+		OrderResponseDTO responseDTO = orderService.cancelOrder(orderId, userDetails);
 
 		return ResponseEntity.ok().body(ApiResponseData.of(ORDER_CANCEL_SUCCESS.getCode(),
 			ORDER_CANCEL_SUCCESS.getMessage(), responseDTO));

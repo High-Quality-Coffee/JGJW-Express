@@ -24,6 +24,8 @@ spring:
           uri: lb://order
           predicates:
             - Path=/api/v1/orders/**
+          filters:
+            - name: AuthPermissionFilter
         - id: delivery
           uri: lb://delivery
           predicates:

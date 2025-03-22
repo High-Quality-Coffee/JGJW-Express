@@ -2,6 +2,8 @@ package com.zgzg.order.application.dto.req;
 
 import java.util.UUID;
 
+import com.zgzg.order.infrastructure.dto.CompanyResponseDTO;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +18,13 @@ public class CreateDeliveryRequestDTO {
 	private String receiverName;
 	private String receiverSlackId;
 
-	public CreateDeliveryRequestDTO(UUID orderId) {
-
+	public CreateDeliveryRequestDTO(UUID orderId, CompanyResponseDTO supplier, CompanyResponseDTO receiver) {
+		this.orderId = orderId;
+		this.originHubId = supplier.getHub_id();
+		this.destinationHubId = receiver.getHub_id();
+		this.receiverAddress = receiver.getAddress();
+		this.receiverName = receiver.getName();
+		// todo. slackID
+		this.receiverSlackId = "tempSlackId";
 	}
 }
