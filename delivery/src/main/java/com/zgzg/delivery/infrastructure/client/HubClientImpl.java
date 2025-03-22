@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.delivery.application.client.HubClient;
+import com.zgzg.delivery.infrastructure.dto.HubResponseDTO;
 import com.zgzg.delivery.infrastructure.dto.RouteDTO;
 import com.zgzg.delivery.infrastructure.dto.RoutesDTO;
 
@@ -24,5 +25,11 @@ public class HubClientImpl implements HubClient {
 	public List<RouteDTO> getHubRoutes(UUID startHubId, UUID endHubId) {
 		ApiResponseData<RoutesDTO> response = feignHubClient.getHubRoutes(startHubId, endHubId);
 		return response.getData().getRoutes();
+	}
+
+	@Override
+	public HubResponseDTO getHub(UUID originHubId) {
+		ApiResponseData<HubResponseDTO> response = feignHubClient.getHub(originHubId);
+		return response.getData();
 	}
 }

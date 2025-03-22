@@ -34,11 +34,11 @@ public class DeliveryRouteLog extends BaseEntity { //배송 경로 기록
 	private Integer sequence;
 	@Column(nullable = false)
 	private UUID startHubId;
-	@Column(nullable = false)
+	// todo. @Column(nullable = false)
 	private String startHubName;
 	@Column(nullable = false)
 	private UUID endHubId;
-	@Column(nullable = false)
+	// todo. @Column(nullable = false)
 	private String endHubName;
 	@Column(nullable = false)
 	private Integer estimatedDistance;

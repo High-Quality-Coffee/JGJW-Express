@@ -22,15 +22,18 @@ import com.zgzg.delivery.domain.entity.DeliveryRouteLog;
 import com.zgzg.delivery.domain.entity.DeliveryStatus;
 import com.zgzg.delivery.domain.repo.DeliveryRepository;
 import com.zgzg.delivery.domain.repo.DeliveryRouteLogRepository;
+import com.zgzg.delivery.infrastructure.dto.HubResponseDTO;
 import com.zgzg.delivery.infrastructure.dto.RouteDTO;
 import com.zgzg.delivery.presentation.dto.global.SearchCriteria;
 import com.zgzg.delivery.presentation.dto.req.CreateDeliveryRequestDTO;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class DeliveryService {
 
 	private final DeliveryRepository deliveryRepository;
@@ -54,23 +57,24 @@ public class DeliveryService {
 
 	public DeliveryResponseDTO getDelivery(UUID deliveryId) {
 		Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
-		// todo. originHubName, destinationHubName, deliveryPersonId, deliveryPersonName 값
 		return DeliveryResponseDTO.from(delivery);
 	}
 
 	@Transactional
 	public void deleteDelivery(UUID deliveryId, CustomUserDetails userDetails) {
 		Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
+
+		if (userDetails.getRole().equals("ROLE_HUB") && !hasHubAuth(delivery, userDetails)) {
+			throw new BaseException(DELIVERY_AUTH_FORBIDDEN);
+		}
 		delivery.softDelete(userDetails.getUsername());
 		deliveryRouteLogRepository.softDeleteRoutes(deliveryId);
 	}
 
 	@Transactional
 	public DeliveryResponseDTO cancelDelivery(UUID deliveryId) {
-		// todo. 배송 상태 != PREPARING 취소 불가
 		Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
 		if (!delivery.getDeliveryStatus().equals(DeliveryStatus.PREPARING)) {
-			// todo. 예외를 던지는 게 맞나..? 그냥 취소 불가일 뿐인데...
 			throw new BaseException(DELIVERY_CANCEL_FAIL);
 		}
 		delivery.cancelDelivery();
@@ -124,5 +128,14 @@ public class DeliveryService {
 		DeliveryRouteLog route = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, sequence);
 		route.completeDelivery();
 		// todo. 실제 거리, 실제 소요 시간
+	}
+
+	private boolean hasHubAuth(Delivery delivery, CustomUserDetails userDetails) {
+		HubResponseDTO response = hubClient.getHub(delivery.getOriginHubId());
+		log.info("Hub Client : 허브 담당자 id - {}", response.getHubDTO().getHubAdminId());
+		if (response.getHubDTO().getHubAdminId().equals(userDetails.getId())) {
+			return true;
+		}
+		return false;
 	}
 }

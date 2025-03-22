@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -43,7 +44,7 @@ public class DeliveryController {
 	private final DeliveryService deliveryService;
 
 	@PostMapping()
-	// @Secured("ROLE_MASTER")
+	@Secured("ROLE_MASTER")
 	public ResponseEntity<ApiResponseData<UUID>> createDelivery(
 		@RequestBody @Validated CreateDeliveryRequestDTO requestDTO) {
 
@@ -74,6 +75,7 @@ public class DeliveryController {
 	}
 
 	@PatchMapping("/{deliveryId}/delete")
+	@Secured({"ROLE_MASTER", "ROLE_HUB"})
 	public ResponseEntity<ApiResponseData<String>> deleteDelivery(@PathVariable UUID deliveryId,
 		CustomUserDetails userDetails) {
 		deliveryService.deleteDelivery(deliveryId, userDetails);

@@ -57,6 +57,7 @@ public enum Code {
 	DELIVERY_CANCEL_SUCCESS(HttpStatus.OK, 3002, "배송이 성공적으로 취소되었습니다."),
 
 	DELIVERY_CANCEL_FAIL(HttpStatus.BAD_REQUEST, 3003, "배송이 시작되어 취소가 불가합니다."),
+	DELIVERY_AUTH_FORBIDDEN(HttpStatus.FORBIDDEN, 3004, "해당 주문에 대한 권한이 없습니다."),
 
 	/**
 	 * Hub 4000번
