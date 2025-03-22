@@ -1,6 +1,5 @@
 package com.zgzg.delivery.domain.entity;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.zgzg.common.utils.BaseEntity;
@@ -14,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Builder
 public class DeliveryRouteLog extends BaseEntity { //배송 경로 기록
 
 	@Id
@@ -40,12 +41,11 @@ public class DeliveryRouteLog extends BaseEntity { //배송 경로 기록
 	@Column(nullable = false)
 	private String endHubName;
 	@Column(nullable = false)
-	private BigDecimal estimatedDistance;
+	private Integer estimatedDistance;
 	@Column(nullable = false)
-	private BigDecimal estimatedTime;
-	private BigDecimal actualDistance;
-	private BigDecimal actualTimeSpent;
-	@Column(nullable = false)
+	private Integer estimatedTime;
+	private Integer actualDistance;
+	private Integer actualTimeSpent;
 	private DeliveryStatus deliveryStatus;
 	private UUID deliveryPersonId;
 	private String deliveryPersonName;

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.security.CustomUserDetails;
+import com.zgzg.delivery.application.client.HubClient;
 import com.zgzg.delivery.application.dto.res.DeliveryResponseDTO;
 import com.zgzg.delivery.application.dto.res.DeliveryRouteLogsResponseDTO;
 import com.zgzg.delivery.application.dto.res.DeliveryRouteResponseDTO;
@@ -21,6 +22,7 @@ import com.zgzg.delivery.domain.entity.DeliveryRouteLog;
 import com.zgzg.delivery.domain.entity.DeliveryStatus;
 import com.zgzg.delivery.domain.repo.DeliveryRepository;
 import com.zgzg.delivery.domain.repo.DeliveryRouteLogRepository;
+import com.zgzg.delivery.infrastructure.dto.RouteDTO;
 import com.zgzg.delivery.presentation.dto.global.SearchCriteria;
 import com.zgzg.delivery.presentation.dto.req.CreateDeliveryRequestDTO;
 
@@ -33,12 +35,20 @@ public class DeliveryService {
 
 	private final DeliveryRepository deliveryRepository;
 	private final DeliveryRouteLogRepository deliveryRouteLogRepository;
+	private final HubClient hubClient;
 
 	@Transactional
-	public UUID createDelivery(CreateDeliveryRequestDTO requestDTO, CustomUserDetails userDetails) {
+	public UUID createDelivery(CreateDeliveryRequestDTO requestDTO) {
 		Delivery delivery = requestDTO.toEntity();
 		Delivery savedDelivery = deliveryRepository.save(delivery);
-		// todo. 배송 경로 생성 로직 추가 (허브 경로)
+
+		List<RouteDTO> hubRoutes = hubClient.getHubRoutes(delivery.getOriginHubId(),
+			delivery.getDestinationHubId());
+		// todo. hubName 추가 요청 -> 상욱님
+		for (RouteDTO hubRoute : hubRoutes) {
+			deliveryRouteLogRepository.save(hubRoute.toEntity());
+		}
+
 		return savedDelivery.getDeliveryId();
 	}
 
@@ -49,10 +59,10 @@ public class DeliveryService {
 	}
 
 	@Transactional
-	public void deleteDelivery(UUID deliveryId) {
+	public void deleteDelivery(UUID deliveryId, CustomUserDetails userDetails) {
 		Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
-		// todo. deletedBy 넣어주는 로직
-		delivery.softDelete("temp");
+		delivery.softDelete(userDetails.getUsername());
+		deliveryRouteLogRepository.softDeleteRoutes(deliveryId);
 	}
 
 	@Transactional
@@ -83,7 +93,6 @@ public class DeliveryService {
 
 	@Transactional
 	public void startDelivery(UUID deliveryId, int sequence) {
-		// 배송 시작 (허브 간 이동)
 		if (sequence == 1) {
 			Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
 			delivery.startDelivery(); // 배송 상태 변경
@@ -114,6 +123,6 @@ public class DeliveryService {
 		// 경로 기록
 		DeliveryRouteLog route = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, sequence);
 		route.completeDelivery();
-		// 실제 거리, 실제 소요 시간
+		// todo. 실제 거리, 실제 소요 시간
 	}
 }

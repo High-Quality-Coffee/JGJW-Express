@@ -9,4 +9,8 @@ public interface DeliveryRouteLogRepository {
 	List<DeliveryRouteLog> findByIdAndNotDeleted(UUID deliveryId);
 
 	DeliveryRouteLog findByIdAndSequence(UUID deliveryId, Integer sequence);
+
+	void save(DeliveryRouteLog entity);
+
+	void softDeleteRoutes(UUID deliveryId);
 }

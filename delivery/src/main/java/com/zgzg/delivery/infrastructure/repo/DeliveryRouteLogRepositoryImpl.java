@@ -26,4 +26,14 @@ public class DeliveryRouteLogRepositoryImpl implements DeliveryRouteLogRepositor
 		return deliveryRouteLogJpaRepository.findByDelivery_DeliveryIdAndSequenceAndDeletedAtIsNull(deliveryId,
 			sequence);
 	}
+
+	@Override
+	public void save(DeliveryRouteLog entity) {
+
+	}
+
+	@Override
+	public void softDeleteRoutes(UUID deliveryId) {
+		deliveryRouteLogJpaRepository.softDeleteRoutes(deliveryId);
+	}
 }
