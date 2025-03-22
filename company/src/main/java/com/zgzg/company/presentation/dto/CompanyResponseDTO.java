@@ -23,12 +23,16 @@ public class CompanyResponseDTO {
 
 	private String address;
 
+	private UUID companyAdminId;
+
 	public static CompanyResponseDTO toDto(Company company) {
 		return CompanyResponseDTO.builder()
 			.id(company.getId())
 			.name(company.getName())
 			.type(company.getType())
 			.address(company.getAddress())
+			.hub_id(company.getHub_id())
+			.companyAdminId(company.getCompanyAdminId())
 			.build();
 	}
 }
