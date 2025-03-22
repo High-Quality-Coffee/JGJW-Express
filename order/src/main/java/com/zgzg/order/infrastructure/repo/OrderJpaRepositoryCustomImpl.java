@@ -50,7 +50,8 @@ public class OrderJpaRepositoryCustomImpl implements OrderJpaRepositoryCustom {
 				order.supplierCompanyName,
 				order.orderTotalPrice,
 				order.orderStatus,
-				order.orderRequest
+				order.orderRequest,
+				order.createdDateTime
 			))
 			.from(order)
 			.where(betweenDateCondition(criteria).and(authCondition(role, id)))
@@ -85,7 +86,7 @@ public class OrderJpaRepositoryCustomImpl implements OrderJpaRepositoryCustom {
 		if (role.equals("ROLE_STORE")) {
 			builder.and(QOrder.order.receiverCompanyId.eq(id));
 		} else if (role.equals("ROLE_HUB")) {
-			builder.and(QOrder.order.receiverHubId.eq(id));
+			builder.and(QOrder.order.supplierHubId.eq(id));
 		}
 		return builder;
 	}

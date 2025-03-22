@@ -18,5 +18,5 @@ public interface OrderDetailJpaRepository extends JpaRepository<OrderDetail, UUI
 	@Query("UPDATE OrderDetail od SET od.deletedAt = CURRENT_TIMESTAMP WHERE od.order.orderId = :orderId")
 	void softDeleteDetails(@Param("orderId") UUID orderId);
 
-	List<OrderDetail> findByOrderDetails(UUID orderId);
+	List<OrderDetail> findByOrder_OrderIdAndDeletedAtIsNull(UUID orderId);
 }

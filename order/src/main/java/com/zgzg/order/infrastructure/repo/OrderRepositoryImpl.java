@@ -39,7 +39,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
 	@Override
 	public List<OrderDetail> findAllByOrderIdAndNotDeleted(UUID orderId) {
-		return detailJpaRepository.findByOrderDetails(orderId);
+		return detailJpaRepository.findByOrder_OrderIdAndDeletedAtIsNull(orderId);
 	}
 
 	@Override
@@ -61,7 +61,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 	@Override
 	public Order findByIdAndDeletedAtIsNullAndSupplierHubId(UUID orderId) {
 		// todo. ??
-		return jpaRepository.findByIdAndDeletedAtIsNullAndSupplierHubId(orderId);
+		// return jpaRepository.findByIdAndDeletedAtIsNullAndSupplierHubId(orderId);
+		return null;
 	}
 
 }

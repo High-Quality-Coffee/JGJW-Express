@@ -66,9 +66,9 @@ public class OrderController {
 
 	@GetMapping("/{orderId}")
 	@Secured({"ROLE_MASTER", "ROLE_HUB", "ROLE_DILIVERY", "ROLE_STORE"})
-	public ResponseEntity<ApiResponseData<OrderDetaiListDTO>> getOrder(@PathVariable UUID orderId,
+	public ResponseEntity<ApiResponseData<OrderDetaiListDTO>> getOrderDetails(@PathVariable UUID orderId,
 		@AuthenticationPrincipal CustomUserDetails userDetails) {
-		OrderDetaiListDTO orderDetails = orderService.getOrder(orderId, userDetails);
+		OrderDetaiListDTO orderDetails = orderService.getOrderDetails(orderId, userDetails);
 		return ResponseEntity.ok()
 			.body(
 				ApiResponseData.of(ORDER_GET_SUCCESS.getCode(), ORDER_GET_SUCCESS.getMessage(), orderDetails));

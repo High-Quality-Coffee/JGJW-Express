@@ -79,7 +79,7 @@ public class OrderService {
 		orderRepository.softDeleteDetails(orderId);
 	}
 
-	public OrderDetaiListDTO getOrder(UUID orderId, CustomUserDetails userDetails) {
+	public OrderDetaiListDTO getOrderDetails(UUID orderId, CustomUserDetails userDetails) {
 		if (userDetails.getRole().equals("ROLE_STORE")) { // STORE(본인 주문만)
 			Order order = orderRepository.findByIdAndNotDeleted(orderId);
 			if (order == null) {
@@ -116,6 +116,10 @@ public class OrderService {
 	@Transactional
 	public OrderResponseDTO cancelOrder(UUID orderId, CustomUserDetails userDetails) {
 		Order order = orderRepository.findByIdAndNotDeleted(orderId);
+
+		if (order == null) {
+			throw new BaseException(ORDER_NOT_FOUND);
+		}
 
 		if (userDetails.getRole().equals(("ROLE_HUB")) && !hasHubAuth(orderId, userDetails.getId())) {
 			throw new BaseException(ORDER_AUTH_FORBIDDEN);
