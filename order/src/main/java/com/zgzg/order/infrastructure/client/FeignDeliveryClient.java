@@ -15,7 +15,7 @@ import com.zgzg.order.infrastructure.dto.DeliveryResponseDTO;
 @FeignClient(name = "delivery")
 public interface FeignDeliveryClient {
 
-	@PostMapping("/api/v1/deliveries")
+	@PostMapping("/api/v1/deliveries/internal")
 	ApiResponseData<UUID> createDelivery(@RequestBody CreateDeliveryRequestDTO requestDTO);
 
 	@GetMapping("/api/v1/deliveries/{deliveryId}")
