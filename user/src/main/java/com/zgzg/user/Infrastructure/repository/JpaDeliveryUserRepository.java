@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface JpaDeliveryUserRepository extends JpaRepository<DeliveryUser, Long> {
     @Query("SELECT du FROM DeliveryUser du WHERE du.deliveryStatus = :status ORDER BY du.deliveryOrder ASC")
@@ -19,4 +20,7 @@ public interface JpaDeliveryUserRepository extends JpaRepository<DeliveryUser, L
     List<DeliveryUser> findAllByOrderByDeliveryOrderAsc();
 
     List<DeliveryUser> findAllByDeliveryTypeOrderByDeliveryOrderAsc(DeliveryType deliveryType);
+
+    @Query("SELECT su FROM DeliveryUser su WHERE su.hubId = :hubId AND su.deliveryType = :deliveryType ORDER BY su.deliveryOrder ASC")
+    List<DeliveryUser> findStoreDeliveryUser(@Param("hubId")UUID id, @Param("deliveryType") DeliveryType deliveryType);
 }
