@@ -4,7 +4,7 @@ import com.zgzg.hub.application.route.dto.ProcessedRouteDTO;
 import com.zgzg.hub.application.route.dto.ProcessedRouteDTO.RouteDTO;
 import com.zgzg.hub.application.route.dto.RedisRouteDTO;
 import com.zgzg.hub.domain.entity.Route;
-import com.zgzg.hub.domain.repository.RouteRepository;
+import com.zgzg.hub.domain.repository.route.RouteRepository;
 import com.zgzg.hub.infrastructure.redis.RedisHashUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +41,8 @@ public class RouteStorageService {
       for (RouteDTO routeDTO : entry.getValue().getRoutes()) {
         String hashField = makeHashField(routeDTO.getStartHubId(), routeDTO.getEndHubId());
         RedisRouteDTO redisRouteDTO = RedisRouteDTO.builder()
+            .startHubName(routeDTO.getStartHubName())
+            .endHubName(routeDTO.getEndHubName())
             .startHubId(routeDTO.getStartHubId())
             .endHubId(routeDTO.getEndHubId())
             .duration(routeDTO.getDuration())
@@ -55,13 +57,15 @@ public class RouteStorageService {
       }
       // 루트 경로 저장.
       RedisRouteDTO rootDTO = RedisRouteDTO.builder()
+          .startHubName(entry.getValue().getFirstHubName())
+          .endHubName(entry.getValue().getLastHubName())
           .startHubId(startId)
           .endHubId(endId)
           .duration(totalTime)
           .distance(totalDistance)
           .sequence(0)
           .build();
-      map.put(makeHashField(startId, endId), rootDTO);
+      map.put(entry.getKey(), rootDTO);
       redisHashUtil.save(entry.getKey(), map);
     }
     log.info("Redis 경로 데이터 업데이트");
@@ -80,6 +84,8 @@ public class RouteStorageService {
       Integer totalTime = 0;
       Integer totalDistance = 0;
       Route route = routeRepository.save(Route.builder()
+          .startHubName(entry.getValue().getFirstHubName())
+          .endHubName(entry.getValue().getLastHubName())
           .startHubId(startId)
           .endHubId(endId)
           .interTime(0)
@@ -96,6 +102,8 @@ public class RouteStorageService {
         totalDistance += routeDTO.getDistance();
 
         routes.add(Route.builder()
+            .startHubName(routeDTO.getStartHubName())
+            .endHubName(routeDTO.getEndHubName())
             .startHubId(routeDTO.getStartHubId())
             .endHubId(routeDTO.getEndHubId())
             .interTime(routeDTO.getDuration())

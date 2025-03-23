@@ -3,7 +3,7 @@ package com.zgzg.hub.application.route.client;
 import static com.zgzg.common.response.Code.DELETE_HUB_ROUTES_FAILED;
 
 import com.zgzg.common.exception.BaseException;
-import com.zgzg.hub.domain.repository.RouteRepository;
+import com.zgzg.hub.domain.repository.route.RouteRepository;
 import com.zgzg.hub.infrastructure.redis.RedisHashUtil;
 import java.util.concurrent.CompletableFuture;
 import lombok.Getter;

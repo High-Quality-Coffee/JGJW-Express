@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.zgzg.common.utils.BaseEntity;
 import com.zgzg.company.presentation.dto.CompanyResponseDTO;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,6 +32,9 @@ public class Company extends BaseEntity{
 
 	private String name;
 
+	@Column(name = "company_admin_id")
+	private UUID companyAdminId;
+
 	private String type;
 
 	private String address;
@@ -42,6 +46,7 @@ public class Company extends BaseEntity{
 			.name(this.name)
 			.type(this.type)
 			.address(this.address)
+			.companyAdminId(this.companyAdminId)
 			.build();
 	}
 

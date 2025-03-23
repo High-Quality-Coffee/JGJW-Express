@@ -1,4 +1,4 @@
-package com.zgzg.hub.application.route.service;
+package com.zgzg.hub.application.route.service.facade;
 
 import static com.zgzg.common.response.Code.HUB_ROUTE_NOT_FOUND;
 
@@ -6,7 +6,7 @@ import com.zgzg.common.exception.BaseException;
 import com.zgzg.hub.application.route.dto.RedisRouteDTO;
 import com.zgzg.hub.application.route.dto.RoutesDTO;
 import com.zgzg.hub.domain.entity.Route;
-import com.zgzg.hub.domain.repository.RouteRepository;
+import com.zgzg.hub.domain.repository.route.RouteRepository;
 import com.zgzg.hub.infrastructure.redis.RedisHashUtil;
 import java.util.HashMap;
 import java.util.List;
