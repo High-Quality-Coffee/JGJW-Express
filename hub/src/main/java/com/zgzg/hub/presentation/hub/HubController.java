@@ -1,11 +1,13 @@
 package com.zgzg.hub.presentation.hub;
 
 import static com.zgzg.common.response.Code.CREATED_HUB_SUCCESS;
+import static com.zgzg.common.response.Code.DELETE_HUB_SUCCESS;
 import static com.zgzg.common.response.Code.GET_HUBS_SUCCESS;
 import static com.zgzg.common.response.Code.GET_HUB_SUCCESS;
 import static com.zgzg.common.response.Code.UPDATE_HUB_SUCCESS;
 
 import com.zgzg.common.response.ApiResponseData;
+import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.hub.application.hub.HubService;
 import com.zgzg.hub.application.hub.res.CreateHubResDTO;
 import com.zgzg.hub.application.hub.res.HubResDTO;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,11 +70,15 @@ public class HubController {
 
   @Secured("ROLE_MASTER")
   @PatchMapping("/{hubId}")
-  public ResponseEntity<Void> deleteHub(
+  public ResponseEntity<?> deleteHub(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
       @PathVariable("hubId") UUID hubId) {
 
-    hubService.deleteHub(hubId);
-    return ResponseEntity.ok().build();
+    hubService.deleteHub(hubId, userDetails.getUsername());
+    return ResponseEntity.ok().body(ApiResponseData.of(
+        DELETE_HUB_SUCCESS.getCode(),
+        DELETE_HUB_SUCCESS.getMessage(),
+        null));
   }
 
   @GetMapping("/{hubId}")
