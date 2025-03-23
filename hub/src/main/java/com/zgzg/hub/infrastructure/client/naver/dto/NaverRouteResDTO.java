@@ -1,4 +1,4 @@
-package com.zgzg.hub.infrastructure.client.dto;
+package com.zgzg.hub.infrastructure.client.naver.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;

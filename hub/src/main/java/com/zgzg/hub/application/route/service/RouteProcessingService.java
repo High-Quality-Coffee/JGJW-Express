@@ -4,7 +4,7 @@ import com.zgzg.hub.application.route.dto.OrganizedRouteDTO;
 import com.zgzg.hub.application.route.dto.ProcessedRouteDTO;
 import com.zgzg.hub.domain.entity.Hub;
 import com.zgzg.hub.domain.repository.HubRepository;
-import com.zgzg.hub.infrastructure.client.dto.RouteDTO;
+import com.zgzg.hub.infrastructure.client.naver.dto.RouteDTO;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +44,8 @@ public class RouteProcessingService {
         String routeKey = makeRouteKey(startHub, endHub);
         ProcessedRouteDTO processedRouteDTO =
             ProcessedRouteDTO.builder()
+                .firstHubName(startHub.getHubName())
+                .lastHubName(endHub.getHubName())
                 .routes(new ArrayList<>())
                 .build();
 
@@ -53,8 +55,16 @@ public class RouteProcessingService {
            *  이동 경로 0, 시간 0, sequence 1
            */
           if (startHub.isMegaHub()) {
-            processedRouteDTO.addRoute(ProcessedRouteDTO.RouteDTO.from(
-                startHub.getHubId(), endHub.getHubId(), 0, 0, 1));
+            processedRouteDTO.addRoute(ProcessedRouteDTO.RouteDTO.builder()
+                .startHubName(startHub.getHubName())
+                .endHubName(endHub.getHubName())
+                .startHubId(startHub.getHubId())
+                .endHubId(endHub.getHubId())
+                .duration(0)
+                .distance(0)
+                .sequence(1)
+                .build());
+
             processedMap.put(routeKey, processedRouteDTO);
             continue;
           }
@@ -156,9 +166,15 @@ public class RouteProcessingService {
     String key = makeRouteKey(startHub, parent);
     RouteDTO route = routeMap.get(key); // 자식 - 부모 경로 조회
 
-    processedRouteDTO.addRoute(ProcessedRouteDTO.RouteDTO.from(
-        startHub.getHubId(), parent.getHubId(),
-        route.getDistance(), route.getDuration(), sequence));
+    processedRouteDTO.addRoute(ProcessedRouteDTO.RouteDTO.builder()
+        .startHubName(startHub.getHubName())
+        .endHubName(parent.getHubName())
+        .startHubId(startHub.getHubId())
+        .endHubId(parent.getHubId())
+        .distance(route.getDistance())
+        .duration(route.getDuration())
+        .sequence(sequence)
+        .build());
 
     log.info("normal to mega : {} sequence : {}", startHub.getHubName(), sequence);
   }
@@ -168,8 +184,15 @@ public class RouteProcessingService {
 
     RouteDTO route = routeMap.get(makeRouteKey(startHub, endHub));
     processedRouteDTO.addRoute(
-        ProcessedRouteDTO.RouteDTO.from(startHub.getHubId(), endHub.getHubId(),
-            route.getDistance(), route.getDuration(), sequence));
+        ProcessedRouteDTO.RouteDTO.builder()
+            .startHubName(startHub.getHubName())
+            .endHubName(endHub.getHubName())
+            .startHubId(startHub.getHubId())
+            .endHubId(endHub.getHubId())
+            .distance(route.getDistance())
+            .duration(route.getDuration())
+            .sequence(sequence)
+            .build());
 
     log.info("mega to mega : {} -> {} sequence : {}", startHub.getHubName(), endHub.getHubName(),
         sequence);
@@ -180,8 +203,15 @@ public class RouteProcessingService {
 
     RouteDTO route = routeMap.get(makeRouteKey(startHub, endHub));
     processedRouteDTO.addRoute(
-        ProcessedRouteDTO.RouteDTO.from(startHub.getHubId(), endHub.getHubId(),
-            route.getDistance(), route.getDuration(), sequence));
+        ProcessedRouteDTO.RouteDTO.builder()
+            .startHubName(startHub.getHubName())
+            .endHubName(endHub.getHubName())
+            .startHubId(startHub.getHubId())
+            .endHubId(endHub.getHubId())
+            .distance(route.getDistance())
+            .duration(route.getDuration())
+            .sequence(sequence)
+            .build());
 
     log.info("mega to normal: {} -> {} sequence : {}", startHub.getHubName(), endHub.getHubName(),
         sequence);

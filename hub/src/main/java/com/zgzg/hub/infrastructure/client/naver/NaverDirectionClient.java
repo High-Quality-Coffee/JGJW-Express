@@ -1,8 +1,8 @@
-package com.zgzg.hub.infrastructure.client;
+package com.zgzg.hub.infrastructure.client.naver;
 
 
 import com.zgzg.hub.config.NaverDirectionConfig;
-import com.zgzg.hub.infrastructure.client.dto.NaverRouteResDTO;
+import com.zgzg.hub.infrastructure.client.naver.dto.NaverRouteResDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -3,9 +3,8 @@ package com.zgzg.hub.presentation.route;
 import static com.zgzg.common.response.Code.GET_HUB_ROUTES_SUCCESS;
 
 import com.zgzg.common.response.ApiResponseData;
-import com.zgzg.hub.application.route.client.RouteClient;
 import com.zgzg.hub.application.route.dto.RoutesDTO;
-import com.zgzg.hub.application.route.service.RouteService;
+import com.zgzg.hub.application.route.service.facade.RouteService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class RouteController {
 
   private final RouteService routeService;
-  private final RouteClient routeClient;
-
-  @GetMapping("/update")
-  public ResponseEntity<String> update() {
-    routeClient.updateAllRoutes();
-    return ResponseEntity.ok().body("성공");
-  }
 
   @GetMapping
   public ResponseEntity<ApiResponseData<RoutesDTO>> getRoutes(

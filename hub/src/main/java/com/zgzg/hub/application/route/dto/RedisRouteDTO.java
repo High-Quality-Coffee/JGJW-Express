@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RedisRouteDTO {
 
+  private String startHubName;
+  private String endHubName;
   private UUID startHubId;
   private UUID endHubId;
   private Integer duration;
@@ -21,6 +23,8 @@ public class RedisRouteDTO {
 
   public static RedisRouteDTO from(Route route) {
     return RedisRouteDTO.builder()
+        .startHubName(route.getStartHubName())
+        .endHubName(route.getEndHubName())
         .startHubId(route.getStartHubId())
         .endHubId(route.getEndHubId())
         .duration(route.getInterTime())

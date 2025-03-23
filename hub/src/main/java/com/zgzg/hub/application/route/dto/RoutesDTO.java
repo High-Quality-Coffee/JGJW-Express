@@ -39,6 +39,8 @@ public class RoutesDTO {
   @AllArgsConstructor
   public static class RouteDTO {
 
+    private String startHubName;
+    private String endHubName;
     private UUID startHubId;
     private UUID endHubId;
     private Integer duration;
@@ -47,6 +49,8 @@ public class RoutesDTO {
 
     public static RouteDTO fromEntity(Route route) {
       return RouteDTO.builder()
+          .startHubName(route.getStartHubName())
+          .endHubName(route.getEndHubName())
           .startHubId(route.getStartHubId())
           .endHubId(route.getEndHubId())
           .distance(route.getInterDistance())
@@ -57,6 +61,8 @@ public class RoutesDTO {
 
     public static RouteDTO fromRedis(RedisRouteDTO redisRouteDTO) {
       return RouteDTO.builder()
+          .startHubName(redisRouteDTO.getStartHubName())
+          .endHubName(redisRouteDTO.getEndHubName())
           .startHubId(redisRouteDTO.getStartHubId())
           .endHubId(redisRouteDTO.getEndHubId())
           .duration(redisRouteDTO.getDuration())

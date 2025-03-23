@@ -66,18 +66,17 @@ public class HubService {
     }
 
     // TODO : 허브 관리자 검증
-
     ValidateUpdateHub(hub, updateHubReqDTO);
     eventPublisher.publishEvent(new UpdateRouteEvent(this));
     return UpdateHubResDTO.from(hub);
   }
 
   @Transactional
-  public void deleteHub(UUID hubId) {
+  public void deleteHub(UUID hubId, String username) {
     Hub hub = hubRepository.findByHubId(hubId)
         .orElseThrow(() -> new BaseException(HUB_NOT_FOUND));
 
-    hub.softDelete("MASTERUSER");
+    hub.softDelete(username);
   }
 
   public HubResDTO getHub(UUID hubId) {
