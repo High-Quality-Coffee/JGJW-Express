@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -41,6 +42,10 @@ public class DeliveryUserRepositoryImpl implements DeliveryUserRepository {
 
     public List<DeliveryUser> findAllByDeliveryTypeOrderByDeliveryOrderAsc(DeliveryType deliveryType){
         return jpaDeliveryUserRepository.findAllByDeliveryTypeOrderByDeliveryOrderAsc(deliveryType);
+    }
+
+    public List<DeliveryUser> findStoreDeliveryUser(@Param("hubId") UUID id, @Param("deliveryType") DeliveryType deliveryType){
+        return jpaDeliveryUserRepository.findStoreDeliveryUser(id, deliveryType);
     }
 
 }

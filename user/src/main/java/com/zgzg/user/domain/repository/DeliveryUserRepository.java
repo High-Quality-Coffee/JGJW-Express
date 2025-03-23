@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface DeliveryUserRepository {
     @Transactional
@@ -21,4 +22,6 @@ public interface DeliveryUserRepository {
     List<DeliveryUser> findAllByOrderByDeliveryOrderAsc();
 
     List<DeliveryUser> findAllByDeliveryTypeOrderByDeliveryOrderAsc(DeliveryType deliveryType);
+
+    List<DeliveryUser> findStoreDeliveryUser(UUID hudId, DeliveryType deliveryType);
 }
