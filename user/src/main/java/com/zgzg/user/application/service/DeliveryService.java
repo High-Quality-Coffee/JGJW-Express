@@ -1,36 +1,37 @@
 package com.zgzg.user.application.service;
 
 import com.zgzg.common.exception.BaseException;
+import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.response.Code;
+import com.zgzg.user.Infrastructure.FeignClient.HubClient;
 import com.zgzg.user.application.dto.DeliveryUserResponseDTO;
+import com.zgzg.user.application.dto.HubResDTO;
 import com.zgzg.user.domain.model.DeliveryStatus;
 import com.zgzg.user.domain.model.DeliveryType;
 import com.zgzg.user.domain.model.DeliveryUser;
 import com.zgzg.user.domain.repository.DeliveryUserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.cache.RedisCacheManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DeliveryService {
 
     private final DeliveryUserRepository deliveryUserRepository;
     private final RedisTemplate<String, String> redisTemplate;
-    private final RedisCacheManager cacheManager;
-
+    private final HubClient hubClient;
     private final String HUB_DELIVERY_CACHE_KEY = "hubDeliveryUser";
     private final String STORE_DELIVERY_CACHE_KEY = "storeDeliveryUser:";
     private final int TOTAL_DELIVERY_USERS = 10; //허브 담당자 전체 수
-    private static final String LAST_HUB_ASSIGNED_KEY = "hub:delivery:lastAssigned"; // 직전 허브 배송 담당자 ID 저장용
+    private static final String LAST_HUB_ASSIGNED_KEY = "hub:delivery:lastAssigned:"; // 직전 허브 배송 담당자 ID 저장용
     private final String LAST_STORE_ASSIGNED_KEY = "store:delivery:lastAssigned"; //직전 업체 배송 담당자 ID 저장용
 
     //허브 배송담당자가 큐에 캐싱되지 않은 경우, 캐싱
@@ -130,8 +131,12 @@ public class DeliveryService {
     public DeliveryUserResponseDTO updateStoreDeliveryUser(UUID hubId){
 
         //먼저, 해당 hubId가 실제로 존재하는 hubId인지 검증하는 로직 필요
-
-
+        ResponseEntity<ApiResponseData<HubResDTO>> hubCheck = hubClient.getHub(hubId);
+        log.info(String.valueOf(hubCheck.getBody().getData().getHubId()));
+        // null 체크를 포함한 안전한 방법
+        if (String.valueOf(hubCheck.getBody().getData().getHubId())==null) {
+            throw new BaseException(Code.HUB_NOT_FOUND);
+        }
 
         // 1. 새로운 배송 담당자 요청이 들어왔으니, 직전에 할당된 담당자 상태를 배송 가능으로 변경
         String lastAssignedUserIdStr = redisTemplate.opsForValue().get(LAST_STORE_ASSIGNED_KEY+hubId);

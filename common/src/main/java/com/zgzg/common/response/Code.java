@@ -35,6 +35,9 @@ public enum Code {
   EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 1006, "토큰이 만료되었습니다."),
   INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 1007, "유효하지 않은 토큰입니다."),
   MEMBER_EXISTS(HttpStatus.OK, 1008, "회원 조회를 성공했습니다"),
+  MEMBER_UPDATE(HttpStatus.OK, 1009, "회원 정보 수정을 성공했습니다"),
+  MEMBER_DELETE(HttpStatus.OK, 1010, "회원 삭제를 성공했습니다"),
+  MEMBER_ALREADY_DELETE(HttpStatus.BAD_REQUEST, 1011, "이미 삭제된 회원입니다."),
   DELIVERY_USER_ASSIGN(HttpStatus.OK,1100, "배송담당자를 할당하였습니다."),
   DELIVERY_USER_NOT_ASSIGN(HttpStatus.OK,1100, "배송담당자를 할당할 수 없습니다."),
 
