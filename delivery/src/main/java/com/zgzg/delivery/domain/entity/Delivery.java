@@ -60,9 +60,9 @@ public class Delivery extends BaseEntity {
 	@Column(nullable = false)
 	private String receiverSlackId;
 
-	private UUID deliveryPersonId;
+	private Long deliveryPersonId;
 
-	private String deliveryPersonName;
+	private String deliveryPersonSlackId;
 
 	@Column(nullable = false)
 	private UUID orderId;

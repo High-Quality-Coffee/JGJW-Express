@@ -56,8 +56,9 @@ public enum Code {
 	DELIVERY_READ_SUCCESS(HttpStatus.OK, 3001, "배송이 성공적으로 조회되었습니다."),
 	DELIVERY_CANCEL_SUCCESS(HttpStatus.OK, 3002, "배송이 성공적으로 취소되었습니다."),
 
-	DELIVERY_CANCEL_FAIL(HttpStatus.BAD_REQUEST, 3003, "배송이 시작되어 취소가 불가합니다."),
-	DELIVERY_AUTH_FORBIDDEN(HttpStatus.FORBIDDEN, 3004, "해당 주문에 대한 권한이 없습니다."),
+	DELIVERY_CANCEL_FAIL(HttpStatus.BAD_REQUEST, 3403, "배송이 시작되어 취소가 불가합니다."),
+	DELIVERY_AUTH_FORBIDDEN(HttpStatus.FORBIDDEN, 3404, "해당 주문에 대한 권한이 없습니다."),
+	DELIVERY_NOT_FOUND(HttpStatus.NOT_FOUND, 3405, "해당 주문을 찾을 수 없습니다."),
 
 	/**
 	 * Hub 4000번

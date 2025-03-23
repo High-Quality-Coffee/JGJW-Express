@@ -50,8 +50,8 @@ public class DeliveryRouteLog extends BaseEntity { //배송 경로 기록
 	private Integer actualDistance;
 	private Integer actualTimeSpent;
 	private DeliveryStatus deliveryStatus;
-	private UUID deliveryPersonId;
-	private String deliveryPersonName;
+	private Long deliveryPersonId;
+	private String deliveryPersonSlackId;
 
 	public void startDelivery() {
 		this.deliveryStatus = DeliveryStatus.HUB_IN_TRANSIT;
@@ -59,5 +59,10 @@ public class DeliveryRouteLog extends BaseEntity { //배송 경로 기록
 
 	public void completeDelivery() {
 		this.deliveryStatus = DeliveryStatus.DELIVERED;
+	}
+
+	public void assignDeliveryPerson(Long personId, String slackId) {
+		this.deliveryPersonId = personId;
+		this.deliveryPersonSlackId = slackId;
 	}
 }

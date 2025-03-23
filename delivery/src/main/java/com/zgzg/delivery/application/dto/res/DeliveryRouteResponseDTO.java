@@ -24,8 +24,8 @@ public class DeliveryRouteResponseDTO {
 	private Integer actualDistance;
 	private Integer actualTimeSpent;
 	private DeliveryStatus deliveryStatus;
-	private UUID deliveryPersonId;
-	private String deliveryPersonName;
+	private Long deliveryPersonId;
+	private String deliveryPersonSlackId;
 	private LocalDateTime createDateTime;
 
 	public static DeliveryRouteResponseDTO from(DeliveryRouteLog log) {
@@ -42,7 +42,7 @@ public class DeliveryRouteResponseDTO {
 			.actualTimeSpent(log.getActualTimeSpent())
 			.deliveryStatus(log.getDeliveryStatus())
 			.deliveryPersonId(log.getDeliveryPersonId())
-			.deliveryPersonName(log.getDeliveryPersonName())
+			.deliveryPersonSlackId(log.getDeliveryPersonSlackId())
 			.createDateTime(log.getCreatedDateTime())
 			.build();
 	}
