@@ -3,7 +3,7 @@ package com.zgzg.hub.application.route.service;
 import com.zgzg.hub.application.route.dto.OrganizedRouteDTO;
 import com.zgzg.hub.application.route.dto.ProcessedRouteDTO;
 import com.zgzg.hub.domain.entity.Hub;
-import com.zgzg.hub.domain.repository.HubRepository;
+import com.zgzg.hub.domain.repository.hub.HubRepository;
 import com.zgzg.hub.infrastructure.client.naver.dto.RouteDTO;
 import java.util.ArrayList;
 import java.util.HashMap;

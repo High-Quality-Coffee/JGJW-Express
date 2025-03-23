@@ -13,7 +13,7 @@ import com.zgzg.hub.application.hub.res.HubResDTO;
 import com.zgzg.hub.application.hub.res.PageHubsResDTO;
 import com.zgzg.hub.application.hub.res.UpdateHubResDTO;
 import com.zgzg.hub.domain.entity.Hub;
-import com.zgzg.hub.domain.repository.HubRepository;
+import com.zgzg.hub.domain.repository.hub.HubRepository;
 import com.zgzg.hub.presentation.hub.req.CreateHubReqDTO;
 import com.zgzg.hub.presentation.hub.req.UpdateHubReqDTO;
 import com.zgzg.hub.util.event.UpdateRouteEvent;
@@ -109,7 +109,7 @@ public class HubService {
   }
 
   public PageHubsResDTO searchHub(String keyword, Pageable pageable) {
-    Page<Hub> hubs = hubRepository.findByHubNameContaining(keyword, pageable);
+    Page<Hub> hubs = hubRepository.searchByHubName(keyword, pageable);
     return PageHubsResDTO.from(hubs);
   }
 
