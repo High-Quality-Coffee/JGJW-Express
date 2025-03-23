@@ -16,6 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RouteDTO {
 
+	private String startHubName;
+	private String endHubName;
 	private UUID startHubId;
 	private UUID endHubId;
 	private Integer duration;
@@ -25,6 +27,8 @@ public class RouteDTO {
 	public DeliveryRouteLog toEntity(Delivery delivery) {
 		return DeliveryRouteLog.builder()
 			.delivery(delivery)
+			.startHubName(startHubName)
+			.endHubName(endHubName)
 			.startHubId(startHubId)
 			.endHubId(endHubId)
 			.estimatedTime(duration)

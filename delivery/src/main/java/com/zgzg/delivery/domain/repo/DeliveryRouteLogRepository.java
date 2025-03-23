@@ -10,7 +10,7 @@ public interface DeliveryRouteLogRepository {
 
 	DeliveryRouteLog findByIdAndSequence(UUID deliveryId, Integer sequence);
 
-	void save(DeliveryRouteLog entity);
+	DeliveryRouteLog save(DeliveryRouteLog entity);
 
 	void softDeleteRoutes(UUID deliveryId);
 }

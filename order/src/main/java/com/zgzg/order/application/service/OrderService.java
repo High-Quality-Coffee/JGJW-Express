@@ -48,19 +48,32 @@ public class OrderService {
 	@Transactional
 	public UUID createOrder(CreateOrderRequestDto requestDto) {
 
+		// 공급 업체, 요청 업체 정보 조회
 		CompanyResponseDTO supplier = companyClient.getCompany(requestDto.getSupplierCompanyId());
 		CompanyResponseDTO receiver = companyClient.getCompany(requestDto.getReceiverCompanyId());
+		log.info("supplier: {} , receiver: {}", supplier.getHub_id(), receiver.getHub_id());
 
-		Order order = requestDto.toEntity(requestDto, receiver.getHub_id());
+		// 주문 생성
+		Order order = requestDto.toEntity(requestDto, supplier.getHub_id());
 		Order savedOrder = orderRepository.save(order);
+
+		// 슬랙 메시지 요청에 필요한 정보(배송으로 넘길 정보)
+		Integer quantity = 0;
+
+		// 주문 상세 생성
 		for (OrderDetailDTO orderDetailDTO : requestDto.getProductList()) {
 			OrderDetail orderDetail = orderDetailDTO.toEntity(order);
+			quantity += orderDetail.getQuantity();
 			orderRepository.saveDetail(orderDetail);
 		}
 
-		CreateDeliveryRequestDTO requestDTO = new CreateDeliveryRequestDTO(savedOrder.getOrderId(), supplier,
-			receiver);
-		UUID deliveryId = deliveryClient.createDelivery(requestDTO);
+		String productName =
+			requestDto.getProductList().get(0).getProductName() + "외 " + (requestDto.getProductList().size() - 1) + "개";
+		CreateDeliveryRequestDTO deliveryRequestDTO = new CreateDeliveryRequestDTO(savedOrder, supplier,
+			receiver, productName, quantity);
+		// 배송 생성 요청
+		UUID deliveryId = deliveryClient.createDelivery(deliveryRequestDTO);
+		// 생성된 배송 id 주문에 저장
 		savedOrder.addDeliveryOrder(deliveryId);
 
 		return savedOrder.getOrderId();

@@ -2,6 +2,7 @@ package com.zgzg.delivery.application.service;
 
 import static com.zgzg.common.response.Code.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.delivery.application.client.DeliveryPersonClient;
 import com.zgzg.delivery.application.client.HubClient;
+import com.zgzg.delivery.application.client.SlackClient;
 import com.zgzg.delivery.application.dto.res.DeliveryResponseDTO;
 import com.zgzg.delivery.application.dto.res.DeliveryRouteLogsResponseDTO;
 import com.zgzg.delivery.application.dto.res.DeliveryRouteResponseDTO;
@@ -23,6 +25,7 @@ import com.zgzg.delivery.domain.entity.DeliveryRouteLog;
 import com.zgzg.delivery.domain.entity.DeliveryStatus;
 import com.zgzg.delivery.domain.repo.DeliveryRepository;
 import com.zgzg.delivery.domain.repo.DeliveryRouteLogRepository;
+import com.zgzg.delivery.infrastructure.client.req.GenerateMessageRequest;
 import com.zgzg.delivery.infrastructure.client.res.DeliveryUserResponseDTO;
 import com.zgzg.delivery.infrastructure.dto.HubResponseDTO;
 import com.zgzg.delivery.infrastructure.dto.RouteDTO;
@@ -42,19 +45,43 @@ public class DeliveryService {
 	private final DeliveryRouteLogRepository deliveryRouteLogRepository;
 	private final HubClient hubClient;
 	private final DeliveryPersonClient deliveryPersonClient;
+	private final SlackClient slackClient;
 
 	@Transactional
 	public UUID createDelivery(CreateDeliveryRequestDTO requestDTO) {
+
 		Delivery delivery = requestDTO.toEntity();
 		Delivery savedDelivery = deliveryRepository.save(delivery);
 
+		// 1. 배송 생성과 동시에 배송 담당자 할당
+		DeliveryUserResponseDTO deliver = deliveryPersonClient.getDeiveryPerson();
+		savedDelivery.assignDeliveryPerson(deliver.getDeliveryUserId(), deliver.getDeliverySlackUsername());
+		// 2. 배송 생성과 동시에 배송 경로 요청
 		List<RouteDTO> hubRoutes = hubClient.getHubRoutes(delivery.getOriginHubId(),
 			delivery.getDestinationHubId());
-		// todo. hubName 추가 요청 -> 상욱님
+
+		// 3. 배송 생성과 동시에 슬랙 알림 전송
+		List<String> intermediateHubs = new ArrayList<>();
+
+		// 배송 경로 저장 및 첫 번째 배송 경로에 배송 담당자 할당
 		for (RouteDTO hubRoute : hubRoutes) {
-			log.info("Hub route: {}", hubRoute.getDistance());
-			deliveryRouteLogRepository.save(hubRoute.toEntity(savedDelivery));
+			DeliveryRouteLog route = deliveryRouteLogRepository.save(hubRoute.toEntity(savedDelivery));
+
+			if (hubRoute.getSequence() == 1) {
+				route.assignDeliveryPerson(deliver.getDeliveryUserId(), deliver.getDeliverySlackUsername());
+				savedDelivery.addOriginHubName(hubRoute.getStartHubName());
+			} else if (hubRoute.getSequence() == hubRoutes.size() - 1) {
+				savedDelivery.addDestinationHubName(hubRoute.getEndHubName());
+			}
+			if (hubRoute.getSequence() != 0 && hubRoute.getSequence() != hubRoutes.size() - 1) {
+				intermediateHubs.add(hubRoute.getEndHubName());
+			}
 		}
+
+		// 슬랙 메시지 전송
+		GenerateMessageRequest messageRequest = GenerateMessageRequest.generate(requestDTO, savedDelivery,
+			intermediateHubs);
+		slackClient.createSlackMessage(messageRequest);
 
 		return savedDelivery.getDeliveryId();
 	}
@@ -109,7 +136,7 @@ public class DeliveryService {
 			if (delivery == null) {
 				throw new BaseException(DELIVERY_NOT_FOUND);
 			}
-			
+
 			delivery.startDelivery(); // 배송 상태 변경
 
 			DeliveryUserResponseDTO deliver = deliveryPersonClient.getDeiveryPerson();
