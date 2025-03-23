@@ -16,4 +16,7 @@ public class HubResDTO {
 	private String createdAt;
 	private String updatedAt;
 	private Long hubAdminId;
+
+	public HubResDTO(HubDTO mockHubDTO) {
+	}
 }
