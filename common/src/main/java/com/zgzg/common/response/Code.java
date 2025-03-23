@@ -34,8 +34,8 @@ public enum Code {
   TOKEN_NOT_EXISTS(HttpStatus.NOT_FOUND, 1005, "액세스 토큰이 존재하지 않습니다."),
   EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 1006, "토큰이 만료되었습니다."),
   INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 1007, "유효하지 않은 토큰입니다."),
-  DELIVERY_USER_ASSIGN(HttpStatus.OK,1100, "배송담당자를 할당하였습니다."),
-  DELIVERY_USER_NOT_ASSIGN(HttpStatus.OK,1100, "배송담당자를 할당할 수 없습니다."),
+  DELIVERY_USER_ASSIGN(HttpStatus.OK, 1100, "배송담당자를 할당하였습니다."),
+  DELIVERY_USER_NOT_ASSIGN(HttpStatus.OK, 1100, "배송담당자를 할당할 수 없습니다."),
 
   /**
    * 주문 2000번대
@@ -70,6 +70,9 @@ public enum Code {
   EXIST_HUB_NAME(HttpStatus.BAD_REQUEST, 4001, "이미 존재하는 허브명 입니다."),
   HUB_NOT_FOUND(HttpStatus.NOT_FOUND, 4002, "허브가 존재하지 않습니다."),
   PARENT_HUB_NOT_FOUND(HttpStatus.BAD_REQUEST, 4003, "중앙 허브가 존재하지 않습니다."),
+  NOT_CHANGES_HUB(HttpStatus.BAD_REQUEST, 4004, "허브 변경사항이 없습니다."),
+  FIRST_CHANGE_CONNECTED_HUBS(HttpStatus.BAD_REQUEST, 4005, "연결된 허브의 중앙 허브를 먼저 변경해야합니다."),
+  NORMAL_HUB_MUST_HAVE_PARENT_HUB(HttpStatus.BAD_REQUEST, 4006, "연결된 중앙 허브가 필요합니다."),
 
   /**
    * 업체 5000 번대

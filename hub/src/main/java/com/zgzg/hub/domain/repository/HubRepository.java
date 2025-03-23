@@ -17,6 +17,8 @@ public interface HubRepository extends JpaRepository<Hub, UUID> {
 
   Optional<Hub> findByHubId(UUID hubId);
 
+  boolean existsByParentHubId(UUID parentHubId);
+
   Page<Hub> findByHubNameContaining(String keyword, Pageable pageable);
 
 }
