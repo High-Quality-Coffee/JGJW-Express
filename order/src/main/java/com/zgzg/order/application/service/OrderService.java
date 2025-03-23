@@ -1,5 +1,7 @@
 package com.zgzg.order.application.service;
 
+import static com.zgzg.common.response.Code.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -9,8 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zgzg.common.exception.BaseException;
-import com.zgzg.common.response.Code;
+import com.zgzg.common.security.CustomUserDetails;
+import com.zgzg.order.application.client.CompanyClient;
+import com.zgzg.order.application.client.DeliveryClient;
+import com.zgzg.order.application.client.HubClient;
 import com.zgzg.order.application.dto.global.PageableResponse;
+import com.zgzg.order.application.dto.req.CreateDeliveryRequestDTO;
 import com.zgzg.order.application.dto.res.OrderDetaiListDTO;
 import com.zgzg.order.application.dto.res.OrderDetailDTO;
 import com.zgzg.order.application.dto.res.OrderDetailResponseDTO;
@@ -18,6 +24,10 @@ import com.zgzg.order.application.dto.res.OrderResponseDTO;
 import com.zgzg.order.domain.entity.Order;
 import com.zgzg.order.domain.entity.OrderDetail;
 import com.zgzg.order.domain.repo.OrderRepository;
+import com.zgzg.order.infrastructure.dto.CompanyResponseDTO;
+import com.zgzg.order.infrastructure.dto.DeliveryResponseDTO;
+import com.zgzg.order.infrastructure.dto.DeliveryStatus;
+import com.zgzg.order.infrastructure.dto.HubResponseDTO;
 import com.zgzg.order.presentation.dto.req.CreateOrderRequestDto;
 import com.zgzg.order.presentation.dto.req.SearchCriteria;
 
@@ -31,51 +41,127 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderService {
 
 	private final OrderRepository orderRepository;
+	private final DeliveryClient deliveryClient;
+	private final CompanyClient companyClient;
+	private final HubClient hubClient;
 
 	@Transactional
 	public UUID createOrder(CreateOrderRequestDto requestDto) {
-		Order order = requestDto.toEntity(requestDto);
+
+		// 공급 업체, 요청 업체 정보 조회
+		CompanyResponseDTO supplier = companyClient.getCompany(requestDto.getSupplierCompanyId());
+		CompanyResponseDTO receiver = companyClient.getCompany(requestDto.getReceiverCompanyId());
+		log.info("supplier: {} , receiver: {}", supplier.getHub_id(), receiver.getHub_id());
+
+		// 주문 생성
+		Order order = requestDto.toEntity(requestDto, supplier.getHub_id());
 		Order savedOrder = orderRepository.save(order);
+
+		// 슬랙 메시지 요청에 필요한 정보(배송으로 넘길 정보)
+		Integer quantity = 0;
+
+		// 주문 상세 생성
 		for (OrderDetailDTO orderDetailDTO : requestDto.getProductList()) {
 			OrderDetail orderDetail = orderDetailDTO.toEntity(order);
+			quantity += orderDetail.getQuantity();
 			orderRepository.saveDetail(orderDetail);
 		}
+
+		String productName =
+			requestDto.getProductList().get(0).getProductName() + "외 " + (requestDto.getProductList().size() - 1) + "개";
+		CreateDeliveryRequestDTO deliveryRequestDTO = new CreateDeliveryRequestDTO(savedOrder, supplier,
+			receiver, productName, quantity);
+		// 배송 생성 요청
+		UUID deliveryId = deliveryClient.createDelivery(deliveryRequestDTO);
+		// 생성된 배송 id 주문에 저장
+		savedOrder.addDeliveryOrder(deliveryId);
+
 		return savedOrder.getOrderId();
 	}
 
 	@Transactional
-	public void deleteOrder(UUID orderId) {
+	public void deleteOrder(UUID orderId, CustomUserDetails userDetails) {
 		Order order = orderRepository.findById(orderId)
-			.orElseThrow(() -> new BaseException(Code.ORDER_NOT_FOUND));
-		// todo. 권한 유효성 검사
-		// todo. 사용자 정보 대입, 임시 데이터 제거
-		order.softDelete("temp1");
-		// todo. 주문이 삭제될 때 연관된 데이터도 함께 관리 - orderDetail
+			.orElseThrow(() -> new BaseException(ORDER_NOT_FOUND));
+
+		if (userDetails.getRole().equals("ROLE_HUB") && !hasHubAuth(orderId,
+			userDetails.getId())) {
+			throw new BaseException(ORDER_AUTH_FORBIDDEN);
+		}
+		order.softDelete(userDetails.getUsername());
+		orderRepository.softDeleteDetails(orderId);
 	}
 
-	public OrderDetaiListDTO getOrder(UUID orderId) {
-		// todo. 권한 확인 - MASTER, HUB(담당 허브만), DELIVERY(본인 주문만), STORE(본인 주문만)
+	public OrderDetaiListDTO getOrderDetails(UUID orderId, CustomUserDetails userDetails) {
+		if (userDetails.getRole().equals("ROLE_STORE")) { // STORE(본인 주문만)
+			Order order = orderRepository.findByIdAndNotDeleted(orderId);
+			if (order == null) {
+				throw new BaseException(ORDER_NOT_FOUND);
+			}
+		} else if (userDetails.getRole().equals("ROLE_HUB") && !hasHubAuth(orderId,
+			userDetails.getId())) { //HUB(담당 허브만)
+			throw new BaseException(ORDER_AUTH_FORBIDDEN);
+		}
+
 		List<OrderDetail> orderDetails = orderRepository.findAllByOrderIdAndNotDeleted(orderId);
 		List<OrderDetailResponseDTO> detailList = orderDetails.stream()
 			.map(detail -> OrderDetailResponseDTO.from(detail))
 			.toList();
-		// todo. 응답 객체 필드에 baseEntity 필드도 추가
 		return new OrderDetaiListDTO(orderId, detailList);
 	}
 
-	// todo. 권한 확인 - MASTER, HUB(담당 허브만), DELIVERY(본인 주문만), STORE(본인 주문만)
-	public PageableResponse<OrderResponseDTO> searchOrder(SearchCriteria criteria, Pageable pageable) {
-		Page<OrderResponseDTO> orderDTOPage = orderRepository.searchOrderByCriteria(criteria, pageable);
-		// todo. 응답 객체 필드에 baseEntity 필드도 추가
+	// todo. 권한 확인 - MASTER, HUB(담당 허브만), STORE(본인 주문만)
+	public PageableResponse<OrderResponseDTO> searchOrder(SearchCriteria criteria, Pageable pageable,
+		CustomUserDetails userDetails) {
+		// 업체면 receiverCompanyId
+
+		// 허브면 receiverHubId
+		// long id = userDetails.getId();
+		// HubResponseDTO hub = hubClient.getHub(id);
+		// order가 없는 상태에선 허브관리자 ID로 허브 ID를 찾을 수 없넹..
+		UUID id = null;
+
+		Page<OrderResponseDTO> orderDTOPage = orderRepository.searchOrderByCriteria(criteria, pageable,
+			userDetails.getRole(), id);
 		return new PageableResponse<>(orderDTOPage);
 	}
 
 	@Transactional
-	public OrderResponseDTO cancelOrder(UUID orderId) {
-		// todo. 권한 확인 - MASTER, HUB(담당 허브만), STORE(본인 주문만)
+	public OrderResponseDTO cancelOrder(UUID orderId, CustomUserDetails userDetails) {
 		Order order = orderRepository.findByIdAndNotDeleted(orderId);
-		// todo. STORE 의 경우, 배송 상태가 배송 시작 전일 때만 취소 가능
+
+		if (order == null) {
+			throw new BaseException(ORDER_NOT_FOUND);
+		}
+
+		if (userDetails.getRole().equals(("ROLE_HUB")) && !hasHubAuth(orderId, userDetails.getId())) {
+			throw new BaseException(ORDER_AUTH_FORBIDDEN);
+		}
+		if (userDetails.getRole().equals("ROLE_STORE")) {
+
+			CompanyResponseDTO company = companyClient.getCompany(order.getReceiverCompanyId());
+			// todo. 조회한 업체의 관리자 id == userDetails.getId
+
+			// STORE 의 경우, 배송 상태가 배송 시작 전일 때만 취소 가능
+			DeliveryResponseDTO delivery = deliveryClient.getDelivery(order.getDeliveryId());
+			if (delivery.getDeliveryStatus().equals(DeliveryStatus.IN_DELIVERY)) {
+				throw new BaseException(DELIVERY_CANCEL_FAIL);
+			}
+		}
 		order.cancelOrder();
 		return OrderResponseDTO.from(order);
+	}
+
+	private boolean hasHubAuth(UUID orderId, Long userId) { // 주문이 들어온 허브의 허브 담당자 id == 조회 id
+		Order order = orderRepository.findByIdAndNotDeleted(orderId);
+		HubResponseDTO hub = getHubClient(order);
+		if (hub.getHubDTO().getHubAdminId().equals(userId)) {
+			return false;
+		}
+		return true;
+	}
+
+	private HubResponseDTO getHubClient(Order order) {
+		return hubClient.getHub(order.getSupplierHubId());
 	}
 }
