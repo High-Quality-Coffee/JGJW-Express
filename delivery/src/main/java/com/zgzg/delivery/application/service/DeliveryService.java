@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.security.CustomUserDetails;
+import com.zgzg.delivery.application.client.DeliveryPersonClient;
 import com.zgzg.delivery.application.client.HubClient;
 import com.zgzg.delivery.application.dto.res.DeliveryResponseDTO;
 import com.zgzg.delivery.application.dto.res.DeliveryRouteLogsResponseDTO;
@@ -22,6 +23,7 @@ import com.zgzg.delivery.domain.entity.DeliveryRouteLog;
 import com.zgzg.delivery.domain.entity.DeliveryStatus;
 import com.zgzg.delivery.domain.repo.DeliveryRepository;
 import com.zgzg.delivery.domain.repo.DeliveryRouteLogRepository;
+import com.zgzg.delivery.infrastructure.client.res.DeliveryUserResponseDTO;
 import com.zgzg.delivery.infrastructure.dto.HubResponseDTO;
 import com.zgzg.delivery.infrastructure.dto.RouteDTO;
 import com.zgzg.delivery.presentation.dto.global.SearchCriteria;
@@ -39,6 +41,7 @@ public class DeliveryService {
 	private final DeliveryRepository deliveryRepository;
 	private final DeliveryRouteLogRepository deliveryRouteLogRepository;
 	private final HubClient hubClient;
+	private final DeliveryPersonClient deliveryPersonClient;
 
 	@Transactional
 	public UUID createDelivery(CreateDeliveryRequestDTO requestDTO) {
@@ -98,11 +101,20 @@ public class DeliveryService {
 
 	@Transactional
 	public void startDelivery(UUID deliveryId, int sequence) {
+		DeliveryRouteLog route = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, sequence);
+
+		log.info("seq : {} , delivery id : {}", sequence, deliveryId);
 		if (sequence == 1) {
 			Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
+			if (delivery == null) {
+				throw new BaseException(DELIVERY_NOT_FOUND);
+			}
+			
 			delivery.startDelivery(); // 배송 상태 변경
+
+			DeliveryUserResponseDTO deliver = deliveryPersonClient.getDeiveryPerson();
+			route.assignDeliveryPerson(deliver.getDeliveryUserId(), deliver.getDeliverySlackUsername());
 		}
-		DeliveryRouteLog route = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, sequence);
 		route.startDelivery(); // 각 시퀀스 배송 상태 변경
 	}
 
@@ -124,6 +136,7 @@ public class DeliveryService {
 		// 배송 완료 (요청 업체 수령 완료)
 		Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
 		delivery.completeDelivery();
+		// todo. 배송 담당자 배송 가능 상태로 변경
 
 		// 경로 기록
 		DeliveryRouteLog route = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, sequence);
