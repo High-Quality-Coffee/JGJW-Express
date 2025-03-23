@@ -28,3 +28,8 @@ eureka:
       defaultZone: http://localhost:19090/eureka/
     register-with-eureka: true  # Eureka에 서비스 등록
     fetch-registry: true        # Eureka에서 다른 서비스 정보 가져오기
+
+logging:
+  level:
+    com.springframework: DEBUG
+    root: DEBUG

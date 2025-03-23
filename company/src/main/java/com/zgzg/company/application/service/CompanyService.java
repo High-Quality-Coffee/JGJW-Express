@@ -11,8 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.response.Code;
+import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.company.domain.Company;
 import com.zgzg.company.domain.Persistence.CompanyRepository;
+import com.zgzg.company.infrastructure.client.FeginServiceClient;
+import com.zgzg.company.infrastructure.client.dto.HubResDTO;
 import com.zgzg.company.presentation.dto.CompanyResponseDTO;
 import com.zgzg.company.presentation.dto.CreateCompanyRequestDTO;
 import com.zgzg.company.presentation.dto.PageableRequestDTO;
@@ -26,9 +29,16 @@ import lombok.RequiredArgsConstructor;
 public class CompanyService {
 
 	private final CompanyRepository companyRepository;
+	private final FeginServiceClient feginServiceClient;
 
-	public void createCompany(CreateCompanyRequestDTO createCompanyRequestDTO) {
+	public void createCompany(CreateCompanyRequestDTO createCompanyRequestDTO, CustomUserDetails userDetails) {
 		Company company = createCompanyRequestDTO.toEntity();
+
+		// 담당 허브만 생성 가능
+		if(!(getHubadmin(fetchHubInfo(company.getHub_id(),userDetails))==userDetails.getId()) && (userDetails.getRole()=="ROLE_HUB")){
+			throw new BaseException(Code.COMPANY_AUTH_ERROR);
+		}
+
 		companyRepository.save(company);
 	}
 
@@ -50,22 +60,30 @@ public class CompanyService {
 		return PageableResponseDTO.from(companiesPage, CompanyResponseDTO::toDto);
 	}
 
-	public void updateCompany(UpdateCompanyRequestDTO updateCompanyRequestDTO) {
-		Company company = companyRepository.findByIdAndDeletedAtIsNull(updateCompanyRequestDTO.getId())
-			.orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
+	public void updateCompany(UpdateCompanyRequestDTO updateCompanyRequestDTO, CustomUserDetails userDetails) {
+			Company company = companyRepository.findByIdAndDeletedAtIsNull(updateCompanyRequestDTO.getId())
+				.orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
 
-		company.update(updateCompanyRequestDTO.getName(),
-			updateCompanyRequestDTO.getType(),
-			updateCompanyRequestDTO.getAddress());
+			if((!(company.getCompanyAdminId().equals(userDetails.getId()))) && (userDetails.getRole()=="ROLE_STORE")){
+				throw new BaseException(Code.COMPANY_UPDATE_ERROR);
+			}
+
+			company.update(updateCompanyRequestDTO.getName(),
+				updateCompanyRequestDTO.getType(),
+				updateCompanyRequestDTO.getAddress());
 
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteCompany(UUID id) {
+	public void deleteCompany(UUID id, CustomUserDetails userDetails) {
 		Company company = companyRepository.findByIdAndDeletedAtIsNull(id)
 			.orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
 
-		company.softDelete("temp");
+		if(!(fetchHubInfo(company.getHub_id(),userDetails).getHubAdminId() == userDetails.getId()) && (userDetails.getRole()=="ROLE_HUB")){
+			throw new BaseException(Code.COMPANY_AUTH_ERROR);
+		}
+
+		company.softDelete(userDetails.getUsername());
 		companyRepository.save(company);
 	}
 
@@ -77,5 +95,13 @@ public class CompanyService {
 		Pageable pageable = PageRequest.of(pageableRequestDTO.getPage(), pageableRequestDTO.getSize(), sort);
 		Page<Company> companiesPage = companyRepository.searchCompanies(keyword, pageable);
 		return PageableResponseDTO.from(companiesPage, CompanyResponseDTO::toDto);
+	}
+
+	public HubResDTO fetchHubInfo(UUID hubId, CustomUserDetails userDetails) {
+		return feginServiceClient.getHub(hubId,userDetails);
+	}
+
+	public Long getHubadmin(HubResDTO hubResDTO){
+		return hubResDTO.getHubAdminId();
 	}
 }
