@@ -1,4 +1,4 @@
-package com.zgzg.hub.application.route.service;
+package com.zgzg.hub.application.route.service.facade;
 
 import static com.zgzg.common.response.Code.HUB_ROUTE_NOT_FOUND;
 
