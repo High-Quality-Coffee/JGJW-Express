@@ -14,11 +14,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Entity
 @Table(name = "p_route")
 @Builder
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Route extends BaseEntity {
@@ -32,7 +34,13 @@ public class Route extends BaseEntity {
   private UUID startHubId;
 
   @Column(nullable = false)
+  private String startHubName;
+
+  @Column(nullable = false)
   private UUID endHubId;
+
+  @Column(nullable = false)
+  private String endHubName;
 
   @Setter
   private Integer interTime;

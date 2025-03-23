@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProcessedRouteDTO {
 
+  private String firstHubName;
+  private String lastHubName;
   private List<RouteDTO> routes;
 
   public void addRoute(RouteDTO route) {
@@ -25,22 +27,12 @@ public class ProcessedRouteDTO {
   @AllArgsConstructor
   public static class RouteDTO {
 
+    private String startHubName;
+    private String endHubName;
     private UUID startHubId;
     private UUID endHubId;
     private Integer distance;
     private Integer duration;
     private int sequence;
-
-    public static RouteDTO from(UUID startHubId, UUID endHubId,
-        Integer distance, Integer duration, int sequence) {
-
-      return RouteDTO.builder()
-          .startHubId(startHubId)
-          .endHubId(endHubId)
-          .distance(distance)
-          .duration(duration)
-          .sequence(sequence)
-          .build();
-    }
   }
 }
