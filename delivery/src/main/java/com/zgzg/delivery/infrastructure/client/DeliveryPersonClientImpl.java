@@ -18,6 +18,7 @@ public class DeliveryPersonClientImpl implements DeliveryPersonClient {
 
 	@Override
 	public DeliveryUserResponseDTO getDeiveryPerson() {
+		log.info("Feign : getDeliveryPerson ");
 		ApiResponseData<DeliveryUserResponseDTO> response = feignDeliveryPersonClient.getDeliveryPerson();
 		log.info("response - code : {}, message : {} ", response.getCode(), response.getMessage());
 		return response.getData();

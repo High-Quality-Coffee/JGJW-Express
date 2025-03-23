@@ -13,12 +13,11 @@ import com.zgzg.delivery.infrastructure.client.res.DeliveryUserResponseDTO;
 @FeignClient(name = "user")
 public interface FeignDeliveryPersonClient {
 
-	@GetMapping("/api/v1/deliveries/users/hub")
+	@GetMapping("/api/v1/delivery/users/hub")
 	ApiResponseData<DeliveryUserResponseDTO> getDeliveryPerson();
 
-	@GetMapping("/api/v1/deliveries/users/store/{hubId}")
+	@GetMapping("/api/v1/delivery/users/store/{hubId}")
 	ApiResponseData<DeliveryUserResponseDTO> getDeliveryPerson(@PathVariable UUID hubId);
-	// todo. API 작업 마무리 요청 (규원님)
 
 	@PutMapping("/api/v1/delivery/users/{id}")
 	ApiResponseData<DeliveryUserResponseDTO> updateDeliveryPerson(@PathVariable UUID id);
