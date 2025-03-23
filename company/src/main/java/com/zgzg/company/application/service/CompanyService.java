@@ -35,7 +35,9 @@ public class CompanyService {
 		Company company = createCompanyRequestDTO.toEntity();
 
 		// 담당 허브만 생성 가능
-		if(!(getHubadmin(fetchHubInfo(company.getHub_id(),userDetails))==userDetails.getId()) && (userDetails.getRole()=="ROLE_HUB")){
+		//getHub_id()에서 존재하는 허브인지 체크 됨
+		if (!(getHubAdmin(fetchHubInfo(company.getHub_id())) == userDetails.getId()) && (
+			userDetails.getRole() == "ROLE_HUB")) {
 			throw new BaseException(Code.COMPANY_AUTH_ERROR);
 		}
 
@@ -43,7 +45,8 @@ public class CompanyService {
 	}
 
 	public CompanyResponseDTO getCompany(UUID id) {
-		Company company = companyRepository.findByIdAndDeletedAtIsNull(id).orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
+		Company company = companyRepository.findByIdAndDeletedAtIsNull(id)
+			.orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
 		return company.toDTO();
 	}
 
@@ -61,16 +64,21 @@ public class CompanyService {
 	}
 
 	public void updateCompany(UpdateCompanyRequestDTO updateCompanyRequestDTO, CustomUserDetails userDetails) {
-			Company company = companyRepository.findByIdAndDeletedAtIsNull(updateCompanyRequestDTO.getId())
-				.orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
+		Company company = companyRepository.findByIdAndDeletedAtIsNull(updateCompanyRequestDTO.getId())
+			.orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
 
-			if((!(company.getCompanyAdminId().equals(userDetails.getId()))) && (userDetails.getRole()=="ROLE_STORE")){
-				throw new BaseException(Code.COMPANY_UPDATE_ERROR);
-			}
+		if ((!(company.getCompanyAdminId().equals(userDetails.getId()))) && (userDetails.getRole() == "ROLE_STORE")) {
+			throw new BaseException(Code.COMPANY_AUTH_ERROR);
+		}
+		if (!(getHubAdmin(fetchHubInfo(company.getHub_id())) == userDetails.getId()) && (
+			userDetails.getRole() == "ROLE_HUB")) {
+			throw new BaseException(Code.COMPANY_AUTH_ERROR);
+		}
 
-			company.update(updateCompanyRequestDTO.getName(),
-				updateCompanyRequestDTO.getType(),
-				updateCompanyRequestDTO.getAddress());
+
+		company.update(updateCompanyRequestDTO.getName(),
+			updateCompanyRequestDTO.getType(),
+			updateCompanyRequestDTO.getAddress());
 
 	}
 
@@ -79,7 +87,8 @@ public class CompanyService {
 		Company company = companyRepository.findByIdAndDeletedAtIsNull(id)
 			.orElseThrow(() -> new BaseException(Code.COMPANY_FIND_ERROR));
 
-		if(!(fetchHubInfo(company.getHub_id(),userDetails).getHubAdminId() == userDetails.getId()) && (userDetails.getRole()=="ROLE_HUB")){
+		if (!(fetchHubInfo(company.getHub_id()).getHubAdminId() == userDetails.getId()) && (
+			userDetails.getRole() == "ROLE_HUB")) {
 			throw new BaseException(Code.COMPANY_AUTH_ERROR);
 		}
 
@@ -97,11 +106,11 @@ public class CompanyService {
 		return PageableResponseDTO.from(companiesPage, CompanyResponseDTO::toDto);
 	}
 
-	public HubResDTO fetchHubInfo(UUID hubId, CustomUserDetails userDetails) {
-		return feginServiceClient.getHub(hubId,userDetails);
+	public HubResDTO fetchHubInfo(UUID hubId) {
+		return feginServiceClient.getHub(hubId);
 	}
 
-	public Long getHubadmin(HubResDTO hubResDTO){
+	public Long getHubAdmin(HubResDTO hubResDTO) {
 		return hubResDTO.getHubAdminId();
 	}
 }

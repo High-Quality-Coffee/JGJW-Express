@@ -35,7 +35,7 @@ public class CompanyController {
 	private final CompanyService companyService;
 
 	@PostMapping("/")
-	//@Secured({"ROLE_MASTER"})
+	@Secured({"ROLE_MASTER","ROLE_HUB"})
 	public ResponseEntity<?> createCompany(@RequestBody CreateCompanyRequestDTO createCompanyRequestDTO, @AuthenticationPrincipal CustomUserDetails userDetails) {
 		companyService.createCompany(createCompanyRequestDTO, userDetails);
 		return ResponseEntity.ok().body(ApiResponseData.success(Code.COMPANY_CREATE));
