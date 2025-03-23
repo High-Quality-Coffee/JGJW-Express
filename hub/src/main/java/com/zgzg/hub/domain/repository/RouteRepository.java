@@ -14,4 +14,6 @@ public interface RouteRepository extends JpaRepository<Route, UUID> {
   @Query("SELECT r FROM Route r where r.parentId IN (SELECT e.routeId FROM Route e "
       + "where e.startHubId = :startId AND e.endHubId = :endId)")
   List<Route> findByStepRoute(@Param("startId") UUID startId, @Param("endId") UUID endId);
+
+  void deleteAll();
 }

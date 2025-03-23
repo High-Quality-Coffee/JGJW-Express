@@ -13,8 +13,10 @@ import com.zgzg.hub.domain.entity.Hub;
 import com.zgzg.hub.domain.repository.HubRepository;
 import com.zgzg.hub.presentation.hub.req.CreateHubReqDTO;
 import com.zgzg.hub.presentation.hub.req.UpdateHubReqDTO;
+import com.zgzg.hub.util.event.UpdateRouteEvent;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class HubService {
 
   private final HubRepository hubRepository;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional
   public CreateHubResDTO createHub(CreateHubReqDTO createHubReqDTO) {
@@ -42,10 +45,11 @@ public class HubService {
         throw new BaseException(PARENT_HUB_NOT_FOUND);
       }
     }
-
     // TODO : 허브 관리자 검증
-
     Hub hub = hubRepository.save(CreateHubReqDTO.toEntity(createHubReqDTO));
+
+    eventPublisher.publishEvent(new UpdateRouteEvent(this));
+
     return CreateHubResDTO.from(hub);
   }
 
@@ -62,23 +66,24 @@ public class HubService {
     }
 
     // TODO : 허브 관리자 검증
-
     ValidateUpdateHub(hub, updateHubReqDTO);
+    eventPublisher.publishEvent(new UpdateRouteEvent(this));
     return UpdateHubResDTO.from(hub);
   }
 
   @Transactional
-  public void deleteHub(UUID hubId) {
+  public void deleteHub(UUID hubId, String username) {
     Hub hub = hubRepository.findByHubId(hubId)
         .orElseThrow(() -> new BaseException(HUB_NOT_FOUND));
 
-    hub.softDelete("MASTERUSER");
+    hub.softDelete(username);
   }
 
   public HubResDTO getHub(UUID hubId) {
     Hub hub = hubRepository.findByHubId(hubId)
         .orElseThrow(() -> new BaseException(HUB_NOT_FOUND));
 
+    eventPublisher.publishEvent(new UpdateRouteEvent(this));
     return HubResDTO.from(hub);
   }
 

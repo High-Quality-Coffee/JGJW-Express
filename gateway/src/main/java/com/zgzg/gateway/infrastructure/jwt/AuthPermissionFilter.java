@@ -55,16 +55,19 @@ public class AuthPermissionFilter extends AbstractGatewayFilterFactory<Config> {
             // 사용자 정보를 헤더에 추가
             String username = jwtUtil.getUsername(accessToken.get(0));
             String role = jwtUtil.getRole(accessToken.get(0));
+            String id = jwtUtil.getId(accessToken.get(0)).toString();
 
             // 사용자 정보를 헤더에 추가
             ServerHttpRequest authRequest = request.mutate()
                     .header("Auth", "true")
                     .header("X-USER-NAME", username)
+                    .header("X-USER-ID",id)
                     .header("X-USER-ROLE", role)
                     .build();
 
             log.info("username : "+username);
             log.info("role: "+role);
+            log.info("id: "+id);
             return chain.filter(exchange.mutate().request(authRequest).build());
         };
     }

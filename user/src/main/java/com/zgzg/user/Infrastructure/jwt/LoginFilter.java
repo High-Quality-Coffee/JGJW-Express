@@ -6,7 +6,9 @@ import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.response.Code;
 import com.zgzg.user.domain.model.RefreshToken;
+import com.zgzg.user.domain.model.User;
 import com.zgzg.user.domain.repository.RefreshRepository;
+import com.zgzg.user.domain.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,13 +35,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-
     private final RefreshRepository refreshRepository;
+    private final UserRepository userRepository;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.userRepository=userRepository;
         //spring security는 대부분의 로직이 필터 단에서 동작하게 된다. 로그인 또한, 필터에서 처리되고, (자동으로 엔드포인트는 "/login" 이 된다.)
         //UsernamePasswordAuthenticationFilter에서 매핑되어 처리된다. 이 필터를 상속받아 LoginFilter를 만들게 된다.
         //security에서 설정해주는 기본 url("/login")을 /api/v1/login 으로 변경
@@ -89,6 +92,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //유저 이름 찾기
         String username = authentication.getName();
 
+        User user = userRepository.findByUsername(username).orElseThrow(()->new BaseException(Code.MEMBER_NOT_EXISTS));
+
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
 
@@ -98,9 +103,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
+        Long id = user.getId();
 
-        String access = jwtUtil.createJwt("access",username, role, 600000L*60*24*100); // 24시간 *100 = 100일. 테스트를 위해 기한 늘림
-        String refresh = jwtUtil.createJwt("refresh", username, role,86400000L*100); // 24시간 *100 = 100일
+        String access = jwtUtil.createJwt("access",username, role, id, 600000L*60*24*100); // 24시간 *100 = 100일. 테스트를 위해 기한 늘림
+        String refresh = jwtUtil.createJwt("refresh", username, role,id,86400000L*100); // 24시간 *100 = 100일
 
         RefreshTokenSave(username,refresh,86400000L*100);
 

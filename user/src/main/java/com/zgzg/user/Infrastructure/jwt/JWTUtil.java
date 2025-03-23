@@ -21,9 +21,13 @@ public class JWTUtil {
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
-    //아래 2개의 메서드는 토큰을 검증하는 로직을 담고 있다. getUsername, isExpired
+    //아래 메서드는 토큰을 검증하는 로직을 담고 있다.
     public String getUsername(String token){
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username",String.class);
+    }
+
+    public Long getId(String token){
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("id", Long.class);
     }
 
     public String getRole(String token) {
@@ -38,9 +42,10 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
     }
 
-    public String createJwt(String category, String username, String role, Long expiredMs){
+    public String createJwt(String category, String username, String role, Long id,Long expiredMs){
         return Jwts.builder()
                 .claim("category", category)
+                .claim("id",id)
                 .claim("username", username)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))

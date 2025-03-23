@@ -4,7 +4,7 @@ import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.response.Code;
 import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.product.application.service.ProductService;
-import com.zgzg.product.application.service.dto.ProductResponseDTO;
+import com.zgzg.product.application.dto.ProductResponseDTO;
 import com.zgzg.product.presentation.request.ProductRequestDTO;
 import com.zgzg.product.presentation.request.ProductStockRequestDTO;
 import com.zgzg.product.presentation.request.ProductUpdateRequestDTO;
@@ -27,7 +27,7 @@ public class ProductController {
     private final ProductService productService;
 
     //상품 신규 등록 (같은 업체, 같은 허브, 같은 상품 이름일 경우, 신규 등록은 불가 -> 재고 추가를 해야함)
-    @Secured("ROLE_HUB")
+    @Secured({"ROLE_MASTER","ROLE_HUB", "ROLE_STORE"})
     @PostMapping("")
     public ResponseEntity<ApiResponseData<String>> create(@RequestBody @Valid ProductRequestDTO productRequestDTO){
 
@@ -45,12 +45,14 @@ public class ProductController {
     }
 
     //상품 전체 조회
+    @Secured({"ROLE_MASTER","ROLE_HUB", "ROLE_STORE", "ROLE_DELIVERY"})
     @GetMapping("")
     public ResponseEntity<ApiResponseData<List<ProductResponseDTO>>> read(){
         return ResponseEntity.ok().body(ApiResponseData.of(Code.PRODUCT_EXISTS.getCode(), Code.PRODUCT_EXISTS.getMessage(),productService.read()));
     }
 
     //특정 상품 조회
+    @Secured({"ROLE_MASTER","ROLE_HUB", "ROLE_STORE", "ROLE_DELIVERY"})
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseData<ProductResponseDTO>> read_one(@PathVariable("id") UUID id){
         return ResponseEntity.ok().body(ApiResponseData.of(Code.PRODUCT_EXISTS.getCode(), Code.PRODUCT_EXISTS.getMessage(),productService.readOne(id)));
@@ -58,6 +60,7 @@ public class ProductController {
     }
 
     //특정 상품 수정
+    @Secured({"ROLE_MASTER","ROLE_HUB", "ROLE_STORE"})
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseData<String>> update(@PathVariable("id") UUID id, @RequestBody ProductUpdateRequestDTO productUpdateRequestDTO){
         return ResponseEntity.ok().body(productService.update(id,productUpdateRequestDTO));
@@ -65,18 +68,21 @@ public class ProductController {
     }
 
     //특정 상품 삭제
+    @Secured({"ROLE_MASTER","ROLE_HUB"})
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseData<String>> delete(@PathVariable("id") UUID id, @AuthenticationPrincipal CustomUserDetails customUserDetails){
         return ResponseEntity.ok().body(productService.delete(id, customUserDetails));
     }
 
     //재고 추가
+    @Secured({"ROLE_MASTER","ROLE_HUB", "ROLE_STORE"})
     @PutMapping("/add")
     public ResponseEntity<ApiResponseData<String>> addProduct(@RequestBody ProductStockRequestDTO productStockRequestDTO){
         return ResponseEntity.ok().body(productService.addProduct(productStockRequestDTO));
     }
 
     //재고 감소
+    @Secured({"ROLE_MASTER","ROLE_HUB", "ROLE_STORE"})
     @PutMapping("/reduce")
     public ResponseEntity<ApiResponseData<String>> reduceProduct(@RequestBody ProductStockRequestDTO productStockRequestDTO){
         return ResponseEntity.ok().body(productService.reduceProduct(productStockRequestDTO));

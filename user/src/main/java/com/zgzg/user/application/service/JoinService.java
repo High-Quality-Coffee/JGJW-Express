@@ -49,7 +49,7 @@ public class JoinService {
                 .deliverySlackUsername(joinDeliveryUserRequestDTO.getSlackUsername())
                 .deliveryType(joinDeliveryUserRequestDTO.getDeliveryType())
                 .deliveryOrder(saveUser.getId())
-                .deliveryStatus(DeliveryStatus.WAITING)
+                .deliveryStatus(DeliveryStatus.CAN_DELIVER)
                 .build();
         deliveryUserRepository.save(deliveryUser).orElseThrow(()->new BaseException(Code.MEMBER_NOT_SAVE));
 

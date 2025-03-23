@@ -7,6 +7,7 @@ import com.zgzg.user.presentation.request.JoinDeliveryUserRequestDTO;
 import com.zgzg.user.presentation.request.JoinRequestDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.zgzg.common.response.Code.MEMBER_SAVE;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/v1/join")
 @RequiredArgsConstructor
 public class JoinController {

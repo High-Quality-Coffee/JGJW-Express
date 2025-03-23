@@ -2,11 +2,9 @@ package com.zgzg.common.response;
 
 import java.util.Optional;
 import java.util.function.Predicate;
-
-import org.springframework.http.HttpStatus;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
@@ -36,6 +34,8 @@ public enum Code {
   TOKEN_NOT_EXISTS(HttpStatus.NOT_FOUND, 1005, "액세스 토큰이 존재하지 않습니다."),
   EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 1006, "토큰이 만료되었습니다."),
   INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 1007, "유효하지 않은 토큰입니다."),
+  DELIVERY_USER_ASSIGN(HttpStatus.OK,1100, "배송담당자를 할당하였습니다."),
+  DELIVERY_USER_NOT_ASSIGN(HttpStatus.OK,1100, "배송담당자를 할당할 수 없습니다."),
 
   /**
    * 주문 2000번대
@@ -57,6 +57,11 @@ public enum Code {
   /**
    * Hub 4000번
    */
+
+  GET_HUB_ROUTES_SUCCESS(HttpStatus.OK, 4150, "경로 조회에 성공했습니다."),
+  HUB_ROUTE_NOT_FOUND(HttpStatus.NOT_FOUND, 4050, "경로가 존재하지 않습니다"),
+  DELETE_HUB_ROUTES_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, 4051, "데이터베이스 경로 실패"),
+
   GET_HUBS_SUCCESS(HttpStatus.OK, 4105, "허브 목록 조회가 처리되었습니다"),
   GET_HUB_SUCCESS(HttpStatus.OK, 4104, "허브 조회가 처리되었습니다."),
   DELETE_HUB_SUCCESS(HttpStatus.OK, 4103, "허브 삭제가 처리되었습니다."),
@@ -103,9 +108,7 @@ public enum Code {
   SLACK_SUCCESS(HttpStatus.OK, 7001, "Slack 메세지 전송 성공입니다."),
   GEMINI_VERIFY_SUCCESS(HttpStatus.OK, 7002, "Slack 메세지 검증 성공입니다."),
   SLACK_MASSAGE_DELETE_SUCCESS(HttpStatus.OK, 7003, "Slack 메세지 삭제 성공입니다."),
-  SLACK_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, 7101, "Slack 메세지 전송 실패입니다."),
-
-  ;
+  SLACK_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, 7101, "Slack 메세지 전송 실패입니다.");
 
   private final HttpStatus status;
   private final Integer code;

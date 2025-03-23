@@ -3,9 +3,9 @@ package com.zgzg.hub.application.route.service;
 import com.zgzg.hub.application.route.dto.OrganizedRouteDTO;
 import com.zgzg.hub.domain.entity.Hub;
 import com.zgzg.hub.domain.repository.HubRepository;
-import com.zgzg.hub.infrastructure.client.NaverDirectionClient;
-import com.zgzg.hub.infrastructure.client.dto.NaverRouteResDTO;
-import com.zgzg.hub.infrastructure.client.dto.RouteDTO;
+import com.zgzg.hub.infrastructure.client.naver.NaverDirectionClient;
+import com.zgzg.hub.infrastructure.client.naver.dto.NaverRouteResDTO;
+import com.zgzg.hub.infrastructure.client.naver.dto.RouteDTO;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,8 +54,10 @@ public class NaverRouteService {
       List<Hub> child = entry.getValue();
 
       for (Hub hub : child) {
-        routeMap.put(makeRoutKey(parent, hub), RouteDTO.from(getDirection(parent, hub)));
-        routeMap.put(makeRoutKey(hub, parent), RouteDTO.from(getDirection(hub, parent)));
+        routeMap.put(makeRoutKey(parent, hub),
+            RouteDTO.from(getDirection(parent, hub), hub.getHubName(), parent.getHubName()));
+        routeMap.put(makeRoutKey(hub, parent),
+            RouteDTO.from(getDirection(hub, parent), hub.getHubName(), parent.getHubName()));
       }
     }
     log.info("일반 허브 - 중앙 허브 경로 조회");
@@ -71,7 +73,8 @@ public class NaverRouteService {
 
         routeMap.put(
             makeRoutKey(startHub, endhub),
-            RouteDTO.from(getDirection(startHub, endhub))
+            RouteDTO.from(getDirection(startHub, endhub), startHub.getHubName(),
+                endhub.getHubName())
         );
       }
     }
@@ -99,7 +102,7 @@ public class NaverRouteService {
     }
     log.info("중앙 허브 데이터 저장");
   }
-  
+
   private NaverRouteResDTO getDirection(Hub startHub, Hub endHub) {
     String goal = startHub.getHubLongitude() + "," + startHub.getHubLatitude();
     String start = endHub.getHubLongitude() + "," + endHub.getHubLatitude();
