@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.transaction.TestTransaction;
 
@@ -23,22 +25,28 @@ public class DataLoadTest {
 	private CompanyRepository companyRepository;
 
 	@Test
-	@WithMockUser(username = "masterUser", roles = {"ROLE_MASTER"})
+	@WithMockUser(username = "masterUser", roles = {"MASTER"})
 	void createCompany() {
 
-		//CreateCompanyRequestDTO requestDTO = new CreateCompanyRequestDTO("테스트업체", "sell", "서울특별시 강남구",
-		//	"3fa85f64-5717-4562-b3fc-2c963f66afa6", "1");
+		CreateCompanyRequestDTO requestDTO = CreateCompanyRequestDTO.builder()
+			.name("테스트업체")
+			.type("sell")
+			.address("서울특별시 강남구")
+			.hub_id(UUID.fromString("a96f074b-43e2-4c07-8981-ff80b1e944c4"))
+			.companyAdminId(1L)
+			.build();
 		CustomUserDetails userDetails = new CustomUserDetails("masterUser", "ROLE_MASTER", 1L);
 
+		UsernamePasswordAuthenticationToken authentication =
+			new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-		//companyService.createCompany(requestDTO, userDetails);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		companyService.createCompany(requestDTO, userDetails);
 
 
 		companyRepository.flush();
 
-
-		TestTransaction.flagForCommit();
-		TestTransaction.end();
 	}
 
 
