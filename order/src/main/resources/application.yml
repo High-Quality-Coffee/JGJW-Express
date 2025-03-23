@@ -24,3 +24,13 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:19090/eureka/
+
+logging:
+  level:
+    com.zgzg.order: DEBUG  # Feign 클라이언트가 있는 패키지
+
+feign:
+  client:
+    config:
+      default: # 모든 Feign 클라이언트에 적용
+        loggerLevel: full
