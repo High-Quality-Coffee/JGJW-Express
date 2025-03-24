@@ -45,7 +45,7 @@ public class QHub extends EntityPathBase<Hub> {
 
     public final StringPath hubName = createString("hubName");
 
-    public final BooleanPath isMegaHub = createBoolean("isMegaHub");
+    public final BooleanPath megaHubStatus = createBoolean("megaHubStatus");
 
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;

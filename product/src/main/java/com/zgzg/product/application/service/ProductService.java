@@ -11,6 +11,10 @@ import com.zgzg.product.presentation.request.ProductRequestDTO;
 import com.zgzg.product.presentation.request.ProductStockRequestDTO;
 import com.zgzg.product.presentation.request.ProductUpdateRequestDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,10 +53,35 @@ public class ProductService {
     public ProductResponseDTO readOne(UUID id){
         Product product = productRepository.findById(id).orElseThrow(()-> new BaseException(Code.PRODUCT_NOT_EXISTS));
         //삭제된 상품은 조회 불가
-        if (product.getDeletedBy().isEmpty()){
+        if (product.getDeletedBy()!=null){
             throw new BaseException(Code.PRODUCT_NOT_EXISTS);
         }
         return toProductDTO(product);
+    }
+
+    public Page<ProductResponseDTO> search(String name, String sortBy, int page, int size) {
+        // 페이지 크기 제한
+        int pageSize = switch (size) {
+            case 30 -> 30;
+            case 50 -> 50;
+            default -> 10;
+        };
+
+        // 정렬 조건 설정
+        Sort sort = Sort.by(
+                "createdDateTime".equals(sortBy) ? "createdDateTime" : "modifiedDateTime"
+        ).descending();
+
+        Pageable pageable = PageRequest.of(page, pageSize, sort);
+
+        Page<Product> products = productRepository.searchProducts(
+                name != null ? name : "",
+                pageable
+        );
+
+        // Product -> ProductResponseDTO 변환
+        return products.map(this::toProductDTO);
+
     }
 
     //상품 수정 (상품 이름, 재고 수량만 변경 가능 - 잘못 입력하였을 경우를 대비)
@@ -83,7 +112,8 @@ public class ProductService {
         }
         //상품이 존재하지 않으면, 신규 등록이 필요, 재고 추가는 안됨
         Product product = productRepository.findById(productStockRequestDTO.getId()).orElseThrow(()->new BaseException(Code.PRODUCT_NOT_EXISTS));
-        product.setProductStock(productStockRequestDTO.getProductStock());
+        Integer totalStock = product.getProductStock() + productStockRequestDTO.getProductStock();
+        product.setProductStock(totalStock);
         productRepository.save(product);
         return ApiResponseData.of(Code.PRODUCT_UPDATE.getCode(), Code.PRODUCT_UPDATE.getMessage(), null);
     }
