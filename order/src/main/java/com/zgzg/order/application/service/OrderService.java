@@ -15,6 +15,7 @@ import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.order.application.client.CompanyClient;
 import com.zgzg.order.application.client.DeliveryClient;
 import com.zgzg.order.application.client.HubClient;
+import com.zgzg.order.application.client.ProductClient;
 import com.zgzg.order.application.dto.global.PageableResponse;
 import com.zgzg.order.application.dto.req.CreateDeliveryRequestDTO;
 import com.zgzg.order.application.dto.res.OrderDetaiListDTO;
@@ -44,9 +45,16 @@ public class OrderService {
 	private final DeliveryClient deliveryClient;
 	private final CompanyClient companyClient;
 	private final HubClient hubClient;
+	private final ProductClient productClient;
 
 	@Transactional
 	public UUID createOrder(CreateOrderRequestDto requestDto) {
+
+		// todo. 상품 재고 확인
+		boolean possibleOrder = productClient.getProduct(requestDto.getProductList());
+		if (!possibleOrder) {
+			throw new BaseException(ORDER_PRODUCT_FAIL);
+		}
 
 		// 공급 업체, 요청 업체 정보 조회
 		CompanyResponseDTO supplier = companyClient.getCompany(requestDto.getSupplierCompanyId());
@@ -56,6 +64,12 @@ public class OrderService {
 		// 주문 생성
 		Order order = requestDto.toEntity(requestDto, supplier.getHub_id());
 		Order savedOrder = orderRepository.save(order);
+
+		// todo. 상품 차감
+		boolean isSuccess = productClient.reduceProduct(requestDto.getProductList());
+		if (!isSuccess) {
+			throw new BaseException(ORDER_DECREASE_PRODUCT_FAIL);
+		}
 
 		// 슬랙 메시지 요청에 필요한 정보(배송으로 넘길 정보)
 		Integer quantity = 0;
@@ -129,6 +143,7 @@ public class OrderService {
 	@Transactional
 	public OrderResponseDTO cancelOrder(UUID orderId, CustomUserDetails userDetails) {
 		Order order = orderRepository.findByIdAndNotDeleted(orderId);
+		List<OrderDetail> details = orderRepository.findAllByOrderIdAndNotDeleted(orderId);
 
 		if (order == null) {
 			throw new BaseException(ORDER_NOT_FOUND);
@@ -149,6 +164,13 @@ public class OrderService {
 			}
 		}
 		order.cancelOrder();
+
+		// todo. 재고 원복
+		boolean isSuccess = productClient.increaseProduct(details);
+		if (!isSuccess) {
+			throw new BaseException(ORDER_INCREASE_PRODUCT_FAIL);
+		}
+
 		return OrderResponseDTO.from(order);
 	}
 
