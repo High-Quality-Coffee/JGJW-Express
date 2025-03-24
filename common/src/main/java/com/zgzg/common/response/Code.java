@@ -85,14 +85,16 @@ public enum Code {
 	 * 업체 5000 번대
 	 */
 	COMPANY_CREATE(HttpStatus.OK, 5001, "업체 생성이 완료되었습니다."),
-	COMPANY_FIND(HttpStatus.OK, 5002, "업체 조회가 완료되었습니다."),
-	COMPANY_UPDATE(HttpStatus.OK, 5003, "업체 수정이 완료되었습니다."),
-	COMPANY_DELETE(HttpStatus.OK, 5004, "업체 삭제가 완료되었습니다."),
-	COMANY_SEARCH(HttpStatus.OK, 5005, "업체 검색이 완료되었습니다."),
+  COMPANY_FIND(HttpStatus.OK, 5002, "업체 조회가 완료되었습니다."),
+  COMPANY_UPDATE(HttpStatus.OK, 5003, "업체 수정이 완료되었습니다."),
+  COMPANY_DELETE(HttpStatus.OK, 5004, "업체 삭제가 완료되었습니다."),
+  COMPANY_SEARCH(HttpStatus.OK, 5005, "업체 검색이 완료되었습니다."),
 
-	COMPANY_FIND_ERROR(HttpStatus.BAD_REQUEST, 5101, "아이디와 일치하는 업체가 없습니다."),
+  COMPANY_FIND_ERROR(HttpStatus.BAD_REQUEST, 5101, "아이디와 일치하는 업체가 없습니다."),
+  COMPANY_UPDATE_ERROR(HttpStatus.BAD_REQUEST, 5102, "업체 수정 권한이 없습니다."),
+  COMPANY_AUTH_ERROR(HttpStatus.BAD_REQUEST, 5103, "업체 소속 허브가 아닙니다."),
 
-	ACCESS_DENIED(HttpStatus.FORBIDDEN, 40204, "접근 권한이 없습니다."),
+  ACCESS_DENIED(HttpStatus.FORBIDDEN, 40204, "접근 권한이 없습니다."),
 
 	/**
 	 * 상품 관련 6000번대

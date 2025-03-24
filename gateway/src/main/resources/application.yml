@@ -20,6 +20,8 @@ spring:
           uri: lb://company
           predicates:
             - Path=/api/v1/companies/**
+          filters:
+            - name: AuthPermissionFilter
         - id: order
           uri: lb://order
           predicates:

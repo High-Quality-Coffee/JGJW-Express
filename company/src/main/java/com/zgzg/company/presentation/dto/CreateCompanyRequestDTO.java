@@ -5,9 +5,12 @@ import java.util.UUID;
 import com.zgzg.company.domain.Company;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@Builder
 public class CreateCompanyRequestDTO {
 
 	@Schema(description = "업체명", example = "test2025")
@@ -21,7 +24,8 @@ public class CreateCompanyRequestDTO {
 	private UUID hub_id;
 
 	@Schema(description = "업체 관리자 아이디", example = "3fa85f64-5717-4562-b3fc-2c963f66afa6")
-	private UUID companyAdminId;
+	private Long companyAdminId;
+
 
 	public Company toEntity() {
 		return Company.builder()

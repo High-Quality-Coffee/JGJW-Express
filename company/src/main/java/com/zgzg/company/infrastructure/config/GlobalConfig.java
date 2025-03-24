@@ -1,4 +1,4 @@
-package com.zgzg.company.config;
+package com.zgzg.company.infrastructure.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
