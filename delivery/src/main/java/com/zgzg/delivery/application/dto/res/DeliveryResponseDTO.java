@@ -24,8 +24,8 @@ public class DeliveryResponseDTO {
 	private String receiverAddress;
 	private String receiverName;
 	private String receiverSlackId;
-	private UUID deliveryPersonId; // 업체 배송 담당자
-	private String deliveryPersonName; // todo. 업체 배송 전에는 담당자 이름 대신 "허브 이동중"으로 할까?
+	private Long deliveryPersonId; // 업체 배송 담당자
+	private String deliveryPersonSlackId;
 	private UUID orderId;
 	private LocalDateTime createDateTime;
 
@@ -41,7 +41,7 @@ public class DeliveryResponseDTO {
 			.receiverName(delivery.getReceiverName())
 			.receiverSlackId(delivery.getReceiverSlackId())
 			.deliveryPersonId(delivery.getDeliveryPersonId())
-			.deliveryPersonName(delivery.getDeliveryPersonName())
+			.deliveryPersonSlackId(delivery.getDeliveryPersonSlackId())
 			.orderId(delivery.getOrderId())
 			.createDateTime(delivery.getCreatedDateTime())
 			.build();

@@ -60,9 +60,9 @@ public class Delivery extends BaseEntity {
 	@Column(nullable = false)
 	private String receiverSlackId;
 
-	private UUID deliveryPersonId;
+	private Long deliveryPersonId;
 
-	private String deliveryPersonName;
+	private String deliveryPersonSlackId;
 
 	@Column(nullable = false)
 	private UUID orderId;
@@ -81,5 +81,18 @@ public class Delivery extends BaseEntity {
 
 	public void completeDelivery() {
 		this.deliveryStatus = DeliveryStatus.DELIVERED;
+	}
+
+	public void assignDeliveryPerson(Long personId, String slackId) {
+		this.deliveryPersonId = personId;
+		this.deliveryPersonSlackId = slackId;
+	}
+
+	public void addOriginHubName(String originHubName) {
+		this.originHubName = originHubName;
+	}
+
+	public void addDestinationHubName(String destinationHubName) {
+		this.destinationHubName = destinationHubName;
 	}
 }

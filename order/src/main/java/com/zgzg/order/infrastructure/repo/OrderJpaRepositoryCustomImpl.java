@@ -1,6 +1,7 @@
 package com.zgzg.order.infrastructure.repo;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,8 @@ public class OrderJpaRepositoryCustomImpl implements OrderJpaRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public Page<OrderResponseDTO> searchOrderByCriteria(SearchCriteria criteria, Pageable pageable) {
+	public Page<OrderResponseDTO> searchOrderByCriteria(SearchCriteria criteria, Pageable pageable, String role,
+		UUID id) {
 		OrderSpecifier[] orderSpecifiers = createOrderSpecifiers(pageable.getSort());
 
 		// todo. 권한 별 조회 가능한 condition 적용
@@ -33,11 +35,6 @@ public class OrderJpaRepositoryCustomImpl implements OrderJpaRepositoryCustom {
 		 * 		- 이 주문을 받은 허브에 대한 정보도 있는 게 맞을지도...?
 		 * 		(주문은 공급 업체가 받았지만 어쨌든 재고 발송이 허브에서 이루어지니까..?)
 		 * 	=> 어쨋든 필요한 조건 허브 id 일치
-		 *
-		 * * 2. 배송담당자 -> 본인 주문만.
-		 * 		- 배송담당자의 본인 주문이라함은 본인이 배송하는 주문?이겠지..? 그렇겠지..응..
-		 * 		- 배송 정보만 알면되지 주문 정보까지 알아야 하나..
-		 * 		- [배송].주문ID.where(배송담당자ID.eq) 리스트 -> 주문ID로 주문 조회
 		 *
 		 * * 3. 업체담당자 -> 본인 주문만.
 		 * 		- 요청 업체 ID로 주문 조회
@@ -53,10 +50,11 @@ public class OrderJpaRepositoryCustomImpl implements OrderJpaRepositoryCustom {
 				order.supplierCompanyName,
 				order.orderTotalPrice,
 				order.orderStatus,
-				order.orderRequest
+				order.orderRequest,
+				order.createdDateTime
 			))
 			.from(order)
-			.where(betweenDateCondition(criteria))
+			.where(betweenDateCondition(criteria).and(authCondition(role, id)))
 			.orderBy(orderSpecifiers)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
@@ -80,6 +78,16 @@ public class OrderJpaRepositoryCustomImpl implements OrderJpaRepositoryCustom {
 			builder.and(QOrder.order.createdDateTime.before(criteria.getEndDate()));
 		}
 		builder.and(QOrder.order.deletedAt.isNull());
+		return builder;
+	}
+
+	private BooleanBuilder authCondition(String role, UUID id) {
+		BooleanBuilder builder = new BooleanBuilder();
+		if (role.equals("ROLE_STORE")) {
+			builder.and(QOrder.order.receiverCompanyId.eq(id));
+		} else if (role.equals("ROLE_HUB")) {
+			builder.and(QOrder.order.supplierHubId.eq(id));
+		}
 		return builder;
 	}
 

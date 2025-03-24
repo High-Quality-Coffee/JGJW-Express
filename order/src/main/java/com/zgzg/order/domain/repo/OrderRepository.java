@@ -21,7 +21,10 @@ public interface OrderRepository {
 
 	List<OrderDetail> findAllByOrderIdAndNotDeleted(UUID orderId);
 
-	Page<OrderResponseDTO> searchOrderByCriteria(SearchCriteria criteria, Pageable pageable);
+	Page<OrderResponseDTO> searchOrderByCriteria(SearchCriteria criteria, Pageable pageable, String role, UUID id);
 
 	Order findByIdAndNotDeleted(UUID orderId);
+
+	void softDeleteDetails(UUID orderId);
+
 }

@@ -23,7 +23,7 @@ public class CompanyResponseDTO {
 
 	private String address;
 
-	private UUID companyAdminId;
+	private Long companyAdminId;
 
 	public static CompanyResponseDTO toDto(Company company) {
 		return CompanyResponseDTO.builder()

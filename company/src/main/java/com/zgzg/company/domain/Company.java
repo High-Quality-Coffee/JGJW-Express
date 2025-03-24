@@ -33,7 +33,7 @@ public class Company extends BaseEntity{
 	private String name;
 
 	@Column(name = "company_admin_id")
-	private UUID companyAdminId;
+	private Long companyAdminId;
 
 	private String type;
 
