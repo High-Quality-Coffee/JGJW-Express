@@ -15,49 +15,48 @@ spring:
         - id: user
           uri: lb://user
           predicates:
-            - Path=/api/v1/join/**, /api/v1/login
+            - Path=/api/v1/join/**, /api/v1/login, /user/v3/api-docs
         - id: company
           uri: lb://company
           predicates:
-            - Path=/api/v1/companies/**
+            - Path=/api/v1/companies/**, /company/v3/api-docs
           filters:
             - name: AuthPermissionFilter
         - id: order
           uri: lb://order
           predicates:
-            - Path=/api/v1/orders/**
+            - Path=/api/v1/orders/**, /order/v3/api-docs
           filters:
             - name: AuthPermissionFilter
         - id: delivery
           uri: lb://delivery
           predicates:
-            - Path=/api/v1/deliveries/**
+            - Path=/api/v1/deliveries/**, /delivery/v3/api-docs
           filters:
             - name: AuthPermissionFilter
         #로그인 필요한 요청(토큰 검증 필터 o)
         - id: user
           uri: lb://user
           predicates:
-            - Path=/api/v1/logout, /api/v1/delivery/users/**, /api/v1/users/**
+            - Path=/api/v1/logout, /api/v1/delivery/users/**, /api/v1/users/**, /user/v3/api-docs
           filters:
             - name: AuthPermissionFilter
         - id: hub
           uri: lb://hub
           predicates:
-            - Path=/api/v1/hubs/**
+            - Path=/api/v1/hubs/**, /hub/v3/api-docs
         - id: ai
           uri: lb://ai
           predicates:
-            - Path=/api/v1/slack/**
+            - Path=/api/v1/slack/**, /ai/v3/api-docs
           filters:
             - name: AuthPermissionFilter
         - id: product
           uri: lb://product
           predicates:
-            - Path=/api/v1/products/**
+            - Path=/api/v1/products/**, /product/v3/api-docs
           filters:
             - name: AuthPermissionFilter
-
   jwt:
     secret: ${JWT_SECRET_KEY}
   autoconfigure:
@@ -70,3 +69,27 @@ eureka:
       defaultZone: ${EUREKA_DISCOVERY_URL}
     register-with-eureka: true
     fetch-registry: true
+
+springdoc:
+  swagger-ui:
+    urls[0]:
+      name: user
+      url: /user/v3/api-docs
+    urls[1]:
+      name: company
+      url: /company/v3/api-docs
+    urls[2]:
+      name: order
+      url: /order/v3/api-docs
+    urls[3]:
+      name: delivery
+      url: /delivery/v3/api-docs
+    urls[4]:
+      name: hub
+      url: /hub/v3/api-docs
+    urls[5]:
+      name: ai
+      url: /ai/v3/api-docs
+    urls[6]:
+      name: product
+      url: /product/v3/api-docs

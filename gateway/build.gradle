@@ -7,6 +7,14 @@ plugins {
 group = 'com.zgzg'
 version = '0.0.1-SNAPSHOT'
 
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -48,6 +56,14 @@ dependencies {
     implementation(project(':common')) {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-data-jpa'
     }
+
+    // swwagger
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${rootProject.ext.springDocVersion}"
+    implementation "org.springdoc:springdoc-openapi-starter-webflux-ui:${rootProject.ext.springDocVersion}"
+
+    // 분산 트레이싱
+    implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+    implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
 
 }
 

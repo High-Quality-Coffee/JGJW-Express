@@ -6,7 +6,12 @@ plugins {
 
 group = 'com.zgzg'
 version = '0.0.1-SNAPSHOT'
-
+bootJar {
+    enabled = true
+}
+jar {
+    enabled = false
+}
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
