@@ -24,4 +24,8 @@ public interface DeliveryUserRepository {
     List<DeliveryUser> findAllByDeliveryTypeOrderByDeliveryOrderAsc(DeliveryType deliveryType);
 
     List<DeliveryUser> findStoreDeliveryUser(UUID hudId, DeliveryType deliveryType);
+
+    List<DeliveryUser> findAll();
+
+    DeliveryUser findById(Long id);
 }

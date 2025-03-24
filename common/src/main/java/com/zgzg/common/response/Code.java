@@ -29,16 +29,20 @@ public enum Code {
 	 * 회원 관련 1000번대
 	 */
 	VALIDATION_ERROR(HttpStatus.BAD_REQUEST, 100, "잘못된 입력값이 존재합니다."),
-	MEMBER_NOT_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, 1001, "회원가입이 정상적으로 처리되지 않았습니다."),
-	MEMBER_SAVE(HttpStatus.OK, 1002, "회원가입이 정상적으로 처리되었습니다."),
-	MEMBER_NOT_EXISTS(HttpStatus.NOT_FOUND, 1003, "해당 유저를 찾을 수 없습니다."),
-	LOGIN_FAILED(HttpStatus.BAD_REQUEST, 1004, "로그인에 실패하셨습니다."),
-	TOKEN_NOT_EXISTS(HttpStatus.NOT_FOUND, 1005, "액세스 토큰이 존재하지 않습니다."),
-	EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 1006, "토큰이 만료되었습니다."),
-	INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 1007, "유효하지 않은 토큰입니다."),
-	MEMBER_EXISTS(HttpStatus.OK, 1008, "회원 조회를 성공했습니다"),
-	DELIVERY_USER_ASSIGN(HttpStatus.OK, 1100, "배송담당자를 할당하였습니다."),
-	DELIVERY_USER_NOT_ASSIGN(HttpStatus.OK, 1100, "배송담당자를 할당할 수 없습니다."),
+  MEMBER_NOT_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, 1001, "회원가입이 정상적으로 처리되지 않았습니다."),
+  MEMBER_SAVE(HttpStatus.OK, 1002, "회원가입이 정상적으로 처리되었습니다."),
+  MEMBER_NOT_EXISTS(HttpStatus.NOT_FOUND, 1003, "해당 유저를 찾을 수 없습니다."),
+  LOGIN_FAILED(HttpStatus.BAD_REQUEST, 1004, "로그인에 실패하셨습니다."),
+  TOKEN_NOT_EXISTS(HttpStatus.NOT_FOUND, 1005, "액세스 토큰이 존재하지 않습니다."),
+  EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 1006, "토큰이 만료되었습니다."),
+  INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 1007, "유효하지 않은 토큰입니다."),
+  MEMBER_EXISTS(HttpStatus.OK, 1008, "회원 조회를 성공했습니다"),
+  MEMBER_UPDATE(HttpStatus.OK, 1009, "회원 정보 수정을 성공했습니다"),
+  MEMBER_DELETE(HttpStatus.OK, 1010, "회원 삭제를 성공했습니다"),
+  MEMBER_ALREADY_DELETE(HttpStatus.BAD_REQUEST, 1011, "이미 삭제된 회원입니다."),
+  MEMBER_CANNOT_SEARCH(HttpStatus.BAD_REQUEST,1012,"삭제된 회원은 조회가 불가능합니다."),
+  DELIVERY_USER_ASSIGN(HttpStatus.OK,1100, "배송담당자를 할당하였습니다."),
+  DELIVERY_USER_NOT_ASSIGN(HttpStatus.OK,1100, "배송담당자를 할당할 수 없습니다."),
   
 
 	/**
@@ -85,6 +89,7 @@ public enum Code {
 	 * 업체 5000 번대
 	 */
 	COMPANY_CREATE(HttpStatus.OK, 5001, "업체 생성이 완료되었습니다."),
+
   COMPANY_FIND(HttpStatus.OK, 5002, "업체 조회가 완료되었습니다."),
   COMPANY_UPDATE(HttpStatus.OK, 5003, "업체 수정이 완료되었습니다."),
   COMPANY_DELETE(HttpStatus.OK, 5004, "업체 삭제가 완료되었습니다."),

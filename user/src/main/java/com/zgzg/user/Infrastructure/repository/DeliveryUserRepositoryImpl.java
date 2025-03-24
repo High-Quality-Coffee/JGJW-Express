@@ -1,5 +1,7 @@
 package com.zgzg.user.Infrastructure.repository;
 
+import com.zgzg.common.exception.BaseException;
+import com.zgzg.common.response.Code;
 import com.zgzg.user.domain.model.DeliveryStatus;
 import com.zgzg.user.domain.model.DeliveryType;
 import com.zgzg.user.domain.model.DeliveryUser;
@@ -46,6 +48,14 @@ public class DeliveryUserRepositoryImpl implements DeliveryUserRepository {
 
     public List<DeliveryUser> findStoreDeliveryUser(@Param("hubId") UUID id, @Param("deliveryType") DeliveryType deliveryType){
         return jpaDeliveryUserRepository.findStoreDeliveryUser(id, deliveryType);
+    }
+
+    public List<DeliveryUser> findAll(){
+        return jpaDeliveryUserRepository.findAll();
+    }
+
+    public DeliveryUser findById(Long id){
+        return jpaDeliveryUserRepository.findById(id).orElseThrow(()->new BaseException(Code.MEMBER_NOT_EXISTS));
     }
 
 }
