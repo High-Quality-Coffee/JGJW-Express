@@ -2,7 +2,7 @@ package com.zgzg.hub.application.route.service;
 
 import com.zgzg.hub.application.route.dto.OrganizedRouteDTO;
 import com.zgzg.hub.domain.entity.Hub;
-import com.zgzg.hub.domain.repository.HubRepository;
+import com.zgzg.hub.domain.repository.hub.HubRepository;
 import com.zgzg.hub.infrastructure.client.naver.NaverDirectionClient;
 import com.zgzg.hub.infrastructure.client.naver.dto.NaverRouteResDTO;
 import com.zgzg.hub.infrastructure.client.naver.dto.RouteDTO;

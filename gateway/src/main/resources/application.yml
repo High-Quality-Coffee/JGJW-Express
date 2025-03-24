@@ -26,6 +26,8 @@ spring:
           uri: lb://order
           predicates:
             - Path=/api/v1/orders/**
+          filters:
+            - name: AuthPermissionFilter
         - id: delivery
           uri: lb://delivery
           predicates:
@@ -36,13 +38,17 @@ spring:
         - id: user
           uri: lb://user
           predicates:
-            - Path=/api/v1/logout, /api/v1/delivery/users/**, /test
+            - Path=/api/v1/logout, /api/v1/delivery/users/**, /api/v1/users/**
           filters:
             - name: AuthPermissionFilter
         - id: hub
           uri: lb://hub
           predicates:
             - Path=/api/v1/hubs/**
+        - id: ai
+          uri: lb://ai
+          predicates:
+            - Path=/api/v1/slack/**
           filters:
             - name: AuthPermissionFilter
         - id: product
@@ -51,10 +57,6 @@ spring:
             - Path=/api/v1/products/**
           filters:
             - name: AuthPermissionFilter
-        - id: ai
-          uri: lb://ai
-          predicates:
-            - Path=/api/v1/ai/**
 
   jwt:
     secret: ${JWT_SECRET_KEY}

@@ -15,7 +15,9 @@ public class CreateDeliveryRequestDTO {
 	private String receiverAddress;
 	private String receiverName;
 	private String receiverSlackId;
-	// private UUID deliveryPersonId;
+	private String productName;
+	private Integer quantity;
+	private String request;
 
 	public Delivery toEntity() {
 		return Delivery.builder()

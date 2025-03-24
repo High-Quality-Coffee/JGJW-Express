@@ -39,6 +39,12 @@ public class Order extends BaseEntity {
 	private UUID receiverCompanyId;
 
 	@Column(nullable = false)
+	private String receiverCompanyName;
+
+	@Column(nullable = false)
+	private UUID supplierHubId;
+
+	@Column(nullable = false)
 	private UUID supplierCompanyId;
 
 	@Column(nullable = false)
@@ -54,11 +60,20 @@ public class Order extends BaseEntity {
 	@Column(columnDefinition = "TEXT")
 	private String orderRequest;
 
+	@Column(nullable = false)
+	private String slackId;
+
+	private UUID deliveryId;
+
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	@Builder.Default
 	private List<OrderDetail> orderDetails = new ArrayList<>();
 
 	public void cancelOrder() {
 		this.orderStatus = OrderStatus.CANCELED;
+	}
+
+	public void addDeliveryOrder(UUID deliveryId) {
+		this.deliveryId = deliveryId;
 	}
 }

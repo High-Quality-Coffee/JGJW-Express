@@ -19,7 +19,6 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -94,18 +93,13 @@ public class HubController {
   @GetMapping
   public ResponseEntity<ApiResponseData<PageHubsResDTO>> searchHub(
       @RequestParam(value = "keyword") String keyword,
-      @RequestParam(value = "page", defaultValue = "0") int page,
+      @RequestParam(value = "page", defaultValue = "1") int page,
       Pageable pageable) {
-
-    int correctedPage = (page > 0) ? page - 1 : 0;
-    Pageable correctedPageable = PageRequest.of(
-        correctedPage, pageable.getPageSize(), pageable.getSort()
-    );
 
     return ResponseEntity.ok().body(ApiResponseData.of(
         GET_HUBS_SUCCESS.getCode(),
         GET_HUBS_SUCCESS.getMessage(),
-        hubService.searchHub(keyword, correctedPageable)));
+        hubService.searchHub(keyword, pageable)));
   }
 
   private URI makeUri(UUID hubId) {

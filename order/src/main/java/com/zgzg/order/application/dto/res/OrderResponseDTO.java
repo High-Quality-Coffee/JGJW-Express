@@ -1,6 +1,7 @@
 package com.zgzg.order.application.dto.res;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.zgzg.order.domain.entity.Order;
@@ -22,6 +23,7 @@ public class OrderResponseDTO {
 	private BigDecimal orderTotalPrice;
 	private OrderStatus orderStatus;
 	private String orderRequest;
+	private LocalDateTime createDateTime;
 
 	public static OrderResponseDTO from(Order order) {
 
@@ -33,6 +35,7 @@ public class OrderResponseDTO {
 			.orderTotalPrice(order.getOrderTotalPrice())
 			.orderStatus(order.getOrderStatus())
 			.orderRequest(order.getOrderRequest())
+			.createDateTime(order.getCreatedDateTime())
 			.build();
 	}
 }
