@@ -4,6 +4,7 @@ import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.common.response.Code;
 import com.zgzg.user.application.dto.DeliveryUserResponseDTO;
 import com.zgzg.user.application.service.DeliveryService;
+import com.zgzg.user.application.service.DeliveryUserService;
 import com.zgzg.user.presentation.request.DeliveryUserRequestDTO;
 import feign.Response;
 import lombok.RequiredArgsConstructor;
@@ -20,25 +21,28 @@ import java.util.UUID;
 public class DeliveryController {
 
     private final DeliveryService deliveryService;
+    private final DeliveryUserService deliveryUserService;
 
     //다건 조회
     @Secured({"ROLE_MASTER","ROLE_HUB", "ROLE_DELIVERY"})
     @GetMapping("")
     public ResponseEntity<ApiResponseData<List<DeliveryUserResponseDTO>>> readAll(){
-        return null;
+        return ResponseEntity.ok().body(ApiResponseData.of(Code.MEMBER_EXISTS.getCode(), Code.MEMBER_EXISTS.getMessage(), deliveryUserService.readAll()));
     }
 
     //단건 조회
     @Secured({"ROLE_MASTER","ROLE_HUB", "ROLE_DELIVERY"})
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseData<DeliveryUserResponseDTO>> readOne(@PathVariable("id") String id){
-        return null;
+    public ResponseEntity<ApiResponseData<DeliveryUserResponseDTO>> readOne(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(ApiResponseData.of(Code.MEMBER_EXISTS.getCode(), Code.MEMBER_EXISTS.getMessage(), deliveryUserService.readOne(id)));
     }
 
     //배송담당자 정보 수정
     @Secured({"ROLE_MASTER","ROLE_HUB", "ROLE_DELIVERY"})
-    public ResponseEntity<ApiResponseData<String>> update(@PathVariable("id") String id, @RequestBody DeliveryUserRequestDTO deliveryUserRequestDTO){
-        return null;
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponseData<String>> update(@PathVariable("id") Long id, @RequestBody DeliveryUserRequestDTO deliveryUserRequestDTO){
+        deliveryUserService.updateDeliveryUser(id,deliveryUserRequestDTO);
+        return ResponseEntity.ok().body(ApiResponseData.of(Code.MEMBER_UPDATE.getCode(),Code.MEMBER_UPDATE.getMessage(),null));
     }
 
 

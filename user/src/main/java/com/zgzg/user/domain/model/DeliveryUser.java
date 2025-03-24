@@ -20,12 +20,14 @@ public class DeliveryUser extends BaseEntity {
     @Column(nullable = false)
     private Long deliveryUserId;
 
+    @Setter
     private UUID hubId;
 
     private String deliverySlackUsername;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Setter
     private DeliveryType deliveryType;
 
     @Column(nullable = false)

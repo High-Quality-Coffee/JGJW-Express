@@ -9,6 +9,7 @@ import com.zgzg.user.domain.repository.UserRepository;
 import com.zgzg.user.presentation.request.UpdateUserRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class UserService {
         return userResponseDTO;
     }
 
+    @Transactional
     public void updateUser(Long id, UpdateUserRequestDTO updateUserRequestDTO){
         User user = userRepository.findById(id).orElseThrow(()->new BaseException(Code.MEMBER_NOT_EXISTS));
         user.setUsername(updateUserRequestDTO.getUsername());
@@ -53,6 +55,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUser(Long id, CustomUserDetails customUserDetails){
         User user = userRepository.findById(id).orElseThrow(()->new BaseException(Code.MEMBER_NOT_EXISTS));
 

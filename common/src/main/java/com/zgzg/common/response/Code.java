@@ -38,6 +38,7 @@ public enum Code {
   MEMBER_UPDATE(HttpStatus.OK, 1009, "회원 정보 수정을 성공했습니다"),
   MEMBER_DELETE(HttpStatus.OK, 1010, "회원 삭제를 성공했습니다"),
   MEMBER_ALREADY_DELETE(HttpStatus.BAD_REQUEST, 1011, "이미 삭제된 회원입니다."),
+  MEMBER_CANNOT_SEARCH(HttpStatus.BAD_REQUEST,1012,"삭제된 회원은 조회가 불가능합니다."),
   DELIVERY_USER_ASSIGN(HttpStatus.OK,1100, "배송담당자를 할당하였습니다."),
   DELIVERY_USER_NOT_ASSIGN(HttpStatus.OK,1100, "배송담당자를 할당할 수 없습니다."),
 
