@@ -56,6 +56,7 @@ public enum Code {
 	ORDER_PRODUCT_FAIL(HttpStatus.FORBIDDEN, 2402, "재고 부족으로 주문이 불가합니다."),
 	ORDER_DECREASE_PRODUCT_FAIL(HttpStatus.FORBIDDEN, 2403, "재고 차감이 실패했습니다."),
 	ORDER_INCREASE_PRODUCT_FAIL(HttpStatus.FORBIDDEN, 2404, "재고 원복에 실패했습니다."),
+	ORDER_CANCEL_FAIL(HttpStatus.FORBIDDEN, 2405, "주문 취소를 할 수 없습니다."),
 
 	/**
 	 * 배송 3000번대

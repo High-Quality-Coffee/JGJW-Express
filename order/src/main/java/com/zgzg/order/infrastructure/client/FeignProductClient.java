@@ -16,15 +16,15 @@ import com.zgzg.order.infrastructure.client.res.ProductResponseDTO;
 public interface FeignProductClient {
 
 	// todo. 특정 상품 조회
-	@GetMapping("/api/v1/products/{productId}")
+	@GetMapping("/api/v1/products/internal/{productId}")
 	ApiResponseData<ProductResponseDTO> getProduct(@PathVariable UUID productId);
 
 	// todo. 상품 재고 차감 (/api/v1/products/reduce/{id}
-	@PutMapping("/api/v1/products/reduce")
+	@PutMapping("/api/v1/products/internal/reduce")
 	ApiResponseData<String> reduceProduct(@RequestBody ProductStockRequestDTO requestDTO);
 
 	// todo. 상품 재고 추가 (/api/v1/products/reduce/{id}
-	@PutMapping("/api/v1/products/add")
+	@PutMapping("/api/v1/products/internal/add")
 	ApiResponseData<String> increaseProduct(@RequestBody ProductStockRequestDTO requestDTO);
 
 }

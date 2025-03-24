@@ -166,6 +166,10 @@ public class OrderService {
 			}
 		}
 		// todo. 배송 취소
+		boolean canceled = deliveryClient.cancelDelivery(order.getDeliveryId());
+		if (!canceled) {
+			throw new BaseException(ORDER_CANCEL_FAIL);
+		}
 		order.cancelOrder();
 
 		// todo. 재고 원복
