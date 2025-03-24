@@ -55,8 +55,6 @@ public class HubService {
       }
     }
 
-    // TODO : 허브 관리자 검증
-
     Hub hub = hubRepository.save(CreateHubReqDTO.toEntity(createHubReqDTO));
     eventPublisher.publishEvent(new UpdateRouteEvent(this));
 
@@ -75,8 +73,6 @@ public class HubService {
         throw new BaseException(PARENT_HUB_NOT_FOUND);
       }
     }
-
-    // TODO : 허브 관리자 검증
 
     if (updateHubReqDTO.getHubDTO() == null) {
       throw new BaseException(NOT_CHANGES_HUB);

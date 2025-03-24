@@ -27,10 +27,3 @@ eureka:
     register-with-eureka: true  # Eureka에 서비스 등록
     fetch-registry: true        # Eureka에서 다른 서비스 정보 가져오기
 
-logging:
-  level:
-    org.springframework.cloud.netflix.eureka: DEBUG
-    com.netflix.discovery: DEBUG
-    com.netflix.eureka: DEBUG
-    com.springframework: DEBUG
-    root: DEBUG

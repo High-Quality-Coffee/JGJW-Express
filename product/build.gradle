@@ -33,6 +33,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
+    // Json log format
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+
+    // Micrometer Tracing 분산 추적 메트릭 수집, 모니터링
+    implementation("io.micrometer:micrometer-tracing-bridge-brave")
+
     implementation project(':common')
     runtimeOnly 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
