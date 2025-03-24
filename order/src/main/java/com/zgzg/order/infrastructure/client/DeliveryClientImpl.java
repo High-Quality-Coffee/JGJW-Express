@@ -31,4 +31,13 @@ public class DeliveryClientImpl implements DeliveryClient {
 		ApiResponseData<UUID> response = feignDeliveryClient.createDelivery(requestDTO);
 		return response.getData();
 	}
+
+	@Override
+	public boolean cancelDelivery(UUID deliveryId) {
+		ApiResponseData<DeliveryResponseDTO> response = feignDeliveryClient.cancelDelivery(deliveryId);
+		if (response.getCode() != 3002) {
+			return false;
+		}
+		return true;
+	}
 }
