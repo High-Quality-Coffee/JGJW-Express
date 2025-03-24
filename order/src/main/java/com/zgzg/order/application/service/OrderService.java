@@ -61,15 +61,15 @@ public class OrderService {
 		CompanyResponseDTO receiver = companyClient.getCompany(requestDto.getReceiverCompanyId());
 		log.info("supplier: {} , receiver: {}", supplier.getHub_id(), receiver.getHub_id());
 
-		// 주문 생성
-		Order order = requestDto.toEntity(requestDto, supplier.getHub_id());
-		Order savedOrder = orderRepository.save(order);
-
 		// todo. 상품 차감
 		boolean isSuccess = productClient.reduceProduct(requestDto.getProductList());
 		if (!isSuccess) {
 			throw new BaseException(ORDER_DECREASE_PRODUCT_FAIL);
 		}
+
+		// 주문 생성
+		Order order = requestDto.toEntity(requestDto, supplier.getHub_id());
+		Order savedOrder = orderRepository.save(order);
 
 		// 슬랙 메시지 요청에 필요한 정보(배송으로 넘길 정보)
 		Integer quantity = 0;
@@ -155,7 +155,9 @@ public class OrderService {
 		if (userDetails.getRole().equals("ROLE_STORE")) {
 
 			CompanyResponseDTO company = companyClient.getCompany(order.getReceiverCompanyId());
-			// todo. 조회한 업체의 관리자 id == userDetails.getId
+			if (!userDetails.getId().equals(company.getCompanyAdminId())) {
+				throw new BaseException(ORDER_AUTH_FORBIDDEN);
+			}
 
 			// STORE 의 경우, 배송 상태가 배송 시작 전일 때만 취소 가능
 			DeliveryResponseDTO delivery = deliveryClient.getDelivery(order.getDeliveryId());
@@ -163,6 +165,7 @@ public class OrderService {
 				throw new BaseException(DELIVERY_CANCEL_FAIL);
 			}
 		}
+		// todo. 배송 취소
 		order.cancelOrder();
 
 		// todo. 재고 원복

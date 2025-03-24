@@ -22,7 +22,7 @@ public class ProductClientImpl implements ProductClient {
 	public boolean getProduct(List<OrderDetailDTO> productList) {
 		for (OrderDetailDTO dto : productList) {
 			ApiResponseData<ProductResponseDTO> response = feignProductClient.getProduct(dto.getProductId());
-			if (response.getData().getProductStock() <= 0) {
+			if (response.getData().getProductStock() - dto.getQuantity() < 0) {
 				return false;
 			}
 		}

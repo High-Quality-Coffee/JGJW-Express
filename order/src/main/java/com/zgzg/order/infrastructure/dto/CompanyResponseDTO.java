@@ -18,5 +18,7 @@ public class CompanyResponseDTO {
 	private String type;
 
 	private String address;
+	
+	private Long companyAdminId;
 
 }
