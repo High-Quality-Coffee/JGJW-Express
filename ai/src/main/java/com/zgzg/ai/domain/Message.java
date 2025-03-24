@@ -69,9 +69,8 @@ public class Message extends BaseEntity {
 	@Column(name = "delay_reason")
 	private String delayReason;
 
-
 	public Message(String messageContent, String messageTitle, String orderNumber, String originHub,
-		String currentLocation, String finalDestination,String estimatedDeliveryTime, String finalDeliveryStartTime) {
+		String currentLocation, String finalDestination, String estimatedDeliveryTime, String finalDeliveryStartTime) {
 		this.messageContent = messageContent;
 		this.messageTitle = messageTitle;
 		this.orderNumber = orderNumber;
@@ -83,7 +82,8 @@ public class Message extends BaseEntity {
 	}
 
 	public Message(String messageContent, String messageTitle, String orderNumber, String originHub,
-		String currentLocation, String finalDestination, String estimatedDeliveryTime,String finalDeliveryStartTime, String receiverId,
+		String currentLocation, String finalDestination, String estimatedDeliveryTime, String finalDeliveryStartTime,
+		String receiverId,
 		String senderId, LocalDateTime sentAt) {
 		this.messageContent = messageContent;
 		this.messageTitle = messageTitle;
@@ -98,7 +98,7 @@ public class Message extends BaseEntity {
 		this.sentAt = sentAt;
 	}
 
-	public MessageResponseDTO toDto(){
+	public MessageResponseDTO toDto() {
 		return MessageResponseDTO.builder()
 			.messageContent(this.messageContent)
 			.messageTitle(this.messageTitle)
@@ -116,7 +116,7 @@ public class Message extends BaseEntity {
 			.build();
 	}
 
-	public void update(MessageUpdateDTO messageUpdateDTO){
+	public void update(MessageUpdateDTO messageUpdateDTO) {
 		this.messageTitle = messageUpdateDTO.getMessageTitle();
 		this.originHub = messageUpdateDTO.getOriginHub();
 		this.currentLocation = messageUpdateDTO.getCurrentLocation();

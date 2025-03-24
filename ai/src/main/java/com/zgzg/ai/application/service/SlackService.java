@@ -8,6 +8,10 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +24,8 @@ import com.zgzg.ai.domain.persistence.MessageReposiroty;
 import com.zgzg.ai.domain.persistence.SlackRepository;
 import com.zgzg.ai.presentation.DTO.MessageResponseDTO;
 import com.zgzg.ai.presentation.DTO.MessageUpdateDTO;
+import com.zgzg.ai.presentation.DTO.PageableRequestDTO;
+import com.zgzg.ai.presentation.DTO.PageableResponseDTO;
 import com.zgzg.common.exception.BaseException;
 import com.zgzg.common.response.Code;
 
@@ -42,14 +48,14 @@ public class SlackService {
 	}
 
 	public MessageResponseDTO getMessage(String id) {
-		Optional<Message> message = messageReposiroty.findById(UUID.fromString(id));
+		Optional<Message> message = messageReposiroty.findByIdAndDeletedAtIsNull(UUID.fromString(id));
 		MessageResponseDTO responseDTO = message.get().toDto();
 		return responseDTO;
 	}
 
 	@Transactional
 	public void updateMessage(String id, MessageUpdateDTO requestDto) {
-		Optional<Message> message = messageReposiroty.findById(UUID.fromString(id));
+		Optional<Message> message = messageReposiroty.findByIdAndDeletedAtIsNull(UUID.fromString(id));
 		message.get().update(requestDto);
 	}
 
@@ -125,8 +131,17 @@ public class SlackService {
 
 	@Transactional
 	public void deleteMessage(String id) {
-		Optional<Message> message = messageReposiroty.findById(UUID.fromString(id));
+		Optional<Message> message = messageReposiroty.findByIdAndDeletedAtIsNull(UUID.fromString(id));
 		message.get().softDelete("Temp");
 	}
 
+	public PageableResponseDTO<MessageResponseDTO> searchMessage(PageableRequestDTO pageableRequestDTO, String keyword) {
+		Sort sort = Sort.unsorted();
+		if (pageableRequestDTO.getSortBy() != null && !pageableRequestDTO.getSortBy().isEmpty()) {
+			sort = Sort.by(pageableRequestDTO.getDirection(), pageableRequestDTO.getSortBy());
+		}
+		Pageable pageable = PageRequest.of(pageableRequestDTO.getPage(), pageableRequestDTO.getSize(), sort);
+		Page<Message> messages = messageReposiroty.searchMessages(keyword, pageable);
+		return PageableResponseDTO.from(messages, MessageResponseDTO::toDto);
+	}
 }

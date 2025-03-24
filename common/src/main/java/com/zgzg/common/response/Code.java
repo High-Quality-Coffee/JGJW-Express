@@ -39,6 +39,7 @@ public enum Code {
 	MEMBER_EXISTS(HttpStatus.OK, 1008, "회원 조회를 성공했습니다"),
 	DELIVERY_USER_ASSIGN(HttpStatus.OK, 1100, "배송담당자를 할당하였습니다."),
 	DELIVERY_USER_NOT_ASSIGN(HttpStatus.OK, 1100, "배송담당자를 할당할 수 없습니다."),
+  
 
 	/**
 	 * 주문 2000번대
