@@ -1,5 +1,7 @@
 package com.zgzg.delivery.infrastructure.client;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Component;
 
 import com.zgzg.common.response.ApiResponseData;
@@ -17,10 +19,16 @@ public class DeliveryPersonClientImpl implements DeliveryPersonClient {
 	private final FeignDeliveryPersonClient feignDeliveryPersonClient;
 
 	@Override
-	public DeliveryUserResponseDTO getDeiveryPerson() {
+	public DeliveryUserResponseDTO getHubDeiveryPerson() {
 		log.info("Feign : getDeliveryPerson ");
-		ApiResponseData<DeliveryUserResponseDTO> response = feignDeliveryPersonClient.getDeliveryPerson();
+		ApiResponseData<DeliveryUserResponseDTO> response = feignDeliveryPersonClient.getHubDeliveryPerson();
 		log.info("response - code : {}, message : {} ", response.getCode(), response.getMessage());
+		return response.getData();
+	}
+
+	@Override
+	public DeliveryUserResponseDTO getStoreDeiveryPerson(UUID endHubId) {
+		ApiResponseData<DeliveryUserResponseDTO> response = feignDeliveryPersonClient.getStoreDeliveryPerson(endHubId);
 		return response.getData();
 	}
 }

@@ -3,6 +3,7 @@ package com.zgzg.delivery.domain.entity;
 import java.util.UUID;
 
 import com.zgzg.common.utils.BaseEntity;
+import com.zgzg.delivery.infrastructure.client.res.DeliveryUserResponseDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -57,12 +58,39 @@ public class DeliveryRouteLog extends BaseEntity { //배송 경로 기록
 		this.deliveryStatus = DeliveryStatus.HUB_IN_TRANSIT;
 	}
 
-	public void completeDelivery() {
+	public void completeDelivery(long actualDuration) {
 		this.deliveryStatus = DeliveryStatus.DELIVERED;
+		this.actualTimeSpent = Math.toIntExact(actualDuration); // todo. 시간 관련 타입 일치
+	}
+
+	public void arrivedHub(long actualDuration) {
+		this.deliveryStatus = DeliveryStatus.HUB_ARRIVED;
+		this.actualTimeSpent = Math.toIntExact(actualDuration); // todo. 시간 관련 타입 일치
+	}
+
+	public void startStoreDelivery(long actualDuration) {
+		this.deliveryStatus = DeliveryStatus.IN_DELIVERY;
+		this.actualTimeSpent = Math.toIntExact(actualDuration); // todo. 시간 관련 타입 일치
 	}
 
 	public void assignDeliveryPerson(Long personId, String slackId) {
 		this.deliveryPersonId = personId;
 		this.deliveryPersonSlackId = slackId;
+	}
+
+	public static DeliveryRouteLog addLastRoute(DeliveryRouteLog route, DeliveryUserResponseDTO deliver) {
+		return DeliveryRouteLog.builder()
+			.delivery(route.getDelivery())
+			.sequence(route.getSequence() + 1)
+			.startHubId(route.getEndHubId())
+			.startHubName(route.getEndHubName())
+			.endHubId(route.getEndHubId()) // todo. 업체 id
+			.endHubName(route.getEndHubName()) // todo. 업체명
+			.estimatedDistance(0)
+			.estimatedTime(0)
+			.deliveryStatus(DeliveryStatus.IN_DELIVERY) // 업체 배송중
+			.deliveryPersonId(deliver.getDeliveryUserId())
+			.deliveryPersonSlackId(deliver.getDeliverySlackUsername())
+			.build();
 	}
 }
