@@ -51,7 +51,7 @@ public class Hub extends BaseEntity {
 
   @Setter
   @Builder.Default
-  private boolean isMegaHub = false;
+  private boolean megaHubStatus = false;
 
   @Setter
   private Long hubAdminId;

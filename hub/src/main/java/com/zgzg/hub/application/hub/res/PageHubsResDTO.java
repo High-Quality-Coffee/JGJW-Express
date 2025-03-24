@@ -30,7 +30,7 @@ public class PageHubsResDTO {
   public static class HubDTO {
 
     private UUID hubId;
-    private String HubName;
+    private String hubName;
     private String hubAddress;
     private String hubLatitude;
     private String hubLongitude;
@@ -41,12 +41,12 @@ public class PageHubsResDTO {
     public static HubDTO from(Hub hub) {
       return HubDTO.builder()
           .hubId(hub.getHubId())
-          .HubName(hub.getHubName())
+          .hubName(hub.getHubName())
           .hubAddress(hub.getHubAddress())
           .hubLatitude(hub.getHubLatitude())
           .hubLongitude(hub.getHubLongitude())
           .hubAdminId(hub.getHubAdminId())
-          .isMegaHub(hub.isMegaHub())
+          .isMegaHub(hub.isMegaHubStatus())
           .parentHubId(hub.getParentHubId())
           .build();
     }

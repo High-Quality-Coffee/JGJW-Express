@@ -39,7 +39,7 @@ public class UpdateHubReqDTO {
     @Min(value = 1, message = "허브 관리자는 1이상의 값을 입력해야 합니다.")
     private Long hubAdminId;
 
-    private Boolean isMegaHub;
+    private Boolean megaHubStatus;
 
     private UUID parentHubId;
   }

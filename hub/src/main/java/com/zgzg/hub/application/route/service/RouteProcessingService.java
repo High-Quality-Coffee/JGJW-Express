@@ -54,7 +54,7 @@ public class RouteProcessingService {
            *  Mega - Mega (같은 허브)
            *  이동 경로 0, 시간 0, sequence 1
            */
-          if (startHub.isMegaHub()) {
+          if (startHub.isMegaHubStatus()) {
             processedRouteDTO.addRoute(ProcessedRouteDTO.RouteDTO.builder()
                 .startHubName(startHub.getHubName())
                 .endHubName(endHub.getHubName())
@@ -81,12 +81,12 @@ public class RouteProcessingService {
           continue;
         }
 
-        if (startHub.isMegaHub()) { // Mega 시작
+        if (startHub.isMegaHubStatus()) { // Mega 시작
           /**
            * 1. Mega - Mega
            * 출발허브 - 도착허브 조회, sequence = 1
            */
-          if (endHub.isMegaHub()) {
+          if (endHub.isMegaHubStatus()) {
             megaToMegaHub(startHub, endHub, routeMap, processedRouteDTO, 1);
             processedMap.put(routeKey, processedRouteDTO);
             continue;
@@ -115,7 +115,7 @@ public class RouteProcessingService {
          * 자기부모 :  Normal -> 출발허브 Mega(1)
          * Normal -> 출발허브의 Mega(1) -> Mega(2)
          */
-        if (endHub.isMegaHub()) {
+        if (endHub.isMegaHubStatus()) {
           Hub startParent = megaHubMap.get(startHub.getParentHubId());
           if (endHub.getHubId().equals(startParent.getHubId())) {
             normalToMegaHub(startHub, megaHubMap, routeMap, processedRouteDTO, 1);

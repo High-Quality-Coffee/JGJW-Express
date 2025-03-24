@@ -1,5 +1,8 @@
 package com.zgzg.hub.config;
 
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
+import com.zgzg.hub.application.hub.res.HubResDTO;
 import com.zgzg.hub.application.route.dto.RedisRouteDTO;
 import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +17,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -60,13 +64,18 @@ public class RedisConfig {
   public RedisCacheManager redisCacheManager(
       RedisConnectionFactory redisConnectionFactory) {
 
+    PolymorphicTypeValidator typeValidator = BasicPolymorphicTypeValidator
+        .builder()
+        .allowIfSubType(Object.class)
+        .build();
+
     RedisCacheConfiguration configuration = RedisCacheConfiguration
         .defaultCacheConfig()
         .disableCachingNullValues()
         .entryTtl(Duration.ofDays(7))
         .computePrefixWith(CacheKeyPrefix.simple())
         .serializeValuesWith(SerializationPair.fromSerializer(
-            new GenericJackson2JsonRedisSerializer()));
+            new Jackson2JsonRedisSerializer<>(HubResDTO.class)));
 
     return RedisCacheManager.builder(redisConnectionFactory)
         .cacheDefaults(configuration)
