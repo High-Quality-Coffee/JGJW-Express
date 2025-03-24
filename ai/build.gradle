@@ -44,6 +44,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Json log format
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+
+    // Micrometer Tracing 분산 추적 메트릭 수집, 모니터링
+    implementation("io.micrometer:micrometer-tracing-bridge-brave")
 }
 
 dependencyManagement {
