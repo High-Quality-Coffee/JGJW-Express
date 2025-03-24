@@ -112,7 +112,8 @@ public class ProductService {
         }
         //상품이 존재하지 않으면, 신규 등록이 필요, 재고 추가는 안됨
         Product product = productRepository.findById(productStockRequestDTO.getId()).orElseThrow(()->new BaseException(Code.PRODUCT_NOT_EXISTS));
-        product.setProductStock(productStockRequestDTO.getProductStock());
+        Integer totalStock = product.getProductStock() + productStockRequestDTO.getProductStock();
+        product.setProductStock(totalStock);
         productRepository.save(product);
         return ApiResponseData.of(Code.PRODUCT_UPDATE.getCode(), Code.PRODUCT_UPDATE.getMessage(), null);
     }

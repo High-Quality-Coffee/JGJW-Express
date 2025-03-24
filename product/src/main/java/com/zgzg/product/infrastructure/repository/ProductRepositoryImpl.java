@@ -22,7 +22,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findAll() {return jpaProductRepository.findAll();}
+    public List<Product> findAll() {return jpaProductRepository.findAllByDeletedAtIsNull();}
 
     public boolean existsProduct( @Param("productName") String productName,
                                   @Param("storeId") UUID storeId,

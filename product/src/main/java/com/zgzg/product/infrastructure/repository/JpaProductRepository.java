@@ -14,9 +14,9 @@ import java.util.UUID;
 
 public interface JpaProductRepository extends JpaRepository<Product, UUID> {
     @NotNull
-    List<Product> findAll();
+    List<Product> findAllByDeletedAtIsNull();
 
-    @Query("SELECT COUNT(p) > 0 FROM Product p WHERE p.productName = :productName AND p.storeId = :storeId AND p.hubId = :hubId")
+    @Query("SELECT COUNT(p) > 0 FROM Product p WHERE p.productName = :productName AND p.storeId = :storeId AND p.hubId = :hubId AND p.deletedAt IS NULL")
     boolean existsProduct(
             @Param("productName") String productName,
             @Param("storeId") UUID storeId,
