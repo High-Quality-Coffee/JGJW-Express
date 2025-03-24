@@ -61,9 +61,9 @@ public class DeliveryUserService {
 
         //수정하려는 허브가 실제로 존재하는지 검사
         ResponseEntity<ApiResponseData<HubResDTO>> hubCheck = hubClient.getHub(deliveryUserRequestDTO.getHubId());
-        log.info(String.valueOf(hubCheck.getBody().getData().getHubId()));
+        System.out.println(hubCheck.getBody().getData().getHubDTO().getHubId());
 
-        if (String.valueOf(hubCheck.getBody().getData().getHubId())==null) {
+        if (hubCheck.getBody().getData().getHubDTO().getHubId()==null) {
             throw new BaseException(Code.HUB_NOT_FOUND);
         }
 

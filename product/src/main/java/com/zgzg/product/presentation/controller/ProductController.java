@@ -10,11 +10,13 @@ import com.zgzg.product.presentation.request.ProductStockRequestDTO;
 import com.zgzg.product.presentation.request.ProductUpdateRequestDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.UUID;
@@ -56,7 +58,19 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseData<ProductResponseDTO>> read_one(@PathVariable("id") UUID id){
         return ResponseEntity.ok().body(ApiResponseData.of(Code.PRODUCT_EXISTS.getCode(), Code.PRODUCT_EXISTS.getMessage(),productService.readOne(id)));
+    }
 
+    //상품 검색
+    @Secured({"ROLE_MASTER","ROLE_HUB", "ROLE_STORE", "ROLE_DELIVERY"})
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponseData<List<ProductResponseDTO>>> searchProducts(
+            @RequestParam(name="name", required = false, defaultValue = "") String name,
+            @RequestParam(name="sortBy", required = false, defaultValue = "createdDateTime") String sortBy,
+            @RequestParam(name="page", required = false, defaultValue = "0") int page,
+            @RequestParam(name="size", required = false, defaultValue = "10") int size
+    ) {
+        Page<ProductResponseDTO> products = productService.search(name, sortBy, page, size);
+        return ResponseEntity.ok().body(ApiResponseData.of(Code.PRODUCT_EXISTS.getCode(), Code.PRODUCT_EXISTS.getMessage(), products.getContent()));
     }
 
     //특정 상품 수정
@@ -87,10 +101,5 @@ public class ProductController {
     public ResponseEntity<ApiResponseData<String>> reduceProduct(@RequestBody ProductStockRequestDTO productStockRequestDTO){
         return ResponseEntity.ok().body(productService.reduceProduct(productStockRequestDTO));
     }
-
-
-
-
-
 
 }

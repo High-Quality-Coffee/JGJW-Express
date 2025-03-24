@@ -3,6 +3,8 @@ package com.zgzg.product.infrastructure.repository;
 import com.zgzg.product.domain.model.Product;
 import com.zgzg.product.domain.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +22,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findAll() {return jpaProductRepository.findAll();}
+    public List<Product> findAll() {return jpaProductRepository.findAllByDeletedAtIsNull();}
 
     public boolean existsProduct( @Param("productName") String productName,
                                   @Param("storeId") UUID storeId,
@@ -31,4 +33,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         return jpaProductRepository.findById(id);
     }
 
+    public Page<Product> searchProducts(@Param("name") String name, Pageable pageable){
+        return jpaProductRepository.searchProducts(name,pageable);
+    }
 }

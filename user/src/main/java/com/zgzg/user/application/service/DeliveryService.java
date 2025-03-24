@@ -132,20 +132,19 @@ public class DeliveryService {
 
         //먼저, 해당 hubId가 실제로 존재하는 hubId인지 검증하는 로직 필요
         ResponseEntity<ApiResponseData<HubResDTO>> hubCheck = hubClient.getHub(hubId);
-        log.info(String.valueOf(hubCheck.getBody().getData().getHubId()));
         // null 체크를 포함한 안전한 방법
-        if (String.valueOf(hubCheck.getBody().getData().getHubId())==null) {
+        if (hubCheck.getBody().getData().getHubDTO().getHubId()==null) {
             throw new BaseException(Code.HUB_NOT_FOUND);
         }
 
-        // 1. 새로운 배송 담당자 요청이 들어왔으니, 직전에 할당된 담당자 상태를 배송 가능으로 변경
-        String lastAssignedUserIdStr = redisTemplate.opsForValue().get(LAST_STORE_ASSIGNED_KEY+hubId);
-        if(lastAssignedUserIdStr != null){
-            DeliveryUser previousUser = deliveryUserRepository.findByDeliveryUserId(Long.parseLong(lastAssignedUserIdStr))
-                    .orElseThrow(() -> new BaseException(Code.MEMBER_NOT_EXISTS));
-            previousUser.setDeliveryStatus(DeliveryStatus.CAN_DELIVER);
-            deliveryUserRepository.save(previousUser);
-        }
+        // 업체 배송담당자는 다시 할당할 필요가 없음
+//        String lastAssignedUserIdStr = redisTemplate.opsForValue().get(LAST_STORE_ASSIGNED_KEY+hubId);
+//        if(lastAssignedUserIdStr != null){
+//            DeliveryUser previousUser = deliveryUserRepository.findByDeliveryUserId(Long.parseLong(lastAssignedUserIdStr))
+//                    .orElseThrow(() -> new BaseException(Code.MEMBER_NOT_EXISTS));
+//            previousUser.setDeliveryStatus(DeliveryStatus.CAN_DELIVER);
+//            deliveryUserRepository.save(previousUser);
+//        }
 
         // 2. 큐에서 배송 가능한 담당자 찾기
         DeliveryUser newUser = null;
@@ -190,7 +189,8 @@ public class DeliveryService {
         redisTemplate.opsForList().rightPush(STORE_DELIVERY_CACHE_KEY+hubId, newUserIdStr);
 
         // 6. 직전 담당자로 기록
-        redisTemplate.opsForValue().set(LAST_STORE_ASSIGNED_KEY+hubId, newUserIdStr);
+        // 직전 담당자 기록 필요 없음
+        //redisTemplate.opsForValue().set(LAST_STORE_ASSIGNED_KEY+hubId, newUserIdStr);
 
         return response;
     }
