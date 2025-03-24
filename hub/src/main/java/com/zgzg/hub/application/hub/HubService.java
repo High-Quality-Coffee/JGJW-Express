@@ -50,7 +50,7 @@ public class HubService {
         throw new BaseException(PARENT_HUB_NOT_FOUND);
       }
     } else {
-      if (!createHubReqDTO.getHubDTO().getIsMegaHub()) {
+      if (!createHubReqDTO.getHubDTO().getMegaHubStatus()) {
         throw new BaseException(NORMAL_HUB_MUST_HAVE_PARENT_HUB);
       }
     }
@@ -138,12 +138,12 @@ public class HubService {
 
     hub.setHubAdminId(updateHubReqDTO.getHubDTO().getHubAdminId());
 
-    if (updateHubReqDTO.getHubDTO().getIsMegaHub() != null) {
-      if (!updateHubReqDTO.getHubDTO().getIsMegaHub() && // 중앙 -> 자식
+    if (updateHubReqDTO.getHubDTO().getMegaHubStatus() != null) {
+      if (!updateHubReqDTO.getHubDTO().getMegaHubStatus() && // 중앙 -> 자식
           hubRepository.existsByParentHubId(hub.getHubId())) {
         throw new BaseException(FIRST_CHANGE_CONNECTED_HUBS);
       }
-      hub.setMegaHub(updateHubReqDTO.getHubDTO().getIsMegaHub());
+      hub.setMegaHubStatus(updateHubReqDTO.getHubDTO().getMegaHubStatus());
       check = true;
     }
 
@@ -158,7 +158,7 @@ public class HubService {
       hub.setParentHubId(updateHubReqDTO.getHubDTO().getParentHubId());
       check = true;
     } else {
-      if (hub.isMegaHub()) {
+      if (hub.isMegaHubStatus()) {
         throw new BaseException(NORMAL_HUB_MUST_HAVE_PARENT_HUB);
       }
       hub.setParentHubId(null);

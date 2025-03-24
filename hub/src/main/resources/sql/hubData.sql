@@ -1,5 +1,5 @@
 INSERT INTO hub_db.dev.p_hub (hub_id, hub_name, hub_address, hub_latitude, hub_longitude,
-                              is_mega_hub,
+                              mega_hub_status,
                               hub_admin_id, parent_hub_id, created_date_time, modified_date_time)
 VALUES ('4d5daff0-bf88-47a8-906d-9a1890476668',
         '서울Hub',

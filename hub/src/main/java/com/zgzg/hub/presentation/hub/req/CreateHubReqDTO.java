@@ -42,7 +42,7 @@ public class CreateHubReqDTO {
     @Min(value = 1, message = "허브 관리자는 1이상의 값을 입력해야 합니다.")
     private Long hubAdminId;
 
-    private Boolean isMegaHub;
+    private Boolean megaHubStatus;
 
     private UUID parentHubId;
   }
@@ -54,7 +54,7 @@ public class CreateHubReqDTO {
         .hubLatitude(createHubReqDTO.getHubDTO().getHubLatitude())
         .hubLongitude(createHubReqDTO.getHubDTO().getHubLongitude())
         .hubAdminId(createHubReqDTO.getHubDTO().getHubAdminId())
-        .isMegaHub(createHubReqDTO.getHubDTO().getIsMegaHub())
+        .megaHubStatus(createHubReqDTO.getHubDTO().getMegaHubStatus())
         .parentHubId(createHubReqDTO.getHubDTO().getParentHubId())
         .build();
   }

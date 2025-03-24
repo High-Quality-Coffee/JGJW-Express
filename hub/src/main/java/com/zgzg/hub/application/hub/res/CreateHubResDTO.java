@@ -33,7 +33,7 @@ public class CreateHubResDTO {
     private String hubLatitude;
     private String hubLongitude;
     private Long hubAdminId;
-    private boolean isMegaHub;
+    private boolean megaHubStatus;
     private UUID parentHubId;
 
     public static HubDTO from(Hub hub) {
@@ -44,7 +44,7 @@ public class CreateHubResDTO {
           .hubLatitude(hub.getHubLatitude())
           .hubLongitude(hub.getHubLongitude())
           .hubAdminId(hub.getHubAdminId())
-          .isMegaHub(hub.isMegaHub())
+          .megaHubStatus(hub.isMegaHubStatus())
           .parentHubId(hub.getParentHubId())
           .build();
     }

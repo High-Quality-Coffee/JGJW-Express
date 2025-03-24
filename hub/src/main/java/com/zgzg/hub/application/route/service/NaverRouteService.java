@@ -83,7 +83,7 @@ public class NaverRouteService {
 
   private void setNormalHub(List<Hub> hubs, Map<UUID, List<Hub>> subMap) {
     for (Hub hub : hubs) { // 일반 허브 저장
-      if (!hub.isMegaHub()) {
+      if (!hub.isMegaHubStatus()) {
         List<Hub> sub = subMap.get(hub.getParentHubId());
         sub.add(hub);
       }
@@ -94,7 +94,7 @@ public class NaverRouteService {
   private void setMegaHub(List<Hub> hubs, Map<UUID, Hub> megaHubMap, List<Hub> megaHubList,
       Map<UUID, List<Hub>> subMap) {
     for (Hub hub : hubs) { // 중앙 허브 저장
-      if (hub.isMegaHub()) {
+      if (hub.isMegaHubStatus()) {
         megaHubMap.put(hub.getHubId(), hub);
         megaHubList.add(hub);
         subMap.put(hub.getHubId(), new ArrayList<>());
