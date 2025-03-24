@@ -40,7 +40,7 @@ public class DeliveryJpaRepositoryCustomImpl implements DeliveryJpaRepositoryCus
 				delivery.receiverName,
 				delivery.receiverSlackId,
 				delivery.deliveryPersonId,
-				delivery.deliveryPersonName,
+				delivery.deliveryPersonSlackId,
 				delivery.orderId
 			))
 			.from(delivery)

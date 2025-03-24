@@ -16,7 +16,7 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 server:
   port: 8085
 
@@ -24,3 +24,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:19090/eureka/
+
+logging:
+  level:
+    com.zgzg.delivery: DEBUG
+    com.zgzg.delivery.infrastructure.configuration: DEBUG  # ErrorDecoder 클래스가 있는 패키지

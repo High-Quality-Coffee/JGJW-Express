@@ -4,7 +4,7 @@ import com.zgzg.hub.application.route.dto.ProcessedRouteDTO;
 import com.zgzg.hub.application.route.dto.ProcessedRouteDTO.RouteDTO;
 import com.zgzg.hub.application.route.dto.RedisRouteDTO;
 import com.zgzg.hub.domain.entity.Route;
-import com.zgzg.hub.domain.repository.RouteRepository;
+import com.zgzg.hub.domain.repository.route.RouteRepository;
 import com.zgzg.hub.infrastructure.redis.RedisHashUtil;
 import java.util.ArrayList;
 import java.util.HashMap;

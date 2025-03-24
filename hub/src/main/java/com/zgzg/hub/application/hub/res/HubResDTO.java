@@ -1,6 +1,7 @@
 package com.zgzg.hub.application.hub.res;
 
 import com.zgzg.hub.domain.entity.Hub;
+import java.io.Serializable;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HubResDTO {
+public class HubResDTO implements Serializable {
 
   private HubDTO hubDTO;
 
@@ -25,7 +26,7 @@ public class HubResDTO {
   @Builder
   @NoArgsConstructor
   @AllArgsConstructor
-  public static class HubDTO {
+  public static class HubDTO implements Serializable {
 
     private UUID hubId;
     private String HubName;

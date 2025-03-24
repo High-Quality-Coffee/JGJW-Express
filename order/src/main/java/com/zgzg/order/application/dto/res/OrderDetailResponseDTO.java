@@ -1,6 +1,7 @@
 package com.zgzg.order.application.dto.res;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.zgzg.order.domain.entity.OrderDetail;
@@ -17,8 +18,7 @@ public class OrderDetailResponseDTO { // 단건 상세 조회
 	private String productName;
 	private BigDecimal productPrice;
 	private Integer productQuantity;
-	private UUID deliveryId;
-	// todo. deliveryId 여기에서 가지고 있어야할까?
+	private LocalDateTime createDateTime;
 
 	public static OrderDetailResponseDTO from(OrderDetail orderDetail) {
 		return OrderDetailResponseDTO.builder()
@@ -27,7 +27,7 @@ public class OrderDetailResponseDTO { // 단건 상세 조회
 			.productName(orderDetail.getProductName())
 			.productPrice(orderDetail.getProductPrice())
 			.productQuantity(orderDetail.getQuantity())
+			.createDateTime(orderDetail.getCreatedDateTime())
 			.build();
 	}
-
 }

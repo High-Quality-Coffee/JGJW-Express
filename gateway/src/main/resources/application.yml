@@ -24,6 +24,8 @@ spring:
           uri: lb://order
           predicates:
             - Path=/api/v1/orders/**
+          filters:
+            - name: AuthPermissionFilter
         - id: delivery
           uri: lb://delivery
           predicates:
@@ -34,7 +36,7 @@ spring:
         - id: user
           uri: lb://user
           predicates:
-            - Path=/api/v1/logout, /api/v1/delivery/users/**, /test
+            - Path=/api/v1/logout, /api/v1/delivery/users/**, /api/v1/users/**
           filters:
             - name: AuthPermissionFilter
         - id: hub
