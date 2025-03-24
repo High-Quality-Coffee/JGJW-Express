@@ -2,6 +2,8 @@ package com.zgzg.delivery.application.service;
 
 import static com.zgzg.common.response.Code.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -54,7 +56,7 @@ public class DeliveryService {
 		Delivery savedDelivery = deliveryRepository.save(delivery);
 
 		// 1. 배송 생성과 동시에 배송 담당자 할당
-		DeliveryUserResponseDTO deliver = deliveryPersonClient.getDeiveryPerson();
+		DeliveryUserResponseDTO deliver = deliveryPersonClient.getHubDeiveryPerson();
 		savedDelivery.assignDeliveryPerson(deliver.getDeliveryUserId(), deliver.getDeliverySlackUsername());
 		// 2. 배송 생성과 동시에 배송 경로 요청
 		List<RouteDTO> hubRoutes = hubClient.getHubRoutes(delivery.getOriginHubId(),
@@ -139,22 +141,37 @@ public class DeliveryService {
 
 			delivery.startDelivery(); // 배송 상태 변경
 
-			DeliveryUserResponseDTO deliver = deliveryPersonClient.getDeiveryPerson();
+			DeliveryUserResponseDTO deliver = deliveryPersonClient.getHubDeiveryPerson();
 			route.assignDeliveryPerson(deliver.getDeliveryUserId(), deliver.getDeliverySlackUsername());
 		}
-		route.startDelivery(); // 각 시퀀스 배송 상태 변경
+		route.startDelivery(); // 배송 경로 상태 변경
 	}
 
 	@Transactional
 	public void arriveDelivery(UUID deliveryId, int sequence) {
 		// 허브 도착(담당자 할당, 실제 거리, 실제 소요 시간
-		// 실제 소요 시간 계산
-		// todo. 실제 거리 계산은 근데 어떻게 하지..? 배송담당자가 운전한 거리 추적을 어케하란말임
+		DeliveryRouteLog lastHub = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, 0);
+		DeliveryRouteLog currentRoute = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, sequence);
 
-		//분기) 마지막 허브인 경우
-		// 업체 배송 담당자 할당(이전 hubId, 현재 hubId, 배송타입) + "IN_DELIVERY" + sequence += 1
-		//분기) 아닌 경우
-		// 허브 배송 담당자 할당(이전 hubId, 현재 hubId, 배송타입) + "HUB_ARRIVED"
+		// 실제 소요 시간 계산
+		long actualDuration = checkActualDuration(currentRoute);
+
+		// todo. 슬랙 알림
+		if (lastHub.getEndHubId().equals(currentRoute.getEndHubId())) { // 마지막 허브인 경우
+			// 업체 배송 담당자 할당, "IN_DELIVERY"
+			DeliveryUserResponseDTO deliver = deliveryPersonClient.getStoreDeiveryPerson(currentRoute.getEndHubId());
+			currentRoute.assignDeliveryPerson(deliver.getDeliveryUserId(), deliver.getDeliverySlackUsername());
+			currentRoute.startStoreDelivery(actualDuration);
+
+			DeliveryRouteLog lastRoute = DeliveryRouteLog.addLastRoute(currentRoute, deliver);
+			deliveryRouteLogRepository.save(lastRoute);
+
+		} else {
+			// 허브 배송 담당자 할당, "HUB_ARRIVED"
+			DeliveryUserResponseDTO deliver = deliveryPersonClient.getHubDeiveryPerson();
+			currentRoute.assignDeliveryPerson(deliver.getDeliveryUserId(), deliver.getDeliverySlackUsername());
+			currentRoute.arrivedHub(actualDuration);
+		}
 
 	}
 
@@ -163,12 +180,15 @@ public class DeliveryService {
 		// 배송 완료 (요청 업체 수령 완료)
 		Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
 		delivery.completeDelivery();
-		// todo. 배송 담당자 배송 가능 상태로 변경
 
 		// 경로 기록
 		DeliveryRouteLog route = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, sequence);
-		route.completeDelivery();
-		// todo. 실제 거리, 실제 소요 시간
+		// 실제 소요 시간 계산
+		long actualDuration = checkActualDuration(route);
+		route.completeDelivery(actualDuration);
+		// 실제 거리
+
+		// todo. 배송 담당자 상태 변경
 	}
 
 	private boolean hasHubAuth(Delivery delivery, CustomUserDetails userDetails) {
@@ -178,5 +198,11 @@ public class DeliveryService {
 			return true;
 		}
 		return false;
+
+	}
+
+	private long checkActualDuration(DeliveryRouteLog currentRoute) {
+		Duration duration = Duration.between(LocalDateTime.now(), currentRoute.getModifiedDateTime());
+		return duration.toMillis();
 	}
 }

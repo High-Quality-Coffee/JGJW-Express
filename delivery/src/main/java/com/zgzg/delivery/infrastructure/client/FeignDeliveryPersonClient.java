@@ -14,12 +14,13 @@ import com.zgzg.delivery.infrastructure.client.res.DeliveryUserResponseDTO;
 public interface FeignDeliveryPersonClient {
 
 	@GetMapping("/api/v1/delivery/users/hub")
-	ApiResponseData<DeliveryUserResponseDTO> getDeliveryPerson();
+	ApiResponseData<DeliveryUserResponseDTO> getHubDeliveryPerson();
 
 	@GetMapping("/api/v1/delivery/users/store/{hubId}")
-	ApiResponseData<DeliveryUserResponseDTO> getDeliveryPerson(@PathVariable UUID hubId);
+	ApiResponseData<DeliveryUserResponseDTO> getStoreDeliveryPerson(@PathVariable UUID hubId);
 
 	@PutMapping("/api/v1/delivery/users/{id}")
 	ApiResponseData<DeliveryUserResponseDTO> updateDeliveryPerson(@PathVariable UUID id);
+
 	// todo. requestBody 추가 필요 -> API 작업 마무리 요청 (규원님)
 }
