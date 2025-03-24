@@ -10,4 +10,6 @@ public interface DeliveryClient {
 	DeliveryResponseDTO getDelivery(UUID orderId);
 
 	UUID createDelivery(CreateDeliveryRequestDTO requestDTO);
+
+	boolean cancelDelivery(UUID deliveryId);
 }

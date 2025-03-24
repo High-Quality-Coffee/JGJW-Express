@@ -53,9 +53,13 @@ public enum Code {
 
 	ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, 2400, "해당 주문을 찾을 수 없습니다."),
 	ORDER_AUTH_FORBIDDEN(HttpStatus.FORBIDDEN, 2401, "해당 주문에 대한 권한이 없습니다."),
+	ORDER_PRODUCT_FAIL(HttpStatus.FORBIDDEN, 2402, "재고 부족으로 주문이 불가합니다."),
+	ORDER_DECREASE_PRODUCT_FAIL(HttpStatus.FORBIDDEN, 2403, "재고 차감이 실패했습니다."),
+	ORDER_INCREASE_PRODUCT_FAIL(HttpStatus.FORBIDDEN, 2404, "재고 원복에 실패했습니다."),
+	ORDER_CANCEL_FAIL(HttpStatus.FORBIDDEN, 2405, "주문 취소를 할 수 없습니다."),
 
 	/**
-	 * 주문 3000번대
+	 * 배송 3000번대
 	 */
 	DELIVERY_CREATE_SUCCESS(HttpStatus.CREATED, 3000, "배송이 성공적으로 생성되었습니다."),
 	DELIVERY_READ_SUCCESS(HttpStatus.OK, 3001, "배송이 성공적으로 조회되었습니다."),
@@ -89,7 +93,6 @@ public enum Code {
 	 * 업체 5000 번대
 	 */
 	COMPANY_CREATE(HttpStatus.OK, 5001, "업체 생성이 완료되었습니다."),
-
   COMPANY_FIND(HttpStatus.OK, 5002, "업체 조회가 완료되었습니다."),
   COMPANY_UPDATE(HttpStatus.OK, 5003, "업체 수정이 완료되었습니다."),
   COMPANY_DELETE(HttpStatus.OK, 5004, "업체 삭제가 완료되었습니다."),

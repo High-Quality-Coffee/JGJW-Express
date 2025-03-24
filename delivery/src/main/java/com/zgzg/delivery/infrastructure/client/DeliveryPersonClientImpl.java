@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.zgzg.common.response.ApiResponseData;
 import com.zgzg.delivery.application.client.DeliveryPersonClient;
+import com.zgzg.delivery.infrastructure.client.req.DeliveryUserRequestDTO;
 import com.zgzg.delivery.infrastructure.client.res.DeliveryUserResponseDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,12 @@ public class DeliveryPersonClientImpl implements DeliveryPersonClient {
 	public DeliveryUserResponseDTO getStoreDeiveryPerson(UUID endHubId) {
 		ApiResponseData<DeliveryUserResponseDTO> response = feignDeliveryPersonClient.getStoreDeliveryPerson(endHubId);
 		return response.getData();
+	}
+
+	@Override
+	public void completeDeliveryPerson(long userId, DeliveryUserRequestDTO requestDTO) {
+		ApiResponseData<DeliveryUserResponseDTO> response = feignDeliveryPersonClient.updateDeliveryPerson(userId,
+			requestDTO);
+		log.info("Feign deliveryPerson : {}", response.getMessage());
 	}
 }

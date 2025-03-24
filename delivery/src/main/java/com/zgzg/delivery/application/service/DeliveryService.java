@@ -27,6 +27,7 @@ import com.zgzg.delivery.domain.entity.DeliveryRouteLog;
 import com.zgzg.delivery.domain.entity.DeliveryStatus;
 import com.zgzg.delivery.domain.repo.DeliveryRepository;
 import com.zgzg.delivery.domain.repo.DeliveryRouteLogRepository;
+import com.zgzg.delivery.infrastructure.client.req.DeliveryUserRequestDTO;
 import com.zgzg.delivery.infrastructure.client.req.GenerateMessageRequest;
 import com.zgzg.delivery.infrastructure.client.res.DeliveryUserResponseDTO;
 import com.zgzg.delivery.infrastructure.dto.HubResponseDTO;
@@ -180,6 +181,7 @@ public class DeliveryService {
 		// 배송 완료 (요청 업체 수령 완료)
 		Delivery delivery = deliveryRepository.findByIdAndNotDeleted(deliveryId);
 		delivery.completeDelivery();
+		log.info("deliver.completeDelivery");
 
 		// 경로 기록
 		DeliveryRouteLog route = deliveryRouteLogRepository.findByIdAndSequence(deliveryId, sequence);
@@ -187,8 +189,13 @@ public class DeliveryService {
 		long actualDuration = checkActualDuration(route);
 		route.completeDelivery(actualDuration);
 		// 실제 거리
+		log.info("경로 기록");
 
-		// todo. 배송 담당자 상태 변경
+		// 업체 배송 담당자 상태 변경
+		DeliveryUserRequestDTO requestDTO = new DeliveryUserRequestDTO().completeDelivery(route.getEndHubId());
+		log.info("deliveryPersonClient");
+		deliveryPersonClient.completeDeliveryPerson(route.getDeliveryPersonId(), requestDTO);
+		log.info("deliveryPersonClient Complete");
 	}
 
 	private boolean hasHubAuth(Delivery delivery, CustomUserDetails userDetails) {

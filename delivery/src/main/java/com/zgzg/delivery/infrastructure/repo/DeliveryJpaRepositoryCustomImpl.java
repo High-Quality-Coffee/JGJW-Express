@@ -41,7 +41,8 @@ public class DeliveryJpaRepositoryCustomImpl implements DeliveryJpaRepositoryCus
 				delivery.receiverSlackId,
 				delivery.deliveryPersonId,
 				delivery.deliveryPersonSlackId,
-				delivery.orderId
+				delivery.orderId,
+				delivery.createdDateTime
 			))
 			.from(delivery)
 			.where(delivery.deletedAt.isNull())

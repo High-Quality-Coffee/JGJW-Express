@@ -18,13 +18,13 @@ public class HubResDTO {
 	public static class HubDTO {
 
 		private UUID hubId;
-		private String HubName;
+		private String hubName;
 		private String hubAddress;
 		private String hubLatitude;
 		private String hubLongitude;
 		private Long hubAdminId;
-		private boolean isMegaHub;
+		private boolean megaHubStatus;
 		private UUID parentHubId;
-		
+
 	}
 }

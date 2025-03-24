@@ -15,7 +15,8 @@ import com.zgzg.delivery.infrastructure.dto.RoutesDTO;
 public interface FeignHubClient {
 
 	@GetMapping("/api/v1/hubs/route")
-	ApiResponseData<RoutesDTO> getHubRoutes(@RequestParam UUID startHubId, @RequestParam UUID endHubId);
+	ApiResponseData<RoutesDTO> getHubRoutes(@RequestParam(name = "startHubId") UUID startHubId,
+		@RequestParam(name = "endHubId") UUID endHubId);
 
 	@GetMapping("/api/v1/hubs/{hubId}")
 	ApiResponseData<HubResponseDTO> getHub(@PathVariable(name = "hubId") UUID hubId);

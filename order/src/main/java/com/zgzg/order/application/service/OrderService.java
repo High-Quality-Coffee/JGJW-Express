@@ -15,6 +15,7 @@ import com.zgzg.common.security.CustomUserDetails;
 import com.zgzg.order.application.client.CompanyClient;
 import com.zgzg.order.application.client.DeliveryClient;
 import com.zgzg.order.application.client.HubClient;
+import com.zgzg.order.application.client.ProductClient;
 import com.zgzg.order.application.dto.global.PageableResponse;
 import com.zgzg.order.application.dto.req.CreateDeliveryRequestDTO;
 import com.zgzg.order.application.dto.res.OrderDetaiListDTO;
@@ -44,14 +45,27 @@ public class OrderService {
 	private final DeliveryClient deliveryClient;
 	private final CompanyClient companyClient;
 	private final HubClient hubClient;
+	private final ProductClient productClient;
 
 	@Transactional
 	public UUID createOrder(CreateOrderRequestDto requestDto) {
+
+		// todo. 상품 재고 확인
+		boolean possibleOrder = productClient.getProduct(requestDto.getProductList());
+		if (!possibleOrder) {
+			throw new BaseException(ORDER_PRODUCT_FAIL);
+		}
 
 		// 공급 업체, 요청 업체 정보 조회
 		CompanyResponseDTO supplier = companyClient.getCompany(requestDto.getSupplierCompanyId());
 		CompanyResponseDTO receiver = companyClient.getCompany(requestDto.getReceiverCompanyId());
 		log.info("supplier: {} , receiver: {}", supplier.getHub_id(), receiver.getHub_id());
+
+		// todo. 상품 차감
+		boolean isSuccess = productClient.reduceProduct(requestDto.getProductList());
+		if (!isSuccess) {
+			throw new BaseException(ORDER_DECREASE_PRODUCT_FAIL);
+		}
 
 		// 주문 생성
 		Order order = requestDto.toEntity(requestDto, supplier.getHub_id());
@@ -129,6 +143,7 @@ public class OrderService {
 	@Transactional
 	public OrderResponseDTO cancelOrder(UUID orderId, CustomUserDetails userDetails) {
 		Order order = orderRepository.findByIdAndNotDeleted(orderId);
+		List<OrderDetail> details = orderRepository.findAllByOrderIdAndNotDeleted(orderId);
 
 		if (order == null) {
 			throw new BaseException(ORDER_NOT_FOUND);
@@ -140,7 +155,9 @@ public class OrderService {
 		if (userDetails.getRole().equals("ROLE_STORE")) {
 
 			CompanyResponseDTO company = companyClient.getCompany(order.getReceiverCompanyId());
-			// todo. 조회한 업체의 관리자 id == userDetails.getId
+			if (!userDetails.getId().equals(company.getCompanyAdminId())) {
+				throw new BaseException(ORDER_AUTH_FORBIDDEN);
+			}
 
 			// STORE 의 경우, 배송 상태가 배송 시작 전일 때만 취소 가능
 			DeliveryResponseDTO delivery = deliveryClient.getDelivery(order.getDeliveryId());
@@ -148,7 +165,19 @@ public class OrderService {
 				throw new BaseException(DELIVERY_CANCEL_FAIL);
 			}
 		}
+		// todo. 배송 취소
+		boolean canceled = deliveryClient.cancelDelivery(order.getDeliveryId());
+		if (!canceled) {
+			throw new BaseException(ORDER_CANCEL_FAIL);
+		}
 		order.cancelOrder();
+
+		// todo. 재고 원복
+		boolean isSuccess = productClient.increaseProduct(details);
+		if (!isSuccess) {
+			throw new BaseException(ORDER_INCREASE_PRODUCT_FAIL);
+		}
+
 		return OrderResponseDTO.from(order);
 	}
 
