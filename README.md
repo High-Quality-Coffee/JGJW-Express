@@ -66,9 +66,9 @@
 
 ## 트러블 슈팅
 
-- Spring Security를 도입하며 발생한 의존성 문제
-- Socket hang up
-- Redis와 관련된 직렬화 문제
+- [Spring Security를 도입하며 발생한 의존성 문제](https://github.com/High-Quality-Coffee/JGJW-Express/wiki/spring-security%EB%A5%BC-%EB%8F%84%EC%9E%85%ED%95%98%EB%A9%B0-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%9D%98%EC%A1%B4%EC%84%B1-%EB%AC%B8%EC%A0%9C)
+- [Socket hang up](https://github.com/High-Quality-Coffee/JGJW-Express/wiki/socket-hang-up)
+- [Redis와 관련된 직렬화 문제](https://github.com/High-Quality-Coffee/JGJW-Express/wiki/Redis%EC%99%80-%EA%B4%80%EB%A0%A8%EB%90%9C-%EC%A7%81%EB%A0%AC%ED%99%94-%EB%AC%B8%EC%A0%9C)
 
 
 <br/>
@@ -77,23 +77,16 @@
 
 ## 고민
 
-**— 서비스 정책/기능**
-
-[AI활용 방안]()
-
-[[정책 고민]우리 물류 시스템 구성에 대한 토론]()
-<br/>
-
 **— 기술/구현**
 
-[MSA 에서의 인증/인가 처리 방식]()
+- [MSA 에서의 인증/인가 처리 방식](https://github.com/High-Quality-Coffee/JGJW-Express/wiki/MSA-%EC%97%90%EC%84%9C%EC%9D%98-%EC%9D%B8%EC%A6%9D-%EC%9D%B8%EA%B0%80-%EC%B2%98%EB%A6%AC-%EB%B0%A9%EC%8B%9D)
 
-[Hub 데이터 저장 구조]()
+- [Hub 데이터 저장 구조](https://github.com/High-Quality-Coffee/JGJW-Express/wiki/Hub-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%A0%80%EC%9E%A5-%EA%B5%AC%EC%A1%B0)
 
-<br/>
+
 **— 피드백**
 
-- 주문과 배송의 관계 
+- [주문과 배송의 관계](https://github.com/High-Quality-Coffee/JGJW-Express/wiki/%EC%A3%BC%EB%AC%B8%E2%80%90%EB%B0%B0%EC%86%A1-%EA%B4%80%EA%B3%84)
 
 
 <br/>
@@ -207,7 +200,7 @@
 <br/>
 
 
-# Team14 Members (팀원 및 팀 소개)
+# Members (팀원 및 팀 소개)
 <table style="margin-left:auto;margin-right:auto;">
   <tr height="160px">
     <th align="center" width="140px">
