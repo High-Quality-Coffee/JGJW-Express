@@ -18,71 +18,73 @@ API 명세서 추가 예정
 - 아키텍처 설명 : 허브, 배송담당자, 회원, 주문, 업체, 상품, 배송, slack/AI로 나뉘어져 있으며, DB, SpringBoot 모두 docker container로 관리 하였습니다. 서비스 간의 통신은 FeignClient를 통해서 진행하였습니다.
 <br/>
 
-<img src="https://github.com/user-attachments/assets/12a8ba80-385e-4d7f-ab72-477c25bf8ecc" alt="project-architecture">
+![image](https://github.com/user-attachments/assets/6c3093f4-e6b2-41c2-b57d-bd7a7eab9347)
 
 <br/>
 <br/>
 
 
-# Team14 Members (팀원 및 팀 소개)
-<table style="margin-left:auto;margin-right:auto;">
-  <tr height="160px">
-    <th align="center" width="140px">
-      <a href="https://github.com/High-Quality-Coffee"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/125748258?v=4"/></a>
-    </th>
-    <th align="center" width="140px">
-      <a href="https://github.com/Ryujy"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/63836145?v=4"/></a>
-    </th>
-    <th align="center" width="140px">
-      <a href="https://github.com/sosa7753"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/141195262?v=4"/></a>
-    </th>
-    <th align="center" width="140px">
-      <a href="https://github.com/singingsandhill"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/64348312?v=4"/></a>
-    </th>
-  </tr>
-  <tr>
-    <td align="center" width="160px">
-      <a href="https://github.com/High-Quality-Coffee"><strong>박규원</strong></a>
-    </td>
-    <td align="center" width="160px">
-      <a href="https://github.com/Ryujy"><strong>류지윤</strong></a>
-    </td>
-    <td align="center" width="160px">
-      <a href="https://github.com/sosa7753"><strong>박상욱</strong></a>
-    </td>
-    <td align="center" width="160px">
-      <a href="https://github.com/singingsandhill"><strong>김지수</strong></a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="160px">
-      회원, 배송담당자, 상품
-    </td>
-    <td align="center" width="160px">
-      주문, 배송
-    </td>
-    <td align="center" width="160px">
-      허브
-    </td>
-    <td align="center" width="160px">
-      슬랙, 업체
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="160px">
-       Lead
-    </td>
-    <td align="center" width="160px">
-       Tech Lead
-    </td>
-    <td align="center" width="160px">
-       BE
-    </td>
-    <td align="center" width="160px">
-       BE
-    </td>
-  </tr>
-</table>
+## 적용 기술
+
+### Redis
+
+- 빈번하게 조회되는 데이터를 캐싱
+- 허브의 경로 데이터는 경로를 계산하여 Cache-Aside 전략으로 캐싱
+
+### QueryDSL
+
+- 정렬, 권한 별 조회 등에 따른 동적 쿼리 작성을 위하여 QueryDSL을 도입하여 활용했습니다.
+
+### Swagger
+
+- 각각의 모듈과 정확한 소통을 위해 스웨거를 통해 API 를 관리하였습니다.
+
+### Zipkin
+
+- 성능 문제를 분석하고 트랜잭션 추적을 위해 Zipkin을 도입하였습니다.
+- 마이크로서비스 간의 호출 관계를 시각화하여 성능 병목 지점을 식별할 수 있도록 하였습니다.
+
+### Aop 로깅
+
+- 공통적으로 적용해야 하는 로깅 기능을 AOP(Aspect-Oriented Programming)를 활용하여 구현하였습니다.
+- 서비스 레이어 및 주요 비즈니스 로직에서 실행 시간을 측정하고 로깅하여 성능을 모니터링하였습니다.
+
+
+<br/>
+<br/>
+
+
+## 트러블 슈팅
+
+- Spring Security를 도입하며 발생한 의존성 문제
+- Socket hang up
+- Redis와 관련된 직렬화 문제
+
+
+<br/>
+<br/>
+
+
+## 고민
+
+**— 서비스 정책/기능**
+
+[AI활용 방안]()
+
+[[정책 고민]우리 물류 시스템 구성에 대한 토론]()
+<br/>
+
+**— 기술/구현**
+
+[MSA 에서의 인증/인가 처리 방식]()
+
+[Hub 데이터 저장 구조]()
+
+<br/>
+**— 피드백**
+
+- 주문과 배송의 관계 
+
 
 <br/>
 <br/>
@@ -131,10 +133,10 @@ API 명세서 추가 예정
 # ERD
 <br/>
 <br/>
-<img src="https://github.com/user-attachments/assets/296bf37e-f93a-4e65-ac7b-0d6f628db39b" alt="erd1">
-<img src="https://github.com/user-attachments/assets/a8910e07-625e-43ed-950c-bf434e494f97" alt="erd2">
-<img src="https://github.com/user-attachments/assets/b4cb32b8-d167-4e47-84ae-99a3933fe30a" alt="erd3">
 
+![image](https://github.com/user-attachments/assets/06447762-be35-440a-99c9-4e900c806151) <br/>
+![image](https://github.com/user-attachments/assets/f6bb5cc1-5be0-46ba-b229-58a3710ddba8) <br/>
+![image](https://github.com/user-attachments/assets/7eb92a53-849e-4dc5-8200-37fdb2cf122c) <br/>
 
 
 <br/>
@@ -199,4 +201,62 @@ API 명세서 추가 예정
 <br/>
 
 
-
+# Team14 Members (팀원 및 팀 소개)
+<table style="margin-left:auto;margin-right:auto;">
+  <tr height="160px">
+    <th align="center" width="140px">
+      <a href="https://github.com/High-Quality-Coffee"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/125748258?v=4"/></a>
+    </th>
+    <th align="center" width="140px">
+      <a href="https://github.com/Ryujy"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/63836145?v=4"/></a>
+    </th>
+    <th align="center" width="140px">
+      <a href="https://github.com/sosa7753"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/141195262?v=4"/></a>
+    </th>
+    <th align="center" width="140px">
+      <a href="https://github.com/singingsandhill"><img height="130px" width="130px" src="https://avatars.githubusercontent.com/u/64348312?v=4"/></a>
+    </th>
+  </tr>
+  <tr>
+    <td align="center" width="160px">
+      <a href="https://github.com/High-Quality-Coffee"><strong>박규원</strong></a>
+    </td>
+    <td align="center" width="160px">
+      <a href="https://github.com/Ryujy"><strong>류지윤</strong></a>
+    </td>
+    <td align="center" width="160px">
+      <a href="https://github.com/sosa7753"><strong>박상욱</strong></a>
+    </td>
+    <td align="center" width="160px">
+      <a href="https://github.com/singingsandhill"><strong>김지수</strong></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="160px">
+      회원, 배송담당자, 상품
+    </td>
+    <td align="center" width="160px">
+      주문, 배송
+    </td>
+    <td align="center" width="160px">
+      허브
+    </td>
+    <td align="center" width="160px">
+      슬랙, 업체
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="160px">
+       Lead
+    </td>
+    <td align="center" width="160px">
+       Tech Lead
+    </td>
+    <td align="center" width="160px">
+       BE
+    </td>
+    <td align="center" width="160px">
+       BE
+    </td>
+  </tr>
+</table>
