@@ -22,7 +22,7 @@ spring:
 
   data:
     redis:
-      host: localhost
+      host: redis-stack
       port: 6379
       password: ${REDIS_PASSWORD}
       database: 0

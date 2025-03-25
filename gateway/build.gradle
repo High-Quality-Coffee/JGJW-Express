@@ -61,9 +61,15 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${rootProject.ext.springDocVersion}"
     implementation "org.springdoc:springdoc-openapi-starter-webflux-ui:${rootProject.ext.springDocVersion}"
 
-    // 분산 트레이싱
+    // Micrometer와 Brave 관련 추가 의존성
+    implementation 'io.micrometer:micrometer-observation'
     implementation 'io.micrometer:micrometer-tracing-bridge-brave'
     implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+    implementation 'io.zipkin.reporter2:zipkin-sender-urlconnection'
+
+    // WebFlux 환경에서 필요한 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'io.projectreactor:reactor-core'
 
 }
 

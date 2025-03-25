@@ -7,6 +7,7 @@ spring:
   config:
     import: "classpath:env.properties"
 
+
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
@@ -29,3 +30,10 @@ eureka:
     register-with-eureka: true  # Eureka에 서비스 등록
     fetch-registry: true        # Eureka에서 다른 서비스 정보 가져오기
 
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans

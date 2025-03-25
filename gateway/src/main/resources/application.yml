@@ -11,50 +11,106 @@ spring:
       discovery:
         locator:
           enabled: true
+        globalcors:
+          corsConfigurations:
+            '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
       routes:
+        # 각 서비스별 Swagger 문서 라우트 - 인증 필터 없음
+        - id: user-docs
+          uri: lb://user
+          predicates:
+            - Path=/user/v3/api-docs/**
+          filters:
+            - RewritePath=/user/(?<remaining>.*), /${remaining}
+
+        - id: company-docs
+          uri: lb://company
+          predicates:
+            - Path=/company/v3/api-docs/**
+          filters:
+            - RewritePath=/company/(?<remaining>.*), /${remaining}
+
+        - id: order-docs
+          uri: lb://order
+          predicates:
+            - Path=/order/v3/api-docs/**
+          filters:
+            - RewritePath=/order/(?<remaining>.*), /${remaining}
+
+        - id: delivery-docs
+          uri: lb://delivery
+          predicates:
+            - Path=/delivery/v3/api-docs/**
+          filters:
+            - RewritePath=/delivery/(?<remaining>.*), /${remaining}
+
+        - id: hub-docs
+          uri: lb://hub
+          predicates:
+            - Path=/hub/v3/api-docs/**
+          filters:
+            - RewritePath=/hub/(?<remaining>.*), /${remaining}
+
+        - id: ai-docs
+          uri: lb://ai
+          predicates:
+            - Path=/ai/v3/api-docs/**
+          filters:
+            - RewritePath=/ai/(?<remaining>.*), /${remaining}
+
+        - id: product-docs
+          uri: lb://product
+          predicates:
+            - Path=/product/v3/api-docs/**
+          filters:
+            - RewritePath=/product/(?<remaining>.*), /${remaining}
+
         - id: user
           uri: lb://user
           predicates:
-            - Path=/api/v1/join/**, /api/v1/login, /user/v3/api-docs
+            - Path=/api/v1/join/**, /api/v1/login
         - id: company
           uri: lb://company
           predicates:
-            - Path=/api/v1/companies/**, /company/v3/api-docs
+            - Path=/api/v1/companies/**
           filters:
             - name: AuthPermissionFilter
         - id: order
           uri: lb://order
           predicates:
-            - Path=/api/v1/orders/**, /order/v3/api-docs
+            - Path=/api/v1/orders/**
           filters:
             - name: AuthPermissionFilter
         - id: delivery
           uri: lb://delivery
           predicates:
-            - Path=/api/v1/deliveries/**, /delivery/v3/api-docs
+            - Path=/api/v1/deliveries/**
           filters:
             - name: AuthPermissionFilter
         #로그인 필요한 요청(토큰 검증 필터 o)
         - id: user
           uri: lb://user
           predicates:
-            - Path=/api/v1/logout, /api/v1/delivery/users/**, /api/v1/users/**, /user/v3/api-docs
+            - Path=/api/v1/logout, /api/v1/delivery/users/**, /api/v1/users/**
           filters:
             - name: AuthPermissionFilter
         - id: hub
           uri: lb://hub
           predicates:
-            - Path=/api/v1/hubs/**, /hub/v3/api-docs
+            - Path=/api/v1/hubs/**
         - id: ai
           uri: lb://ai
           predicates:
-            - Path=/api/v1/slack/**, /ai/v3/api-docs
+            - Path=/api/v1/slack/**
           filters:
             - name: AuthPermissionFilter
         - id: product
           uri: lb://product
           predicates:
-            - Path=/api/v1/products/**, /product/v3/api-docs
+            - Path=/api/v1/products/**
           filters:
             - name: AuthPermissionFilter
   jwt:
@@ -72,6 +128,8 @@ eureka:
 
 springdoc:
   swagger-ui:
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
     urls[0]:
       name: user
       url: /user/v3/api-docs
@@ -93,3 +151,19 @@ springdoc:
     urls[6]:
       name: product
       url: /product/v3/api-docs
+
+logging:
+  level:
+      reactor.netty.http.client: DEBUG
+      org.springframework.cloud.gateway: DEBUG
+      org.springframework.web.reactive: DEBUG
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      type: w3c,b3
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
