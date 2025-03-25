@@ -11,7 +11,63 @@ spring:
       discovery:
         locator:
           enabled: true
+        globalcors:
+          corsConfigurations:
+            '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
       routes:
+        # 각 서비스별 Swagger 문서 라우트 - 인증 필터 없음
+        - id: user-docs
+          uri: lb://user
+          predicates:
+            - Path=/user/v3/api-docs/**
+          filters:
+            - RewritePath=/user/(?<remaining>.*), /${remaining}
+
+        - id: company-docs
+          uri: lb://company
+          predicates:
+            - Path=/company/v3/api-docs/**
+          filters:
+            - RewritePath=/company/(?<remaining>.*), /${remaining}
+
+        - id: order-docs
+          uri: lb://order
+          predicates:
+            - Path=/order/v3/api-docs/**
+          filters:
+            - RewritePath=/order/(?<remaining>.*), /${remaining}
+
+        - id: delivery-docs
+          uri: lb://delivery
+          predicates:
+            - Path=/delivery/v3/api-docs/**
+          filters:
+            - RewritePath=/delivery/(?<remaining>.*), /${remaining}
+
+        - id: hub-docs
+          uri: lb://hub
+          predicates:
+            - Path=/hub/v3/api-docs/**
+          filters:
+            - RewritePath=/hub/(?<remaining>.*), /${remaining}
+
+        - id: ai-docs
+          uri: lb://ai
+          predicates:
+            - Path=/ai/v3/api-docs/**
+          filters:
+            - RewritePath=/ai/(?<remaining>.*), /${remaining}
+
+        - id: product-docs
+          uri: lb://product
+          predicates:
+            - Path=/product/v3/api-docs/**
+          filters:
+            - RewritePath=/product/(?<remaining>.*), /${remaining}
+
         - id: user
           uri: lb://user
           predicates:
@@ -57,7 +113,6 @@ spring:
             - Path=/api/v1/products/**
           filters:
             - name: AuthPermissionFilter
-
   jwt:
     secret: ${JWT_SECRET_KEY}
   autoconfigure:
@@ -70,3 +125,45 @@ eureka:
       defaultZone: ${EUREKA_DISCOVERY_URL}
     register-with-eureka: true
     fetch-registry: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls[0]:
+      name: user
+      url: /user/v3/api-docs
+    urls[1]:
+      name: company
+      url: /company/v3/api-docs
+    urls[2]:
+      name: order
+      url: /order/v3/api-docs
+    urls[3]:
+      name: delivery
+      url: /delivery/v3/api-docs
+    urls[4]:
+      name: hub
+      url: /hub/v3/api-docs
+    urls[5]:
+      name: ai
+      url: /ai/v3/api-docs
+    urls[6]:
+      name: product
+      url: /product/v3/api-docs
+
+logging:
+  level:
+      reactor.netty.http.client: DEBUG
+      org.springframework.cloud.gateway: DEBUG
+      org.springframework.web.reactive: DEBUG
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      type: w3c,b3
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans

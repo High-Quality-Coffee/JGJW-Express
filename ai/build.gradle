@@ -12,6 +12,12 @@ java {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
+bootJar {
+    enabled = true
+}
+jar {
+    enabled = false
+}
 
 repositories {
     mavenCentral()

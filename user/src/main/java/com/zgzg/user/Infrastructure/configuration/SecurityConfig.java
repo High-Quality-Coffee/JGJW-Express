@@ -79,7 +79,8 @@ public class SecurityConfig {
 		http
 			.securityMatcher("/**")
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/api/v1/join/**", "/api/v1/login", "/api/v1/delivery/users/**").permitAll()
+				.requestMatchers("/api/v1/join/**", "/api/v1/login", "/api/v1/delivery/users/**",
+					"/swagger-ui/index.html/**","/user/v3/api-docs/**","/v3/api-docs/**").permitAll()
 				.anyRequest().authenticated()
 			)
 			.csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화 (POST 요청 허용)
