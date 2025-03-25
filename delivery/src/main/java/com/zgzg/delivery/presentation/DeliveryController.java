@@ -66,6 +66,7 @@ public class DeliveryController {
 	}
 
 	@PatchMapping("/{deliveryId}/cancel")
+	@Secured({"ROLE_MASTER", "ROLE_HUB", "ROLE_DELIVERY"})
 	public ResponseEntity<ApiResponseData<DeliveryResponseDTO>> cancelDelivery(
 		@PathVariable UUID deliveryId) {
 		DeliveryResponseDTO responseDTO = deliveryService.cancelDelivery(deliveryId);
@@ -103,6 +104,7 @@ public class DeliveryController {
 	}
 
 	@GetMapping("/{deliveryId}/routes")
+	@Secured({"ROLE_MASTER", "ROLE_HUB", "ROLE_DELIVERY", "ROLE_STORE"})
 	public ResponseEntity<ApiResponseData<DeliveryRouteLogsResponseDTO>> getDeliveryRoutes(
 		@PathVariable UUID deliveryId) {
 		DeliveryRouteLogsResponseDTO responseDTO = deliveryService.getDeliveryRoutes(deliveryId);
@@ -111,6 +113,7 @@ public class DeliveryController {
 	}
 
 	@PatchMapping("/{deliveryId}/{sequence}/start")
+	@Secured({"ROLE_MASTER", "ROLE_HUB", "ROLE_DELIVERY"})
 	public ResponseEntity<ApiResponseData<DeliveryRouteLogsResponseDTO>> startDelivery(
 		@PathVariable UUID deliveryId, @PathVariable int sequence) {
 
@@ -121,6 +124,7 @@ public class DeliveryController {
 	}
 
 	@PatchMapping("/{deliveryId}/{sequence}/hub-arrival")
+	@Secured({"ROLE_MASTER", "ROLE_HUB", "ROLE_DELIVERY"})
 	public ResponseEntity<ApiResponseData<DeliveryRouteLogsResponseDTO>> arriveDelivery(
 		@PathVariable UUID deliveryId, @PathVariable int sequence) {
 
@@ -131,6 +135,7 @@ public class DeliveryController {
 	}
 
 	@PatchMapping("/{deliveryId}/{sequence}/complete")
+	@Secured({"ROLE_MASTER", "ROLE_HUB", "ROLE_DELIVERY"})
 	public ResponseEntity<ApiResponseData<DeliveryRouteLogsResponseDTO>> completeDelivery(
 		@PathVariable UUID deliveryId, @PathVariable int sequence) {
 		// 업체 배송 완료
