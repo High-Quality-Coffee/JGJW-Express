@@ -1,13 +1,23 @@
-물류 관리 및 배송 시스템을 위한 MSA 기반 플랫폼 - ZgZg Express 
+# 물류 관리 및 배송 시스템을 위한 MSA 기반 플랫폼 - ZgZg Express 
 
-<img src="" alt="서비스 소개" width="100%"/>
+<img src="https://github.com/user-attachments/assets/e8ffe057-f2e7-400d-a1e4-86910b4cdeb1" alt="서비스 소개" width="100%"/>
 
 
 <br/>
 <br/>
 
 # Getting Started (서비스 구성 및 실행 방법)
-API 명세서 추가 예정
+![image](https://github.com/user-attachments/assets/7c9a9e45-2b24-441c-8f20-da6894a7078e)
+![image](https://github.com/user-attachments/assets/9e937597-712b-4279-ad41-e6ff25d48399)
+![image](https://github.com/user-attachments/assets/872337eb-c0e6-4df0-a342-a6ede1b67452)
+![image](https://github.com/user-attachments/assets/742483a1-4a9d-4b17-919c-52c4072f4bdb)
+![image](https://github.com/user-attachments/assets/35b89d13-bdd2-49a4-87e8-cbe25865a541)
+![image](https://github.com/user-attachments/assets/7733c11f-41bb-4e38-acbb-ac5b52a7bc87)
+![image](https://github.com/user-attachments/assets/eb3b7164-d778-4b32-9ba5-df0c2e9e6951)
+![image](https://github.com/user-attachments/assets/9420be13-bc06-4674-9810-de4c64e4ac7e)
+![image](https://github.com/user-attachments/assets/9fc17597-4cee-4a74-873b-683d5a25cc10)
+![image](https://github.com/user-attachments/assets/1496188e-2171-4033-af6f-f1b621fe43ac)
+
 
 <br/>
 <br/>
@@ -102,14 +112,10 @@ API 명세서 추가 예정
   - Redis Queue를 통해서 배송 담당자의 순번에 따라서(라운드 로빈방식으로) 배송담당자를 할당합니다.
 
 - **주문**:
-  - 주문 취소: 주문 생성 후 5분 이내에만 취소 가능하도록 제한합니다
-  - 주문 유형: 온라인 주문과 대면 주문(가게에서 직접 주문) 모두 지원합니다.
-  - 대면 주문 처리: 가게 사장님이 직접 대면 주문을 접수합니다.
+   
   
 - **배송**:
-  - 결제 방식: 카드 결제만 가능하도록 구현합니다
-  - PG사 연동: PG사와의 결제 연동은 외주 개발로 진행하며, 결제 관련 내역만 플랫폼의 데이터베이스에 저장합니다.
-  - 결제 테이블: 결제 내역을 저장하기 위한 전용 테이블 설계하여 관리합니다.
+  
 
 - **상품**:
   - 상품 신규 등록이 가능합니다
